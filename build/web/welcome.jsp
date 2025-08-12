@@ -7,6 +7,7 @@
     <title>BookShop - Your Gateway to Knowledge</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/sidebar.css">
     <style>
         /* ===== CSS VARIABLES ===== */
         :root {
@@ -345,137 +346,7 @@
         }
 
         /* ===== MANAGER/ADMIN NAVIGATION (Sidebar Only) ===== */
-        .admin-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .admin-sidebar {
-            width: 320px;
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-            color: white;
-            padding: 1rem 0;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 999;
-            scrollbar-width: thin;
-            scrollbar-color: #a855f7 #6366f1;
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .admin-sidebar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .admin-sidebar::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-        }
-
-        .admin-sidebar::-webkit-scrollbar-thumb {
-            background: #a855f7;
-            border-radius: 3px;
-        }
-
-        .admin-sidebar::-webkit-scrollbar-thumb:hover {
-            background: #9333ea;
-        }
-
-        .admin-sidebar-header {
-            padding: 2rem 1.5rem 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            margin-bottom: 1.5rem;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.05);
-            margin: 0 1rem 1.5rem;
-            border-radius: 12px;
-        }
-
-        .admin-sidebar-header h2 {
-            color: #fbbf24;
-            margin-bottom: 0.5rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .admin-sidebar-header p {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-        }
-
-        .admin-sidebar-menu {
-            list-style: none;
-            padding: 0 1rem;
-        }
-
-        .admin-sidebar-menu li {
-            margin-bottom: 0.5rem;
-        }
-
-        .admin-sidebar-menu a {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: none;
-            padding: 1rem 1.2rem;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            font-size: 0.95rem;
-            border-left: 4px solid transparent;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .admin-sidebar-menu a::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.5s;
-        }
-
-        .admin-sidebar-menu a:hover::before {
-            left: 100%;
-        }
-
-        .admin-sidebar-menu a:hover {
-            background: rgba(255,255,255,0.15);
-            color: white;
-            transform: translateX(8px);
-            border-left-color: #fbbf24;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .admin-sidebar-menu a.active {
-            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(168, 85, 247, 0.2));
-            color: #fbbf24;
-            border-left-color: #fbbf24;
-            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.2);
-        }
-
-        .admin-sidebar-menu i {
-            width: 20px;
-            text-align: center;
-            font-size: 1.1rem;
-            color: #fbbf24;
-        }
-
-        .admin-sidebar-menu a:hover i,
-        .admin-sidebar-menu a.active i {
-            color: #fbbf24;
-            transform: scale(1.1);
-        }
-
-        .admin-main-content {
-            flex: 1;
-            margin-left: 320px;
-        }
+        /* Sidebar styles are now in css/sidebar.css */
 
         /* ===== STAFF NAVIGATION (Horizontal Tabs) ===== */
         .staff-layout {
@@ -807,20 +678,11 @@
                 padding: 0 1rem;
             }
             
-            .admin-sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-                box-shadow: none;
-            }
+            /* Sidebar responsive styles are now in css/sidebar.css */
             
-            .admin-sidebar.open {
-                transform: translateX(0);
-                box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
-            }
-            
-            .customer-main-content,
-            .admin-main-content {
-                margin-left: 0;
+            .customer-main-content {
+                margin-top: 120px;
+                padding: 0 1rem;
             }
             
             .staff-tabs {
@@ -932,6 +794,7 @@
                     <li><a href="books.jsp">Books</a></li>
                     <li><a href="categories.jsp">Categories</a></li>
                     <li><a href="contact.jsp">Contact</a></li>
+                    <li><a href="help.jsp">Help (Public - How to Login and Benefits)</a></li>
                     <li><a href="login.jsp" class="login-btn">Login</a></li>
                 </ul>
             </div>
@@ -963,10 +826,11 @@
                         <li><a href="about.jsp">About</a></li>
                         <li><a href="books.jsp">Books</a></li>
                         <li><a href="categories.jsp">Categories</a></li>
-                        <li><a href="dashboard.jsp">My Profile</a></li>
                         <li><a href="orders.jsp">My Orders</a></li>
                         <li><a href="wishlist.jsp">Wishlist</a></li>
                         <li><a href="contact.jsp">Contact</a></li>
+                        <li><a href="profile.jsp">My Profile</a></li>
+                        <li><a href="help.jsp">Help (Customer)</a></li>
                         <%
                         // Get customer full name from session
                         String customerName = (String) session.getAttribute("customerName");
@@ -1028,13 +892,11 @@
                     <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
                     <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
                     <li><a href="user-management.jsp"><i class="fas fa-users"></i> Manage Users</a></li>
-                    <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Customer Support</a></li>
+                    <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Manage Customer</a></li>
                     <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
-                    <li><a href="reports.jsp"><i class="fas fa-chart-bar"></i> Analytics & Reports</a></li>
-                    <li><a href="inventory.jsp"><i class="fas fa-boxes"></i> Inventory Management</a></li>
                     <li><a href="settings.jsp"><i class="fas fa-cogs"></i> System Settings</a></li>
-                    <li><a href="backup.jsp"><i class="fas fa-database"></i> Backup & Restore</a></li>
-                    <li><a href="logs.jsp"><i class="fas fa-file-alt"></i> System Logs</a></li>
+                    <li><a href="profile.jsp"><i class="fas fa-user"></i> My Profile</a></li>
+                    <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help</a></li>
                     <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
                 <%
@@ -1046,12 +908,10 @@
                     <li><a href="pos.jsp"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
                     <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
                     <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
-                    <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> Process Orders</a></li>
-                    <li><a href="reports.jsp"><i class="fas fa-chart-bar"></i> Sales Reports</a></li>
-                    <li><a href="staff.jsp"><i class="fas fa-user-tie"></i> Staff Management</a></li>
-                    <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Customer Support</a></li>
-                    <li><a href="inventory.jsp"><i class="fas fa-boxes"></i> Stock Management</a></li>
-                    <li><a href="promotions.jsp"><i class="fas fa-tags"></i> Promotions</a></li>
+                    <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Manage Customer</a></li>
+                    <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
+                    <li><a href="profile.jsp"><i class="fas fa-user"></i> My Profile</a></li>
+                    <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help</a></li>
                     <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
                 <%
@@ -1059,15 +919,10 @@
                 %>
                 <!-- STAFF SIDEBAR MENU -->
                 <ul class="admin-sidebar-menu">
-                    <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
                     <li><a href="pos.jsp"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
-                    <li><a href="books.jsp"><i class="fas fa-book"></i> Browse Books</a></li>
-                    <li><a href="categories.jsp"><i class="fas fa-tags"></i> Categories</a></li>
-                    <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> Process Orders</a></li>
-                    <li><a href="customers.jsp"><i class="fas fa-users"></i> Customer Support</a></li>
-                    <li><a href="inventory.jsp"><i class="fas fa-boxes"></i> Check Stock</a></li>
-                    <li><a href="returns.jsp"><i class="fas fa-undo"></i> Returns & Refunds</a></li>
-                    <li><a href="schedule.jsp"><i class="fas fa-calendar"></i> My Schedule</a></li>
+                    <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
+                    <li><a href="profile.jsp"><i class="fas fa-user"></i> My Profile</a></li>
+                    <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help (Staff)</a></li>
                     <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
                 <%
@@ -1187,6 +1042,7 @@
         <p>&copy; 2024 BookShop. All rights reserved. | Your trusted source for quality books and knowledge.</p>
     </footer>
 
+    <script src="js/sidebar.js"></script>
     <script>
         // Navbar background change on scroll (for public, customer, and staff)
         window.addEventListener('scroll', function() {

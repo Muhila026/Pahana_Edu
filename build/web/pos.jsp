@@ -7,6 +7,7 @@
     <title>Point of Sale - Pahana BookShop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/sidebar.css">
     <style>
         :root {
             --primary-color: #6366f1;
@@ -32,93 +33,7 @@
             min-height: 100vh;
         }
 
-        /* Sidebar Styles */
-        .admin-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .admin-sidebar {
-            width: 320px;
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-            color: white;
-            padding: 1rem 0;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 999;
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .admin-sidebar-header {
-            padding: 2rem 1.5rem 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            margin-bottom: 1.5rem;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.05);
-            margin: 0 1rem 1.5rem;
-            border-radius: 12px;
-        }
-
-        .admin-sidebar-header h2 {
-            color: #fbbf24;
-            margin-bottom: 0.5rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .admin-sidebar-header p {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-        }
-
-        .admin-sidebar-menu {
-            list-style: none;
-            padding: 0 1rem;
-        }
-
-        .admin-sidebar-menu li {
-            margin-bottom: 0.5rem;
-        }
-
-        .admin-sidebar-menu a {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: none;
-            padding: 1rem 1.2rem;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            font-size: 0.95rem;
-            border-left: 4px solid transparent;
-        }
-
-        .admin-sidebar-menu a:hover {
-            background: rgba(255,255,255,0.15);
-            color: white;
-            transform: translateX(8px);
-            border-left-color: #fbbf24;
-        }
-
-        .admin-sidebar-menu a.active {
-            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(168, 85, 247, 0.2));
-            color: #fbbf24;
-            border-left-color: #fbbf24;
-        }
-
-        .admin-sidebar-menu i {
-            width: 20px;
-            text-align: center;
-            font-size: 1.1rem;
-            color: #fbbf24;
-        }
-
-        .admin-main-content {
-            flex: 1;
-            margin-left: 320px;
-        }
+        /* Sidebar styles are now in css/sidebar.css */
 
         /* Main Content Styles */
         .main-content {
@@ -416,18 +331,7 @@
         }
 
         @media (max-width: 768px) {
-            .admin-sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-            }
-            
-            .admin-sidebar.open {
-                transform: translateX(0);
-            }
-            
-            .admin-main-content {
-                margin-left: 0;
-            }
+            /* Sidebar responsive styles are now in css/sidebar.css */
             
             .main-content {
                 padding: 1rem;
@@ -493,18 +397,16 @@
                 %>
                 <!-- ADMIN SIDEBAR MENU -->
                 <ul class="admin-sidebar-menu">
-                    <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard (Admin)</a></li>
                     <li><a href="pos.jsp" class="active"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
                     <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
                     <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
                     <li><a href="user-management.jsp"><i class="fas fa-users"></i> Manage Users</a></li>
-                    <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Customer Support</a></li>
+                    <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Manage Customer</a></li>
                     <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
-                    <li><a href="reports.jsp"><i class="fas fa-chart-bar"></i> Analytics & Reports</a></li>
-                    <li><a href="inventory.jsp"><i class="fas fa-boxes"></i> Inventory Management</a></li>
                     <li><a href="settings.jsp"><i class="fas fa-cogs"></i> System Settings</a></li>
-                    <li><a href="backup.jsp"><i class="fas fa-database"></i> Backup & Restore</a></li>
-                    <li><a href="logs.jsp"><i class="fas fa-file-alt"></i> System Logs</a></li>
+                    <li><a href="profile.jsp"><i class="fas fa-user"></i> My Profile</a></li>
+                    <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help (Admin)</a></li>
                     <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
                 <%
@@ -512,16 +414,14 @@
                 %>
                 <!-- MANAGER SIDEBAR MENU -->
                 <ul class="admin-sidebar-menu">
-                    <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard (Manager)</a></li>
                     <li><a href="pos.jsp" class="active"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
                     <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
                     <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
-                    <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> Process Orders</a></li>
-                    <li><a href="reports.jsp"><i class="fas fa-chart-bar"></i> Sales Reports</a></li>
-                    <li><a href="staff.jsp"><i class="fas fa-user-tie"></i> Staff Management</a></li>
-                    <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Customer Support</a></li>
-                    <li><a href="inventory.jsp"><i class="fas fa-boxes"></i> Stock Management</a></li>
-                    <li><a href="promotions.jsp"><i class="fas fa-tags"></i> Promotions</a></li>
+                    <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Manage Customer</a></li>
+                    <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
+                    <li><a href="profile.jsp"><i class="fas fa-user"></i> My Profile</a></li>
+                    <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help (Manager)</a></li>
                     <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
                 <%
@@ -529,15 +429,10 @@
                 %>
                 <!-- STAFF SIDEBAR MENU -->
                 <ul class="admin-sidebar-menu">
-                    <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
                     <li><a href="pos.jsp" class="active"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
-                    <li><a href="books.jsp"><i class="fas fa-book"></i> Browse Books</a></li>
-                    <li><a href="categories.jsp"><i class="fas fa-tags"></i> Categories</a></li>
-                    <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> Process Orders</a></li>
-                    <li><a href="customers.jsp"><i class="fas fa-users"></i> Customer Support</a></li>
-                    <li><a href="inventory.jsp"><i class="fas fa-boxes"></i> Check Stock</a></li>
-                    <li><a href="returns.jsp"><i class="fas fa-undo"></i> Returns & Refunds</a></li>
-                    <li><a href="schedule.jsp"><i class="fas fa-calendar"></i> My Schedule</a></li>
+                    <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
+                    <li><a href="profile.jsp"><i class="fas fa-user"></i> My Profile</a></li>
+                    <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help (Staff)</a></li>
                     <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
                 <%
@@ -594,7 +489,7 @@
                                             </div>
                                             <div class="product-stock">Stock: <%= book.getStockQuantity() %></div>
                                         </div>
-                                        <button class="add-to-cart-btn" onclick="addToCart('<%= book.getTitle().replace("'", "\\'") %>', <%= book.getPrice() != null ? book.getPrice() : 0 %>, <%= book.getBookId() %>)">
+                                        <button class="add-to-cart-btn" data-title="<%= book.getTitle() %>" data-price="<%= book.getPrice() != null ? book.getPrice() : 0 %>" data-bookid="<%= book.getBookId() %>">
                                             <i class="fas fa-plus"></i> Add
                                         </button>
                                     </div>
@@ -610,7 +505,7 @@
                                             <div class="product-details">F. Scott Fitzgerald • Fiction • $12.99</div>
                                             <div class="product-stock">Stock: 15</div>
                                         </div>
-                                        <button class="add-to-cart-btn" onclick="addToCart('The Great Gatsby', 12.99, 1)">
+                                        <button class="add-to-cart-btn" data-title="The Great Gatsby" data-price="12.99" data-bookid="1">
                                             <i class="fas fa-plus"></i> Add
                                         </button>
                                     </div>
@@ -621,7 +516,7 @@
                                             <div class="product-details">Harper Lee • Fiction • $14.99</div>
                                             <div class="product-stock">Stock: 8</div>
                                         </div>
-                                        <button class="add-to-cart-btn" onclick="addToCart('To Kill a Mockingbird', 14.99, 2)">
+                                        <button class="add-to-cart-btn" data-title="To Kill a Mockingbird" data-price="14.99" data-bookid="2">
                                             <i class="fas fa-plus"></i> Add
                                         </button>
                                     </div>
@@ -632,7 +527,7 @@
                                             <div class="product-details">George Orwell • Fiction • $11.99</div>
                                             <div class="product-stock">Stock: 12</div>
                                         </div>
-                                        <button class="add-to-cart-btn" onclick="addToCart('1984', 11.99, 3)">
+                                        <button class="add-to-cart-btn" data-title="1984" data-price="11.99" data-bookid="3">
                                             <i class="fas fa-plus"></i> Add
                                         </button>
                                     </div>
@@ -685,9 +580,29 @@
         </div>
     <% } %>
 
+    <script src="js/sidebar.js"></script>
     <script>
         // Simple cart functionality
         let cart = [];
+
+        // Set up event listeners for add to cart buttons
+        function setupAddToCartListeners() {
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                // Remove existing listeners to avoid duplicates
+                button.removeEventListener('click', handleAddToCart);
+                button.addEventListener('click', handleAddToCart);
+            });
+        }
+
+        function handleAddToCart() {
+            const title = this.getAttribute('data-title');
+            const price = parseFloat(this.getAttribute('data-price'));
+            const bookId = parseInt(this.getAttribute('data-bookid'));
+            addToCart(title, price, bookId);
+        }
+
+        // Set up initial event listeners
+        document.addEventListener('DOMContentLoaded', setupAddToCartListeners);
 
         function addToCart(name, price, bookId) {
             const existingItem = cart.find(item => item.name === name);

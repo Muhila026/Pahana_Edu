@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Category Management - BookShop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/sidebar.css">
     <style>
         * {
             margin: 0;
@@ -22,99 +23,7 @@
         }
 
         /* ===== MANAGER/ADMIN NAVIGATION (Sidebar Only) ===== */
-        .admin-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .admin-sidebar {
-            width: 320px;
-            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 1rem 0;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 999;
-            scrollbar-width: thin;
-            scrollbar-color: #3498db #2c3e50;
-        }
-
-        .admin-sidebar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .admin-sidebar::-webkit-scrollbar-track {
-            background: #2c3e50;
-        }
-
-        .admin-sidebar::-webkit-scrollbar-thumb {
-            background: #3498db;
-            border-radius: 3px;
-        }
-
-        .admin-sidebar::-webkit-scrollbar-thumb:hover {
-            background: #2980b9;
-        }
-
-        .admin-sidebar-header {
-            padding: 0 1.5rem 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .admin-sidebar-header h2 {
-            color: #3498db;
-            margin-bottom: 0.5rem;
-        }
-
-        .admin-sidebar-menu {
-            list-style: none;
-            padding: 0 1.5rem;
-        }
-
-        .admin-sidebar-menu li {
-            margin-bottom: 0.5rem;
-        }
-
-        .admin-sidebar-menu a {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            color: white;
-            text-decoration: none;
-            padding: 0.8rem 1.2rem;
-            border-radius: 8px;
-            transition: all 0.3s;
-            font-weight: 500;
-            font-size: 0.95rem;
-            border-left: 3px solid transparent;
-        }
-
-        .admin-sidebar-menu a:hover {
-            background: rgba(255,255,255,0.1);
-            color: #3498db;
-            transform: translateX(5px);
-            border-left-color: #3498db;
-        }
-
-        .admin-sidebar-menu a.active {
-            background: rgba(52, 152, 219, 0.2);
-            color: #3498db;
-            border-left-color: #3498db;
-        }
-
-        .admin-sidebar-menu i {
-            width: 20px;
-            text-align: center;
-            font-size: 1rem;
-        }
-
-        .admin-main-content {
-            flex: 1;
-            margin-left: 320px;
-        }
+        /* Sidebar styles are now in css/sidebar.css */
 
         /* ===== COMMON STYLES ===== */
         .main-content {
@@ -360,18 +269,7 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .admin-sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-            }
-            
-            .admin-sidebar.open {
-                transform: translateX(0);
-            }
-            
-            .admin-main-content {
-                margin-left: 0;
-            }
+            /* Sidebar responsive styles are now in css/sidebar.css */
             
             .form-row {
                 flex-direction: column;
@@ -673,6 +571,7 @@
         <p>&copy; 2024 BookShop. All rights reserved. | Category Management System</p>
     </footer>
 
+    <script src="js/sidebar.js"></script>
     <script>
         // Mobile sidebar toggle
         function toggleSidebar() {

@@ -1,5 +1,20 @@
 /* ===== UNIFIED SIDEBAR DESIGN FOR ALL PAGES ===== */
 
+/* CSS Variables for consistent theming */
+:root {
+    --sidebar-bg-primary: #6366f1;
+    --sidebar-bg-secondary: #4f46e5;
+    --sidebar-accent: #fbbf24;
+    --sidebar-accent-hover: #f59e0b;
+    --sidebar-text-primary: #ffffff;
+    --sidebar-text-secondary: rgba(255, 255, 255, 0.8);
+    --sidebar-border: rgba(255, 255, 255, 0.2);
+    --sidebar-hover-bg: rgba(255, 255, 255, 0.15);
+    --sidebar-active-bg: rgba(251, 191, 36, 0.2);
+    --sidebar-scrollbar: #a855f7;
+    --sidebar-scrollbar-hover: #9333ea;
+}
+
 /* Admin Layout Container */
 .admin-layout {
     display: flex;
@@ -9,16 +24,17 @@
 /* Main Sidebar Styling */
 .admin-sidebar {
     width: 320px;
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--sidebar-bg-primary) 0%, var(--sidebar-bg-secondary) 100%);
+    color: var(--sidebar-text-primary);
     padding: 1rem 0;
     position: fixed;
     height: 100vh;
     overflow-y: auto;
     z-index: 999;
     scrollbar-width: thin;
-    scrollbar-color: #a855f7 #6366f1;
+    scrollbar-color: var(--sidebar-scrollbar) var(--sidebar-bg-primary);
     box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
 /* Custom Scrollbar Styling */
@@ -32,18 +48,18 @@
 }
 
 .admin-sidebar::-webkit-scrollbar-thumb {
-    background: #a855f7;
+    background: var(--sidebar-scrollbar);
     border-radius: 3px;
 }
 
 .admin-sidebar::-webkit-scrollbar-thumb:hover {
-    background: #9333ea;
+    background: var(--sidebar-scrollbar-hover);
 }
 
 /* Sidebar Header */
 .admin-sidebar-header {
     padding: 2rem 1.5rem 1.5rem;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
+    border-bottom: 1px solid var(--sidebar-border);
     margin: 0 1rem 1.5rem;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.05);
@@ -51,14 +67,14 @@
 }
 
 .admin-sidebar-header h2 {
-    color: #fbbf24;
+    color: var(--sidebar-accent);
     margin-bottom: 0.5rem;
     font-size: 1.5rem;
     font-weight: 700;
 }
 
 .admin-sidebar-header p {
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--sidebar-text-secondary);
     font-size: 0.9rem;
 }
 
@@ -66,6 +82,7 @@
 .admin-sidebar-menu {
     list-style: none;
     padding: 0 1rem;
+    margin: 0;
 }
 
 .admin-sidebar-menu li {
@@ -76,7 +93,7 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--sidebar-text-secondary);
     text-decoration: none;
     padding: 1rem 1.2rem;
     border-radius: 12px;
@@ -106,18 +123,18 @@
 
 /* Hover States */
 .admin-sidebar-menu a:hover {
-    background: rgba(255,255,255,0.15);
-    color: white;
+    background: var(--sidebar-hover-bg);
+    color: var(--sidebar-text-primary);
     transform: translateX(8px);
-    border-left-color: #fbbf24;
+    border-left-color: var(--sidebar-accent);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* Active State */
 .admin-sidebar-menu a.active {
-    background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(168, 85, 247, 0.2));
-    color: #fbbf24;
-    border-left-color: #fbbf24;
+    background: var(--sidebar-active-bg);
+    color: var(--sidebar-accent);
+    border-left-color: var(--sidebar-accent);
     box-shadow: 0 4px 15px rgba(251, 191, 36, 0.2);
 }
 
@@ -126,13 +143,13 @@
     width: 20px;
     text-align: center;
     font-size: 1.1rem;
-    color: #fbbf24;
+    color: var(--sidebar-accent);
     transition: all 0.3s ease;
 }
 
 .admin-sidebar-menu a:hover i,
 .admin-sidebar-menu a.active i {
-    color: #fbbf24;
+    color: var(--sidebar-accent);
     transform: scale(1.1);
 }
 
@@ -140,6 +157,7 @@
 .admin-main-content {
     flex: 1;
     margin-left: 320px;
+    transition: margin-left 0.3s ease;
 }
 
 /* Responsive Design */
@@ -167,13 +185,19 @@
     top: 20px;
     left: 20px;
     z-index: 1001;
-    background: #6366f1;
+    background: var(--sidebar-bg-primary);
     color: white;
     border: none;
     padding: 10px;
     border-radius: 8px;
     cursor: pointer;
     font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+    background: var(--sidebar-bg-secondary);
+    transform: scale(1.05);
 }
 
 @media (max-width: 768px) {
@@ -240,7 +264,7 @@
 
 /* Focus States for Accessibility */
 .admin-sidebar-menu a:focus {
-    outline: 2px solid #fbbf24;
+    outline: 2px solid var(--sidebar-accent);
     outline-offset: 2px;
 }
 
@@ -259,7 +283,7 @@
     height: 40px;
     margin: -20px 0 0 -20px;
     border: 4px solid rgba(255, 255, 255, 0.3);
-    border-top: 4px solid #fbbf24;
+    border-top: 4px solid var(--sidebar-accent);
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
@@ -267,4 +291,32 @@
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Theme Variations */
+.admin-sidebar.theme-dark {
+    --sidebar-bg-primary: #1f2937;
+    --sidebar-bg-secondary: #111827;
+    --sidebar-accent: #10b981;
+    --sidebar-accent-hover: #059669;
+    --sidebar-scrollbar: #6b7280;
+    --sidebar-scrollbar-hover: #4b5563;
+}
+
+.admin-sidebar.theme-ocean {
+    --sidebar-bg-primary: #0ea5e9;
+    --sidebar-bg-secondary: #0284c7;
+    --sidebar-accent: #f59e0b;
+    --sidebar-accent-hover: #d97706;
+    --sidebar-scrollbar: #06b6d4;
+    --sidebar-scrollbar-hover: #0891b2;
+}
+
+.admin-sidebar.theme-forest {
+    --sidebar-bg-primary: #059669;
+    --sidebar-bg-secondary: #047857;
+    --sidebar-accent: #fbbf24;
+    --sidebar-accent-hover: #f59e0b;
+    --sidebar-scrollbar: #10b981;
+    --sidebar-scrollbar-hover: #059669;
 }

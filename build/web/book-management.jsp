@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Management - BookShop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/sidebar.css">
     <style>
         * {
             margin: 0;
@@ -27,35 +28,9 @@
             min-height: 100vh;
         }
 
-        .admin-sidebar {
-            width: 320px;
-            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 1rem 0;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 999;
-            scrollbar-width: thin;
-            scrollbar-color: #3498db #2c3e50;
-        }
+        /* Sidebar styles are now in css/sidebar.css */
 
-        .admin-sidebar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .admin-sidebar::-webkit-scrollbar-track {
-            background: #2c3e50;
-        }
-
-        .admin-sidebar::-webkit-scrollbar-thumb {
-            background: #3498db;
-            border-radius: 3px;
-        }
-
-        .admin-sidebar::-webkit-scrollbar-thumb:hover {
-            background: #2980b9;
-        }
+        /* Sidebar scrollbar styles are now in css/sidebar.css */
 
         .admin-sidebar-header {
             padding: 0 1.5rem 1.5rem;
@@ -411,18 +386,7 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .admin-sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-            }
-            
-            .admin-sidebar.open {
-                transform: translateX(0);
-            }
-            
-            .admin-main-content {
-                margin-left: 0;
-            }
+            /* Sidebar responsive styles are now in css/sidebar.css */
             
             .form-row,
             .form-row-3 {
@@ -517,18 +481,17 @@
             %>
            <!-- ADMIN SIDEBAR MENU -->
            <ul class="admin-sidebar-menu">
-            <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard (Admin)</a></li>
             <li><a href="pos.jsp"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
             <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
             <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
             <li><a href="user-management.jsp"><i class="fas fa-users"></i> Manage Users</a></li>
-            <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Customer Support</a></li>
+            <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Manage Customer</a></li>
             <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
             <li><a href="reports.jsp"><i class="fas fa-chart-bar"></i> Analytics & Reports</a></li>
-            <li><a href="inventory.jsp"><i class="fas fa-boxes"></i> Inventory Management</a></li>
             <li><a href="settings.jsp"><i class="fas fa-cogs"></i> System Settings</a></li>
-            <li><a href="backup.jsp"><i class="fas fa-database"></i> Backup & Restore</a></li>
-            <li><a href="logs.jsp"><i class="fas fa-file-alt"></i> System Logs</a></li>
+            <li><a href="profile.jsp"><i class="fas fa-user"></i> My Profile</a></li>
+            <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help (Admin)</a></li>
             <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
             <%
@@ -536,27 +499,14 @@
             %>
             <!-- MANAGER SIDEBAR MENU -->
             <ul class="admin-sidebar-menu">
-                <!-- Main Navigation -->
-                <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard (Manager)</a></li>
                 <li><a href="pos.jsp"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
-                
-                <!-- Inventory Management -->
-                <li class="menu-divider"><span>Inventory</span></li>
-                <li><a href="BookServlet?action=list" class="active"><i class="fas fa-book"></i> Inventory Management</a></li>
-                <li><a href="CategoryServlet?action=list"><i class="fas fa-tags"></i> Categories</a></li>
-                
-                <!-- Sales & Orders -->
-                <li class="menu-divider"><span>Sales & Orders</span></li>
-                <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> Order Management</a></li>
-                <li><a href="transactions.jsp"><i class="fas fa-receipt"></i> Transaction History</a></li>
-                
-                <!-- Management -->
-                <li class="menu-divider"><span>Management</span></li>
-                <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Customer Management</a></li>
-                
-                <!-- User -->
-                <li class="menu-divider"><span>User</span></li>
-                <li><a href="user-profile.jsp"><i class="fas fa-user-circle"></i> My Profile</a></li>
+                <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
+                <li><a href="BookServlet?action=list" class="active"><i class="fas fa-book"></i> Manage Books</a></li>
+                <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Manage Customer</a></li>
+                <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
+                <li><a href="profile.jsp"><i class="fas fa-user"></i> My Profile</a></li>
+                <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help (Manager)</a></li>
                 <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
             <%
@@ -804,6 +754,7 @@
         <p>&copy; 2024 BookShop. All rights reserved. | Book Management System</p>
     </footer>
 
+    <script src="js/sidebar.js"></script>
     <script>
         // Mobile sidebar toggle
         function toggleSidebar() {
