@@ -1,803 +1,832 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.sql.*" %>
-<%@page import="java.util.*" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>POS - Point of Sale</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Point of Sale - Pahana BookShop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #a855f7;
+            --text-color: #1e293b;
+            --light-color: #f8fafc;
+            --hover-color: #4f46e5;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f4f6f9;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            min-height: 100vh;
         }
-        
-        .header {
-            background: #2c3e50;
+
+        /* Sidebar Styles */
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .admin-sidebar {
+            width: 320px;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
             color: white;
-            padding: 15px 20px;
+            padding: 1rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 999;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-sidebar-header {
+            padding: 2rem 1.5rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            margin: 0 1rem 1.5rem;
+            border-radius: 12px;
+        }
+
+        .admin-sidebar-header h2 {
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .admin-sidebar-header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .admin-sidebar-menu {
+            list-style: none;
+            padding: 0 1rem;
+        }
+
+        .admin-sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-sidebar-menu a {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            padding: 1rem 1.2rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-left: 4px solid transparent;
         }
-        
-        .header h1 {
-            font-size: 24px;
+
+        .admin-sidebar-menu a:hover {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            transform: translateX(8px);
+            border-left-color: #fbbf24;
         }
-        
-        .user-info {
+
+        .admin-sidebar-menu a.active {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(168, 85, 247, 0.2));
+            color: #fbbf24;
+            border-left-color: #fbbf24;
+        }
+
+        .admin-sidebar-menu i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #fbbf24;
+        }
+
+        .admin-main-content {
+            flex: 1;
+            margin-left: 320px;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .page-header h1 {
+            color: #6366f1;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* POS Grid Layout */
+        .pos-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Product Search Section */
+        .product-search {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .search-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .search-header h3 {
+            color: #6366f1;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .search-form {
             display: flex;
-            align-items: center;
-            gap: 15px;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
-        
-        .logout-btn {
-            background: #e74c3c;
+
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        
-        .container {
-            display: flex;
-            height: calc(100vh - 70px);
-        }
-        
-        .left-panel {
-            flex: 2;
-            padding: 20px;
-            background: white;
-            border-right: 1px solid #ddd;
-        }
-        
-        .right-panel {
-            flex: 1;
-            padding: 20px;
-            background: white;
-        }
-        
-        .search-section {
-            margin-bottom: 20px;
-        }
-        
-        .search-box {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
+            padding: 0.8rem 1.5rem;
             border-radius: 8px;
-            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        
-        .search-box:focus {
-            outline: none;
-            border-color: #3498db;
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
         }
-        
-        .books-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-            max-height: 500px;
+
+        /* Product List */
+        .product-list {
+            max-height: 400px;
             overflow-y: auto;
-        }
-        
-        .book-card {
-            border: 1px solid #ddd;
+            border: 1px solid #e2e8f0;
             border-radius: 8px;
-            padding: 15px;
+        }
+
+        .product-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background-color 0.3s ease;
+        }
+
+        .product-item:hover {
+            background-color: #f8fafc;
+        }
+
+        .product-item:last-child {
+            border-bottom: none;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-name {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+
+        .product-details {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .product-stock {
+            font-size: 0.8rem;
+            color: #475569;
+            margin-top: 0.25rem;
+        }
+
+        .add-to-cart-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
-        
-        .book-card:hover {
-            border-color: #3498db;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+        .add-to-cart-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
-        
-        .book-card.selected {
-            border-color: #3498db;
-            background: #ecf0f1;
+
+        /* Cart Section */
+        .cart-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.1);
         }
-        
-        .book-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #2c3e50;
+
+        .cart-header {
+            margin-bottom: 1.5rem;
         }
-        
-        .book-author {
-            color: #7f8c8d;
-            margin-bottom: 5px;
+
+        .cart-header h3 {
+            color: #6366f1;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
         }
-        
-        .book-price {
-            font-size: 18px;
-            font-weight: bold;
-            color: #27ae60;
-        }
-        
-        .book-stock {
-            color: #e67e22;
-            font-size: 14px;
-        }
-        
-        .cart-section h3 {
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-        
+
         .cart-items {
+            margin-bottom: 1.5rem;
             max-height: 300px;
             overflow-y: auto;
-            margin-bottom: 20px;
         }
-        
+
         .cart-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid #f1f5f9;
         }
-        
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
         .cart-item-info {
             flex: 1;
         }
-        
-        .cart-item-title {
-            font-weight: bold;
-            margin-bottom: 5px;
+
+        .cart-item-name {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
         }
-        
+
         .cart-item-price {
-            color: #7f8c8d;
+            color: #6366f1;
+            font-weight: 600;
         }
-        
-        .cart-item-quantity {
+
+        .cart-item-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.5rem;
         }
-        
+
         .quantity-btn {
-            background: #3498db;
-            color: white;
+            background: #f1f5f9;
             border: none;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 14px;
+            transition: background-color 0.3s ease;
         }
-        
+
         .quantity-btn:hover {
-            background: #2980b9;
+            background: #e2e8f0;
         }
-        
-        .quantity-input {
-            width: 50px;
+
+        .quantity-display {
+            padding: 0.5rem;
+            min-width: 40px;
             text-align: center;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 5px;
+            font-weight: 600;
         }
-        
-        .remove-btn {
-            background: #e74c3c;
+
+        .remove-item-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
             color: white;
             border: none;
-            padding: 5px 10px;
+            padding: 0.25rem 0.5rem;
             border-radius: 4px;
+            font-size: 0.8rem;
             cursor: pointer;
-            font-size: 12px;
+            transition: all 0.3s ease;
         }
-        
-        .cart-total {
-            border-top: 2px solid #3498db;
-            padding-top: 15px;
-            margin-bottom: 20px;
+
+        .remove-item-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
-        
-        .total-row {
+
+        /* Cart Summary */
+        .cart-summary {
+            border-top: 2px solid #f1f5f9;
+            padding-top: 1.5rem;
+        }
+
+        .summary-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 0.5rem;
         }
-        
-        .total-amount {
-            font-size: 24px;
-            font-weight: bold;
-            color: #27ae60;
+
+        .summary-row.total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #6366f1;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 1rem;
+            margin-top: 1rem;
         }
-        
+
         .checkout-btn {
-            width: 100%;
-            background: #27ae60;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
             color: white;
             border: none;
-            padding: 15px;
+            padding: 1rem 2rem;
             border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
         }
-        
+
         .checkout-btn:hover {
-            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
         }
-        
-        .checkout-btn:disabled {
-            background: #bdc3c7;
-            cursor: not-allowed;
-        }
-        
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        
-        .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        
-        /* Receipt Modal Styles */
-        .receipt-modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-        }
-        
-        .receipt-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            position: relative;
-            text-align: center;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        
-        .receipt-header {
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .receipt-header h2 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-        
-        .receipt-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            font-size: 14px;
-            color: #7f8c8d;
-        }
-        
-        .receipt-items {
-            text-align: left;
-            margin-bottom: 20px;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            padding: 15px;
-        }
-        
-        .receipt-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .receipt-item:last-child {
-            border-bottom: none;
-        }
-        
-        .receipt-item-details {
-            flex: 1;
-            text-align: left;
-        }
-        
-        .receipt-item-title {
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-        
-        .receipt-item-author {
-            font-size: 12px;
-            color: #7f8c8d;
-            font-style: italic;
-        }
-        
-        .receipt-item-price {
-            color: #27ae60;
-            font-weight: bold;
-        }
-        
-        .receipt-total {
-            border-top: 2px solid #3498db;
-            padding-top: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #27ae60;
-        }
-        
-        .receipt-actions {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-        
-        .receipt-btn {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s;
-        }
-        
-        .receipt-btn:hover {
-            background: #2980b9;
-        }
-        
-        .receipt-btn.print {
-            background: #27ae60;
-        }
-        
-        .receipt-btn.print:hover {
-            background: #229954;
-        }
-        
-        .receipt-btn.close {
-            background: #e74c3c;
-        }
-        
-        .receipt-btn.close:hover {
-            background: #c0392b;
-        }
-        
-        @media print {
-            .receipt-actions {
-                display: none;
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .pos-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
             }
-            .receipt-content {
-                margin: 0;
-                box-shadow: none;
-                border-radius: 0;
+        }
+
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .admin-sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .admin-main-content {
+                margin-left: 0;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
             }
         }
     </style>
 </head>
 <body>
     <%
-        // Check if user is logged in and has appropriate role
-        if (session == null || session.getAttribute("loggedIn") == null) {
-            response.sendRedirect("login.jsp");
-            return;
+    // Determine user type and role for navigation
+    String userType = null;
+    String role = null;
+    String username = null;
+    boolean isLoggedIn = false;
+    
+    if (session != null && session.getAttribute("loggedIn") != null) {
+        isLoggedIn = (Boolean) session.getAttribute("loggedIn");
+        if (isLoggedIn) {
+            userType = (String) session.getAttribute("userType");
+            role = (String) session.getAttribute("role");
+            username = (String) session.getAttribute("username");
         }
-        
-        String userType = (String) session.getAttribute("userType");
-        String role = (String) session.getAttribute("role");
-        String username = (String) session.getAttribute("username");
-        
-        // Only allow admin, manager, and staff
-        if (!"admin".equals(userType) && !"Manager".equals(role) && !"Staff".equals(role)) {
-            response.sendRedirect("login.jsp?error=Access denied");
-            return;
+    }
+    
+    // Determine navigation type
+    String navType = "public"; // default
+    if (isLoggedIn) {
+        if ("admin".equals(userType) || "Admin".equals(role)) {
+            navType = "admin";
+        } else if ("Manager".equals(role)) {
+            navType = "manager";
+        } else if ("Staff".equals(role)) {
+            navType = "staff";
+        } else {
+            navType = "customer";
         }
+    }
     %>
-    
-    <div class="header">
-        <h1><i class="fas fa-cash-register"></i> POS - Point of Sale</h1>
-        <div class="user-info">
-            <span>Welcome, <%= username %> (<%= role != null ? role : userType %>)</span>
-            <a href="LogoutServlet" class="logout-btn">Logout</a>
-        </div>
-    </div>
-    
-    <div class="container">
-        <div class="left-panel">
-            <div class="search-section">
-                <input type="text" id="searchBox" class="search-box" placeholder="Search books by title, author, or category...">
-            </div>
-            
-            <div class="books-grid" id="booksGrid">
-                <!-- Books will be loaded here -->
-            </div>
-        </div>
-        
-        <div class="right-panel">
-            <h3><i class="fas fa-shopping-cart"></i> Shopping Cart</h3>
-            
-            <div class="success-message" id="successMessage"></div>
-            <div class="error-message" id="errorMessage"></div>
-            
-            <div class="cart-items" id="cartItems">
-                <!-- Cart items will be displayed here -->
-                <p style="text-align: center; color: #7f8c8d; margin-top: 50px;">No items in cart</p>
-            </div>
-            
-            <div class="cart-total">
-                <div class="total-row">
-                    <span>Subtotal:</span>
-                    <span id="subtotal">Rs. 0.00</span>
-                </div>
-                <div class="total-row">
-                    <span>Total:</span>
-                    <span class="total-amount" id="totalAmount">Rs. 0.00</span>
-                </div>
-            </div>
-            
-            <button class="checkout-btn" id="checkoutBtn" onclick="processSale()" disabled>
-                <i class="fas fa-credit-card"></i> Process Sale
-            </button>
-        </div>
-    </div>
 
-    <!-- Receipt Modal -->
-    <div id="receiptModal" class="receipt-modal">
-        <div class="receipt-content">
-            <div class="receipt-header">
-                <h2><i class="fas fa-book"></i> BookShop</h2>
-                <p>Sales Receipt</p>
-                <div class="receipt-info">
-                    <span id="receiptDate"></span>
-                    <span>Sale ID: <span id="receiptSaleId"></span></span>
+    <% if ("admin".equals(navType) || "manager".equals(navType) || "staff".equals(navType)) { %>
+        <!-- MANAGER/ADMIN/STAFF NAVIGATION (Sidebar Only) -->
+        <div class="admin-layout">
+            <!-- Sidebar -->
+            <aside class="admin-sidebar">
+                <div class="admin-sidebar-header">
+                    <h2><%= "admin".equals(navType) ? "Admin" : ("manager".equals(navType) ? "Manager" : "Staff") %> Panel</h2>
+                    <p>Welcome, <%= username %></p>
                 </div>
-                <div class="receipt-info">
-                    <span>Cashier: <%= username %></span>
-                    <span id="receiptTime"></span>
+                
+                <%
+                // Different sidebar menus for each role
+                if ("admin".equals(navType)) {
+                %>
+                <!-- ADMIN SIDEBAR MENU -->
+                <ul class="admin-sidebar-menu">
+                    <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="pos.jsp" class="active"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
+                    <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
+                    <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
+                    <li><a href="user-management.jsp"><i class="fas fa-users"></i> Manage Users</a></li>
+                    <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Customer Support</a></li>
+                    <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
+                    <li><a href="reports.jsp"><i class="fas fa-chart-bar"></i> Analytics & Reports</a></li>
+                    <li><a href="inventory.jsp"><i class="fas fa-boxes"></i> Inventory Management</a></li>
+                    <li><a href="settings.jsp"><i class="fas fa-cogs"></i> System Settings</a></li>
+                    <li><a href="backup.jsp"><i class="fas fa-database"></i> Backup & Restore</a></li>
+                    <li><a href="logs.jsp"><i class="fas fa-file-alt"></i> System Logs</a></li>
+                    <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+                <%
+                } else if ("manager".equals(navType)) {
+                %>
+                <!-- MANAGER SIDEBAR MENU -->
+                <ul class="admin-sidebar-menu">
+                    <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="pos.jsp" class="active"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
+                    <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
+                    <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
+                    <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> Process Orders</a></li>
+                    <li><a href="reports.jsp"><i class="fas fa-chart-bar"></i> Sales Reports</a></li>
+                    <li><a href="staff.jsp"><i class="fas fa-user-tie"></i> Staff Management</a></li>
+                    <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Customer Support</a></li>
+                    <li><a href="inventory.jsp"><i class="fas fa-boxes"></i> Stock Management</a></li>
+                    <li><a href="promotions.jsp"><i class="fas fa-tags"></i> Promotions</a></li>
+                    <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+                <%
+                } else if ("staff".equals(navType)) {
+                %>
+                <!-- STAFF SIDEBAR MENU -->
+                <ul class="admin-sidebar-menu">
+                    <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="pos.jsp" class="active"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
+                    <li><a href="books.jsp"><i class="fas fa-book"></i> Browse Books</a></li>
+                    <li><a href="categories.jsp"><i class="fas fa-tags"></i> Categories</a></li>
+                    <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> Process Orders</a></li>
+                    <li><a href="customers.jsp"><i class="fas fa-users"></i> Customer Support</a></li>
+                    <li><a href="inventory.jsp"><i class="fas fa-boxes"></i> Check Stock</a></li>
+                    <li><a href="returns.jsp"><i class="fas fa-undo"></i> Returns & Refunds</a></li>
+                    <li><a href="schedule.jsp"><i class="fas fa-calendar"></i> My Schedule</a></li>
+                    <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+                <%
+                }
+                %>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="admin-main-content">
+                <div class="main-content">
+                    <div class="page-header">
+                        <h1>Point of Sale (POS)</h1>
+                        <p>Process sales, manage inventory, and serve customers efficiently</p>
+                    </div>
+                    
+                    <!-- POS Grid Layout -->
+                    <div class="pos-grid">
+                        <!-- Product Search Section -->
+                        <div class="product-search">
+                            <div class="search-header">
+                                <h3><i class="fas fa-search"></i> Product Search</h3>
+                                <p>Search for books by title, author, or ISBN</p>
+                            </div>
+                            
+                            <form class="search-form">
+                                <input type="text" class="search-input" placeholder="Search for books..." id="productSearch">
+                                <button type="button" class="search-btn" onclick="searchProducts()">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                                <button type="button" class="search-btn" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="loadProductsFromDatabase()">
+                                    <i class="fas fa-database"></i> Load Products
+                                </button>
+                            </form>
+                            
+                            <div class="product-list" id="productList">
+                                <!-- Products will be loaded dynamically from database -->
+                                <%
+                                // Get books from request attribute (if available from BookServlet)
+                                java.util.List<com.pahana.BookServlet.Book> books = 
+                                    (java.util.List<com.pahana.BookServlet.Book>) request.getAttribute("books");
+                                
+                                if (books != null && !books.isEmpty()) {
+                                    for (com.pahana.BookServlet.Book book : books) {
+                                        // Only show books with stock > 0
+                                        if (book.getStockQuantity() > 0) {
+                                %>
+                                    <div class="product-item" data-title="<%= book.getTitle().toLowerCase() %>" data-author="<%= book.getAuthor() != null ? book.getAuthor().toLowerCase() : "" %>">
+                                        <div class="product-info">
+                                            <div class="product-name"><%= book.getTitle() %></div>
+                                            <div class="product-details">
+                                                <%= book.getAuthor() != null ? book.getAuthor() : "Unknown Author" %> • 
+                                                <%= book.getCategoryName() != null ? book.getCategoryName() : "Uncategorized" %> • 
+                                                $<%= book.getPrice() != null ? book.getPrice().toString() : "0.00" %>
+                                            </div>
+                                            <div class="product-stock">Stock: <%= book.getStockQuantity() %></div>
+                                        </div>
+                                        <button class="add-to-cart-btn" onclick="addToCart('<%= book.getTitle().replace("'", "\\'") %>', <%= book.getPrice() != null ? book.getPrice() : 0 %>, <%= book.getBookId() %>)">
+                                            <i class="fas fa-plus"></i> Add
+                                        </button>
+                                    </div>
+                                <%
+                                        }
+                                    }
+                                } else {
+                                    // If no books from servlet, show sample products
+                                %>
+                                    <div class="product-item" data-title="the great gatsby" data-author="f. scott fitzgerald">
+                                        <div class="product-info">
+                                            <div class="product-name">The Great Gatsby</div>
+                                            <div class="product-details">F. Scott Fitzgerald • Fiction • $12.99</div>
+                                            <div class="product-stock">Stock: 15</div>
+                                        </div>
+                                        <button class="add-to-cart-btn" onclick="addToCart('The Great Gatsby', 12.99, 1)">
+                                            <i class="fas fa-plus"></i> Add
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="product-item" data-title="to kill a mockingbird" data-author="harper lee">
+                                        <div class="product-info">
+                                            <div class="product-name">To Kill a Mockingbird</div>
+                                            <div class="product-details">Harper Lee • Fiction • $14.99</div>
+                                            <div class="product-stock">Stock: 8</div>
+                                        </div>
+                                        <button class="add-to-cart-btn" onclick="addToCart('To Kill a Mockingbird', 14.99, 2)">
+                                            <i class="fas fa-plus"></i> Add
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="product-item" data-title="1984" data-author="george orwell">
+                                        <div class="product-info">
+                                            <div class="product-name">1984</div>
+                                            <div class="product-details">George Orwell • Fiction • $11.99</div>
+                                            <div class="product-stock">Stock: 12</div>
+                                        </div>
+                                        <button class="add-to-cart-btn" onclick="addToCart('1984', 11.99, 3)">
+                                            <i class="fas fa-plus"></i> Add
+                                        </button>
+                                    </div>
+                                <%
+                                }
+                                %>
+                            </div>
+                        </div>
+                        
+                        <!-- Cart Section -->
+                        <div class="cart-section">
+                            <div class="cart-header">
+                                <h3><i class="fas fa-shopping-cart"></i> Shopping Cart</h3>
+                                <p>Review items and complete purchase</p>
+                            </div>
+                            
+                            <div class="cart-items" id="cartItems">
+                                <!-- Cart items will be displayed here -->
+                            </div>
+                            
+                            <div class="cart-summary">
+                                <div class="summary-row">
+                                    <span>Subtotal:</span>
+                                    <span id="subtotal">$0.00</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Tax (8%):</span>
+                                    <span id="tax">$0.00</span>
+                                </div>
+                                <div class="summary-row total">
+                                    <span>Total:</span>
+                                    <span id="total">$0.00</span>
+                                </div>
+                                
+                                <button class="checkout-btn" onclick="processCheckout()">
+                                    <i class="fas fa-credit-card"></i> Process Payment
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="receipt-items" id="receiptItems">
-                <!-- Receipt items will be populated here -->
-            </div>
-            
-            <div class="receipt-total">
-                <div>Total Amount: <span id="receiptTotal"></span></div>
-            </div>
-            
-            <div class="receipt-actions">
-                <button class="receipt-btn print" onclick="printReceipt()">
-                    <i class="fas fa-print"></i> Print Receipt
-                </button>
-                <button class="receipt-btn close" onclick="closeReceipt()">
-                    <i class="fas fa-times"></i> Close
-                </button>
-            </div>
+            </main>
         </div>
-    </div>
+    <% } else { %>
+        <!-- Access Denied for non-staff users -->
+        <div style="text-align: center; padding: 4rem 2rem;">
+            <h1 style="color: #ef4444; margin-bottom: 1rem;">Access Denied</h1>
+            <p style="color: #64748b; margin-bottom: 2rem;">You don't have permission to access the Point of Sale system.</p>
+            <a href="welcome.jsp" style="background: #6366f1; color: white; padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 8px; display: inline-block;">Return to Home</a>
+        </div>
+    <% } %>
 
     <script>
+        // Simple cart functionality
         let cart = [];
-        let books = [];
-        
-        // Load books on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            loadBooks();
-            
-            // Search functionality
-            document.getElementById('searchBox').addEventListener('input', function() {
-                const searchTerm = this.value.trim();
-                if (searchTerm.length > 0) {
-                    searchBooks(searchTerm);
-                } else {
-                    loadBooks();
-                }
-            });
-        });
-        
-        function loadBooks() {
-            fetch('POSServlet?action=getBooks')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        books = data.books;
-                        displayBooks(books);
-                    } else {
-                        showError('Failed to load books: ' + data.error);
-                    }
-                })
-                .catch(error => {
-                    showError('Error loading books: ' + error.message);
-                });
-        }
-        
-        function searchBooks(searchTerm) {
-            fetch(`POSServlet?action=searchBooks&search=${encodeURIComponent(searchTerm)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        books = data.books;
-                        displayBooks(books);
-                    } else {
-                        showError('Search failed: ' + data.error);
-                    }
-                })
-                .catch(error => {
-                    showError('Search error: ' + error.message);
-                });
-        }
-        
-        function displayBooks(booksToShow) {
-            const grid = document.getElementById('booksGrid');
-            grid.innerHTML = '';
-            
-            if (booksToShow.length === 0) {
-                grid.innerHTML = '<p style="text-align: center; color: #7f8c8d; grid-column: 1/-1; margin-top: 50px;">No books found</p>';
-                return;
+
+        function addToCart(name, price, bookId) {
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name, price, quantity: 1, bookId: bookId });
             }
             
-            booksToShow.forEach(book => {
-                const bookCard = document.createElement('div');
-                bookCard.className = 'book-card';
-                bookCard.onclick = () => addToCart(book);
-                
-                bookCard.innerHTML = `
-                    <div class="book-title">${book.title}</div>
-                    <div class="book-author">${book.author}</div>
-                    <div class="book-price">Rs. ${book.price.toFixed(2)}</div>
-                    <div class="book-stock">Stock: ${book.stock}</div>
-                `;
-                
-                grid.appendChild(bookCard);
+            // Update stock display
+            updateStockDisplay(name, -1);
+            
+            updateCartDisplay();
+            updateTotals();
+        }
+
+        function updateStockDisplay(bookName, change) {
+            const productItems = document.querySelectorAll('.product-item');
+            productItems.forEach(item => {
+                const itemName = item.querySelector('.product-name').textContent;
+                if (itemName === bookName) {
+                    const stockElement = item.querySelector('.product-stock');
+                    if (stockElement) {
+                        const currentStock = parseInt(stockElement.textContent.match(/\d+/)[0]);
+                        const newStock = Math.max(0, currentStock + change);
+                        stockElement.textContent = `Stock: ${newStock}`;
+                        
+                        // Disable add button if stock is 0
+                        const addButton = item.querySelector('.add-to-cart-btn');
+                        if (newStock === 0) {
+                            addButton.disabled = true;
+                            addButton.style.background = '#9ca3af';
+                            addButton.style.cursor = 'not-allowed';
+                        }
+                    }
+                }
             });
         }
-        
-        function addToCart(book) {
-            const existingItem = cart.find(item => item.id === book.id);
+
+        function updateQuantity(index, change) {
+            const item = cart[index];
+            const oldQuantity = item.quantity;
+            item.quantity += change;
             
-            if (existingItem) {
-                if (existingItem.quantity < book.stock) {
-                    existingItem.quantity++;
-                    existingItem.totalPrice = existingItem.quantity * existingItem.price;
-                } else {
-                    showError('Cannot add more items. Stock limit reached.');
-                    return;
-                }
+            if (item.quantity <= 0) {
+                cart.splice(index, 1);
+                // Restore all stock when item is completely removed
+                updateStockDisplay(item.name, oldQuantity);
             } else {
-                cart.push({
-                    id: book.id,
-                    title: book.title,
-                    author: book.author,
-                    price: book.price,
-                    quantity: 1,
-                    totalPrice: book.price,
-                    stock: book.stock
-                });
+                // Update stock based on quantity change
+                updateStockDisplay(item.name, -change);
             }
             
             updateCartDisplay();
-            updateCheckoutButton();
+            updateTotals();
         }
-        
+
+        function removeItem(index) {
+            const removedItem = cart[index];
+            cart.splice(index, 1);
+            
+            // Restore stock when item is removed
+            updateStockDisplay(removedItem.name, removedItem.quantity);
+            
+            updateCartDisplay();
+            updateTotals();
+        }
+
         function updateCartDisplay() {
-            const cartContainer = document.getElementById('cartItems');
+            const cartItems = document.getElementById('cartItems');
+            cartItems.innerHTML = '';
             
-            if (cart.length === 0) {
-                cartContainer.innerHTML = '<p style="text-align: center; color: #7f8c8d; margin-top: 50px;">No items in cart</p>';
-                return;
-            }
-            
-            cartContainer.innerHTML = '';
             cart.forEach((item, index) => {
                 const cartItem = document.createElement('div');
                 cartItem.className = 'cart-item';
-                
                 cartItem.innerHTML = `
                     <div class="cart-item-info">
-                        <div class="cart-item-title">${item.title}</div>
-                        <div class="cart-item-price">Rs. ${item.price.toFixed(2)} each</div>
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">$${item.price.toFixed(2)}</div>
                     </div>
-                    <div class="cart-item-quantity">
+                    <div class="cart-item-controls">
                         <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
-                        <input type="number" class="quantity-input" value="${item.quantity}" 
-                               min="1" max="${item.stock}" onchange="updateQuantityInput(${index}, this.value)">
+                        <span class="quantity-display">${item.quantity}</span>
                         <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
-                    </div>
-                    <div style="text-align: right; min-width: 80px;">
-                        <div style="font-weight: bold; margin-bottom: 5px;">Rs. ${item.totalPrice.toFixed(2)}</div>
-                        <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+                        <button class="remove-item-btn" onclick="removeItem(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 `;
-                
-                cartContainer.appendChild(cartItem);
+                cartItems.appendChild(cartItem);
             });
         }
-        
-        function updateQuantity(index, change) {
-            const item = cart[index];
-            const newQuantity = item.quantity + change;
-            
-            if (newQuantity >= 1 && newQuantity <= item.stock) {
-                item.quantity = newQuantity;
-                item.totalPrice = item.quantity * item.price;
-                updateCartDisplay();
-                updateTotals();
-                updateCheckoutButton();
-            }
-        }
-        
-        function updateQuantityInput(index, value) {
-            const item = cart[index];
-            const newQuantity = parseInt(value);
-            
-            if (newQuantity >= 1 && newQuantity <= item.stock) {
-                item.quantity = newQuantity;
-                item.totalPrice = item.quantity * item.price;
-                updateTotals();
-                updateCheckoutButton();
-            } else {
-                // Reset to valid value
-                updateCartDisplay();
-            }
-        }
-        
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartDisplay();
-            updateTotals();
-            updateCheckoutButton();
-        }
-        
+
         function updateTotals() {
-            const subtotal = cart.reduce((sum, item) => sum + item.totalPrice, 0);
-            document.getElementById('subtotal').textContent = `Rs. ${subtotal.toFixed(2)}`;
-            document.getElementById('totalAmount').textContent = `Rs. ${subtotal.toFixed(2)}`;
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.08;
+            const total = subtotal + tax;
+            
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
         }
-        
-        function updateCheckoutButton() {
-            const checkoutBtn = document.getElementById('checkoutBtn');
-            checkoutBtn.disabled = cart.length === 0;
+
+        function searchProducts() {
+            const searchTerm = document.getElementById('productSearch').value.toLowerCase();
+            const productItems = document.querySelectorAll('.product-item');
+            
+            productItems.forEach(item => {
+                const productName = item.querySelector('.product-name').textContent.toLowerCase();
+                const productAuthor = item.dataset.author;
+                const productTitle = item.dataset.title;
+
+                if (productName.includes(searchTerm) || productAuthor.includes(searchTerm) || productTitle.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
         }
-        
-        function processSale() {
+
+        function loadProductsFromDatabase() {
+            // Redirect to BookServlet to get real book data
+            window.location.href = 'BookServlet?action=list&redirect=pos';
+        }
+
+        function processCheckout() {
             if (cart.length === 0) {
-                showError('Cart is empty');
+                alert('Please add items to cart before checkout.');
                 return;
             }
             
-            const saleData = {
-                items: cart,
-                totalAmount: parseFloat(document.getElementById('totalAmount').textContent.replace('Rs. ', ''))
-            };
-            
-            fetch('POSServlet', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `action=processSale&saleData=${JSON.stringify(saleData)}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showSuccess('Sale processed successfully! Sale ID: ' + data.saleId);
-                    showReceipt(data.saleId);
-                    cart = [];
-                    updateCartDisplay();
-                    updateTotals();
-                    updateCheckoutButton();
-                    loadBooks(); // Refresh book list to update stock
-                } else {
-                    showError('Sale failed: ' + data.error);
-                }
-            })
-            .catch(error => {
-                showError('Error processing sale: ' + error.message);
-            });
+            alert('Payment processed successfully! Total: $' + document.getElementById('total').textContent);
+            cart = [];
+            updateCartDisplay();
+            updateTotals();
         }
-        
-        function showSuccess(message) {
-            const successDiv = document.getElementById('successMessage');
-            successDiv.textContent = message;
-            successDiv.style.display = 'block';
-            document.getElementById('errorMessage').style.display = 'none';
-            
-            setTimeout(() => {
-                successDiv.style.display = 'none';
-            }, 5000);
-        }
-        
-        function showError(message) {
-            const errorDiv = document.getElementById('errorMessage');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-            document.getElementById('successMessage').style.display = 'none';
-            
-            setTimeout(() => {
-                errorDiv.style.display = 'none';
-            }, 5000);
-        }
-        
-        // Receipt functions
-        function showReceipt(saleId) {
-            // Set receipt details
-            const now = new Date();
-            document.getElementById('receiptDate').textContent = now.toLocaleDateString();
-            document.getElementById('receiptTime').textContent = now.toLocaleTimeString();
-            document.getElementById('receiptSaleId').textContent = saleId;
-            document.getElementById('receiptTotal').textContent = `Rs. ${parseFloat(document.getElementById('totalAmount').textContent.replace('Rs. ', '')).toFixed(2)}`;
-            
-            // Populate receipt items with book details
-            const receiptItems = document.getElementById('receiptItems');
-            receiptItems.innerHTML = '';
-            
-            cart.forEach(item => {
-                const receiptItem = document.createElement('div');
-                receiptItem.className = 'receipt-item';
-                
-                receiptItem.innerHTML = `
-                    <div class="receipt-item-details">
-                        <div class="receipt-item-title">${item.title}</div>
-                        <div class="receipt-item-author">by ${item.author || 'Unknown Author'}</div>
-                        <div style="font-size: 12px; color: #7f8c8d;">
-                            Qty: ${item.quantity} × Rs. ${item.price.toFixed(2)}
-                        </div>
-                    </div>
-                    <div class="receipt-item-price">
-                        Rs. ${item.totalPrice.toFixed(2)}
-                    </div>
-                `;
-                
-                receiptItems.appendChild(receiptItem);
-            });
-            
-            // Show the receipt modal
-            document.getElementById('receiptModal').style.display = 'block';
-        }
-        
-        function closeReceipt() {
-            document.getElementById('receiptModal').style.display = 'none';
-        }
-        
-        function printReceipt() {
-            window.print();
-        }
-        
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('receiptModal');
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        }
+
+        // Initialize
+        updateTotals();
     </script>
 </body>
 </html>

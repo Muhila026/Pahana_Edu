@@ -371,7 +371,7 @@
                 margin: 10px 20px;
                 border-radius: 6px;
             }
-        }
+        
 
         /* ===== MANAGER/ADMIN NAVIGATION (Sidebar Only) ===== */
         .admin-layout {
