@@ -6,174 +6,556 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Login Page</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
-                margin: 0;
-                padding: 20px;
-            }
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - BookShop</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-hover: #4f46e5;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --background-color: #f8fafc;
+            --card-background: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: var(--card-background);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .login-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-header p {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-body {
+            padding: 40px 30px;
+        }
+
+        .form-floating {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-floating .form-control {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .form-floating .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            background: white;
+        }
+
+        .form-floating label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .password-field {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.3s ease;
+            z-index: 10;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            width: 100%;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-login::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-login:hover::before {
+            left: 100%;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        .alert {
+            border-radius: 12px;
+            border: none;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #fef2f2, #fee2e2);
+            color: var(--error-color);
+            border-left: 4px solid var(--error-color);
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            color: var(--success-color);
+            border-left: 4px solid var(--success-color);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .divider span {
+            background: var(--card-background);
+            padding: 0 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .register-link a:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: white;
+            color: var(--text-secondary);
+            text-decoration: none;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .social-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.1);
+        }
+
+        .social-btn i {
+            font-size: 18px;
+        }
+
+        /* Forgot Password Styling */
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .forgot-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .forgot-link:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+            transform: translateX(5px);
+        }
+
+        .forgot-link i {
+            margin-right: 6px;
+            font-size: 12px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 576px) {
             .login-container {
-                max-width: 400px;
-                margin: 100px auto;
-                background: white;
-                padding: 30px;
-                border-radius: 8px;
-                box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            }
-            .form-group {
-                margin-bottom: 20px;
-            }
-            label {
-                display: block;
-                margin-bottom: 5px;
-                font-weight: bold;
-            }
-            input[type="text"], input[type="password"], select {
-                width: 100%;
-                padding: 10px;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                box-sizing: border-box;
-            }
-            .btn {
-                background-color: #4CAF50;
-                color: white;
-                padding: 12px 20px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                width: 100%;
-                font-size: 16px;
-            }
-            .btn:hover {
-                background-color: #45a049;
-            }
-            .error {
-                color: red;
-                margin-bottom: 15px;
-                padding: 10px;
-                background-color: #ffe6e6;
-                border-radius: 4px;
-            }
-            .success {
-                color: green;
-                margin-bottom: 15px;
-                padding: 10px;
-                background-color: #e6ffe6;
-                border-radius: 4px;
-            }
-            .user-type-info {
-                background-color: #f8f9fa;
-                padding: 10px;
-                border-radius: 4px;
-                margin-bottom: 15px;
-                font-size: 14px;
-                color: #666;
+                margin: 10px;
+                border-radius: 15px;
             }
             
-            .password-container {
-                position: relative;
+            .login-header {
+                padding: 30px 20px;
             }
             
-            .password-toggle {
-                position: absolute;
-                right: 10px;
-                top: 50%;
-                transform: translateY(-50%);
-                background: none;
-                border: none;
-                cursor: pointer;
-                color: #666;
-                font-size: 16px;
-                padding: 0;
-                width: 20px;
-                height: 20px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+            .login-header h1 {
+                font-size: 2rem;
             }
             
-            .password-toggle:hover {
-                color: #4CAF50;
+            .login-body {
+                padding: 30px 20px;
             }
             
-            .password-container input[type="password"],
-            .password-container input[type="text"] {
-                padding-right: 35px;
+            .social-login {
+                flex-direction: column;
             }
-        </style>
-    </head>
-    <body>
-        <div class="login-container">
-            <h2>Login</h2>
-            
+        }
+
+        /* Loading Animation */
+        .btn-loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Input Focus Effects */
+        .form-floating .form-control:focus + label {
+            color: var(--primary-color);
+        }
+
+        /* Floating Label Animation */
+        .form-floating .form-control:not(:placeholder-shown) + label,
+        .form-floating .form-control:focus + label {
+            transform: scale(0.85) translateY(-1rem) translateX(0.15rem);
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Header Section -->
+        <div class="login-header">
+            <h1></i>Pahana BookShop</h1>
+            <p>Welcome back! Please sign in to your account</p>
+        </div>
+
+        <!-- Body Section -->
+        <div class="login-body">
+            <!-- Error Messages -->
             <% if (request.getAttribute("error") != null) { %>
-                <div class="error">
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
                     <%= request.getAttribute("error") %>
                 </div>
             <% } %>
-            
+
+            <!-- Success Messages -->
             <% if (request.getAttribute("success") != null) { %>
-                <div class="success">
+                <div class="alert alert-success" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
                     <%= request.getAttribute("success") %>
                 </div>
             <% } %>
-            
+
             <% if (request.getParameter("message") != null) { %>
-                <div class="success">
+                <div class="alert alert-success" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
                     <%= request.getParameter("message") %>
                 </div>
             <% } %>
-            
-            <form action="LoginServlet" method="post">
-                <div class="form-group">
-                    <label for="username">Username/Email:</label>
-                    <input type="text" id="username" name="username" required placeholder="Enter your username or email">
-                </div>
-                
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <div class="password-container">
-                        <input type="password" id="password" name="password" required>
-                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('password')">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <button type="submit" class="btn">Login</button>
-            </form>
-            
-            <p style="text-align: center; margin-top: 20px; color: #666;">
-                Enter your username/email and password to login
-            </p>
-            
-            <p style="text-align: center; margin-top: 15px;">
-                Don't have an account? <a href="register.jsp" style="color: #4CAF50; text-decoration: none; font-weight: bold;">Register here</a>
-            </p>
-        </div>
 
-        <script>
-            function togglePasswordVisibility(inputId) {
-                const input = document.getElementById(inputId);
-                const icon = input.parentElement.querySelector('.password-toggle i');
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
-                } else {
-                    input.type = 'password';
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
-                }
+            <!-- Login Form -->
+            <form id="loginForm" action="LoginServlet" method="post">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="username" name="username" 
+                           placeholder="Username or Email" required>
+                    <label for="username">
+                        <i class="fas fa-user me-2"></i>Username or Email
+                    </label>
+                </div>
+
+                <div class="form-floating password-field">
+                    <input type="password" class="form-control" id="password" name="password" 
+                           placeholder="Password" required>
+                    <label for="password">
+                        <i class="fas fa-lock me-2"></i>Password
+                    </label>
+                    <button type="button" class="password-toggle" onclick="togglePassword()">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+
+                <!-- Forgot Password Link -->
+                <div class="forgot-password">
+                    <a href="#" onclick="showForgotPassword()" class="forgot-link">
+                        <i class="fas fa-key me-1"></i>Forgot Password?
+                    </a>
+                </div>
+
+                <button type="submit" class="btn btn-login" id="loginBtn">
+                    <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                </button>
+            </form>
+
+            <!-- Divider -->
+            <div class="divider">
+                <span>or continue with</span>
+            </div>
+
+        
+            <!-- Register Link -->
+            <div class="register-link">
+                <p>Don't have an account? 
+                    <a href="register.jsp">Create one here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Password Toggle Functionality
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleBtn = document.querySelector('.password-toggle i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.classList.remove('fa-eye');
+                toggleBtn.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.classList.remove('fa-eye-slash');
+                toggleBtn.classList.add('fa-eye');
             }
-        </script>
-    </body>
+        }
+
+        // Form Submission with Loading State
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            const loginBtn = document.getElementById('loginBtn');
+            const originalText = loginBtn.innerHTML;
+            
+            // Add loading state
+            loginBtn.classList.add('btn-loading');
+            loginBtn.disabled = true;
+            
+            // Simulate loading delay (remove in production)
+            setTimeout(() => {
+                loginBtn.classList.remove('btn-loading');
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = originalText;
+            }, 2000);
+        });
+
+        // Forgot Password Function
+        function showForgotPassword() {
+            // You can implement a modal or redirect to forgot password page
+            // For now, showing an alert with instructions
+            const email = document.getElementById('username').value;
+            if (email) {
+                alert(`Password reset instructions will be sent to: ${email}\n\nThis functionality needs to be implemented on the backend.`);
+            } else {
+                alert('Please enter your email address first, then click Forgot Password.');
+            }
+        }
+
+        // Social Login Functions
+        function socialLogin(provider) {
+            // Add your social login logic here
+            console.log(`Social login with ${provider}`);
+            
+            // Example: Show loading state
+            const btn = event.target.closest('.social-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+            btn.style.pointerEvents = 'none';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.pointerEvents = 'auto';
+                alert(`${provider} login functionality needs to be implemented`);
+            }, 1500);
+        }
+
+        // Input Focus Effects
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.parentElement.classList.remove('focused');
+                }
+            });
+        });
+
+        // Auto-hide alerts after 5 seconds
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            });
+        }, 5000);
+
+        // Add smooth animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginContainer = document.querySelector('.login-container');
+            loginContainer.style.opacity = '0';
+            loginContainer.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                loginContainer.style.transition = 'all 0.6s ease';
+                loginContainer.style.opacity = '1';
+                loginContainer.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
 </html>
 
