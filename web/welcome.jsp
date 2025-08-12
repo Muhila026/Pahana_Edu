@@ -6,7 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookShop - Your Gateway to Knowledge</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            --primary-color: #6366f1; /* Modern indigo */
+            --secondary-color: #8b5cf6; /* Modern violet */
+            --accent-color: #a855f7; /* Modern purple */
+            --text-color: #1e293b; /* Dark blue-gray */
+            --light-color: #f8fafc; /* Light gray */
+            --hover-color: #4f46e5;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -14,72 +26,157 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
-            background: linear-gradient(135deg, #724784 0%, #ac87cd 100%);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
             min-height: 100vh;
         }
 
         /* ===== PUBLIC NAVIGATION (Top Navbar Only) ===== */
         .public-navbar {
-            background: linear-gradient(135deg, #724784, #ac87cd, #724784);
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .nav-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
+            padding: 0 20px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 0 2rem;
+            justify-content: space-between;
         }
         
         .logo {
-            color: white;
             font-size: 1.8rem;
-            font-weight: bold;
+            font-weight: 700;
+            color: #6366f1;
             text-decoration: none;
+            letter-spacing: -0.5px;
+            padding: 18px 20px 18px 0;
+            display: flex;
+            align-items: center;
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-text {
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% auto;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .logo:hover .logo-text {
+            background-position: 100% 0;
         }
         
         .nav-menu {
-            display: flex;
             list-style: none;
-            gap: 2rem;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            margin-left: auto;
+        }
+        
+        .nav-menu li {
+            position: relative;
         }
         
         .nav-menu a {
-            color: white;
+            display: block;
+            padding: 18px 16px;
+            color: #1e293b;
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            border-bottom: 2px solid transparent;
         }
         
-        .nav-menu a:hover {
-            color: #ffaf24;
-            background: rgba(255,255,255,0.1);
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #6366f1;
+            border-bottom-color: #6366f1;
+        }
+        
+        .nav-menu a.active {
+            font-weight: 600;
+        }
+        
+        .welcome-user {
+            color: #8b5cf6 !important;
+            font-weight: 600 !important;
+            padding: 18px 16px !important;
         }
         
         .login-btn {
-            background: #ff7f42;
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 25px;
-            font-weight: bold;
-            transition: all 0.3s;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            color: white !important;
+            font-weight: 600 !important;
+            border-radius: 6px;
+            margin: 7px 0;
+            padding: 8px 16px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
         }
         
         .login-btn:hover {
-            background: #ffaf24;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+        
+        @media (max-width: 991px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .logo {
+                border-right: none;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                margin-right: 0;
+                justify-content: space-between;
+            }
+            
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                margin: 0;
+            }
+            
+            .nav-menu.show {
+                display: flex;
+            }
+            
+            .nav-menu a {
+                padding: 14px 20px;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            }
+            
+            .welcome-user {
+                padding: 14px 20px !important;
+            }
+            
+            .login-btn {
+                margin: 10px 20px;
+                border-radius: 6px;
+            }
+            
+            .navbar-toggler {
+                position: absolute;
+                right: 20px;
+                top: 20px;
+                border-color: #6366f1;
+            }
         }
 
         /* ===== CUSTOMER NAVIGATION (Top Navbar Only) ===== */
@@ -88,89 +185,110 @@
         }
 
         .customer-navbar {
-            background: linear-gradient(135deg, #724784, #ac87cd, #724784);
-            padding: 1.2rem 0;
-            position: fixed;
-            width: 100%;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .customer-nav-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
+            padding: 0 20px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 0 2rem;
-            gap: 2rem;
+            justify-content: space-between;
         }
 
         .customer-logo {
-            color: white;
             font-size: 1.8rem;
-            font-weight: bold;
+            font-weight: 700;
+            color: #6366f1;
             text-decoration: none;
+            letter-spacing: -0.5px;
+            padding: 18px 20px 18px 0;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .customer-logo-text {
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% auto;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .customer-logo:hover .customer-logo-text {
+            background-position: 100% 0;
         }
 
         .customer-nav-menu {
-            display: flex;
             list-style: none;
-            gap: 0.5rem;
+            display: flex;
             margin: 0;
             padding: 0;
+            margin-left: auto;
             flex-wrap: wrap;
-            justify-content: center;
+        }
+
+        .customer-nav-menu li {
+            position: relative;
         }
 
         .customer-nav-menu a {
-            color: white;
+            display: block;
+            padding: 18px 16px;
+            color: #1e293b;
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s;
-            padding: 0.6rem 1rem;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            border-bottom: 2px solid transparent;
             white-space: nowrap;
-            font-size: 0.9rem;
         }
 
-        .customer-nav-menu a:hover {
-            color: #ffaf24;
-            background: rgba(255,255,255,0.1);
-            transform: translateY(-2px);
+        .customer-nav-menu a:hover,
+        .customer-nav-menu a.active {
+            color: #6366f1;
+            border-bottom-color: #6366f1;
         }
 
         .customer-nav-menu a.active {
-            background: #ff7f42;
-            color: white;
+            font-weight: 600;
         }
 
         .customer-user-info {
             display: flex;
             align-items: center;
             gap: 1rem;
-            color: white;
+            color: #1e293b;
         }
 
         .customer-user-info .welcome-text {
-            font-weight: 500;
-            color: #ffaf24;
+            font-weight: 600;
+            color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         .customer-logout-btn {
-            background: #ff7f42;
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 25px;
-            font-weight: bold;
-            transition: all 0.3s;
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+            color: white !important;
+            font-weight: 600 !important;
+            border-radius: 6px;
+            margin: 7px 0;
+            padding: 8px 16px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -178,8 +296,47 @@
         }
 
         .customer-logout-btn:hover {
-            background: #ffaf24;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+        
+        @media (max-width: 991px) {
+            .customer-nav-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .customer-logo {
+                border-right: none;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                margin-right: 0;
+                justify-content: space-between;
+            }
+            
+            .customer-nav-menu {
+                display: none;
+                flex-direction: column;
+                margin: 0;
+            }
+            
+            .customer-nav-menu.show {
+                display: flex;
+            }
+            
+            .customer-nav-menu a {
+                padding: 14px 20px;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            }
+            
+            .customer-user-info {
+                margin-left: 0;
+                justify-content: center;
+            }
+            
+            .customer-logout-btn {
+                margin: 10px 20px;
+                border-radius: 6px;
+            }
         }
 
         .customer-main-content {
@@ -195,7 +352,7 @@
 
         .admin-sidebar {
             width: 320px;
-            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
             color: white;
             padding: 1rem 0;
             position: fixed;
@@ -203,7 +360,8 @@
             overflow-y: auto;
             z-index: 999;
             scrollbar-width: thin;
-            scrollbar-color: #3498db #2c3e50;
+            scrollbar-color: #a855f7 #6366f1;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
         }
 
         .admin-sidebar::-webkit-scrollbar {
@@ -211,33 +369,44 @@
         }
 
         .admin-sidebar::-webkit-scrollbar-track {
-            background: #2c3e50;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
         }
 
         .admin-sidebar::-webkit-scrollbar-thumb {
-            background: #3498db;
+            background: #a855f7;
             border-radius: 3px;
         }
 
         .admin-sidebar::-webkit-scrollbar-thumb:hover {
-            background: #2980b9;
+            background: #9333ea;
         }
 
         .admin-sidebar-header {
-            padding: 0 1.5rem 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 2rem 1.5rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
             margin-bottom: 1.5rem;
             text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            margin: 0 1rem 1.5rem;
+            border-radius: 12px;
         }
 
         .admin-sidebar-header h2 {
-            color: #3498db;
+            color: #fbbf24;
             margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .admin-sidebar-header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
         }
 
         .admin-sidebar-menu {
             list-style: none;
-            padding: 0 1.5rem;
+            padding: 0 1rem;
         }
 
         .admin-sidebar-menu li {
@@ -248,33 +417,59 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            color: white;
+            color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
-            padding: 0.8rem 1.2rem;
-            border-radius: 8px;
-            transition: all 0.3s;
+            padding: 1rem 1.2rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
             font-weight: 500;
             font-size: 0.95rem;
-            border-left: 3px solid transparent;
+            border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .admin-sidebar-menu a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .admin-sidebar-menu a:hover::before {
+            left: 100%;
         }
 
         .admin-sidebar-menu a:hover {
-            background: rgba(255,255,255,0.1);
-            color: #3498db;
-            transform: translateX(5px);
-            border-left-color: #3498db;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            transform: translateX(8px);
+            border-left-color: #fbbf24;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .admin-sidebar-menu a.active {
-            background: rgba(52, 152, 219, 0.2);
-            color: #3498db;
-            border-left-color: #3498db;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(168, 85, 247, 0.2));
+            color: #fbbf24;
+            border-left-color: #fbbf24;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.2);
         }
 
         .admin-sidebar-menu i {
             width: 20px;
             text-align: center;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            color: #fbbf24;
+        }
+
+        .admin-sidebar-menu a:hover i,
+        .admin-sidebar-menu a.active i {
+            color: #fbbf24;
+            transform: scale(1.1);
         }
 
         .admin-main-content {
@@ -288,39 +483,66 @@
         }
 
         .staff-navbar {
-            background: linear-gradient(135deg, #724784, #ac87cd, #724784);
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .staff-tabs {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             display: flex;
-            gap: 0.5rem;
-            padding: 0 2rem;
+            gap: 0.8rem;
+            padding: 0 20px;
             overflow-x: auto;
+            justify-content: flex-end;
         }
 
         .staff-tab {
-            background: rgba(255,255,255,0.1);
-            color: white;
+            background: rgba(99, 102, 241, 0.05);
+            color: #1e293b;
             text-decoration: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 25px;
+            padding: 18px 16px;
+            border-radius: 6px;
             font-weight: 500;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap;
+            position: relative;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            font-size: 0.95rem;
+            border-bottom: 2px solid transparent;
         }
 
-        .staff-tab:hover,
+        .staff-tab:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+            border-bottom-color: #6366f1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.1);
+        }
+
         .staff-tab.active {
-            background: #ff7f42;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
             color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            border-color: #6366f1;
+            border-bottom-color: #6366f1;
+        }
+        
+        @media (max-width: 991px) {
+            .staff-tabs {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .staff-tab {
+                padding: 14px 20px;
+                border-radius: 6px;
+            }
         }
 
         .staff-main-content {
@@ -337,24 +559,39 @@
         .page-header {
             background: white;
             padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
             margin-bottom: 2rem;
             text-align: center;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
         }
 
         .page-header h1 {
-            color: #724784;
+            color: #6366f1;
             margin-bottom: 0.5rem;
+            font-weight: 700;
         }
 
         .page-header p {
-            color: #666;
+            color: #64748b;
+            font-weight: 500;
         }
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, #724784 0%, #ac87cd 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -393,20 +630,37 @@
             font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
+            position: relative;
+            overflow: hidden;
         }
         
         .cta-primary {
-            background: #ff7f42;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
             color: white;
         }
         
+        .cta-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .cta-primary:hover::before {
+            left: 100%;
+        }
+        
         .cta-primary:hover {
-            background: #ffaf24;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255,127,66,0.3);
+            box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
         }
         
         .cta-secondary {
@@ -417,14 +671,15 @@
         
         .cta-secondary:hover {
             background: white;
-            color: #724784;
+            color: #6366f1;
             transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
         }
         
         /* Features Section */
         .features {
             padding: 5rem 2rem;
-            background: #ffe2b8;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
         }
         
         .container {
@@ -436,7 +691,8 @@
             text-align: center;
             font-size: 2.5rem;
             margin-bottom: 3rem;
-            color: #724784;
+            color: #6366f1;
+            font-weight: 700;
         }
         
         .features-grid {
@@ -448,36 +704,63 @@
         .feature-card {
             background: white;
             padding: 2.5rem;
-            border-radius: 15px;
+            border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
         }
         
         .feature-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
+            border-color: rgba(99, 102, 241, 0.3);
         }
         
         .feature-card h3 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
-            color: #724784;
+            color: #6366f1;
+            font-weight: 600;
         }
         
         .feature-icon {
             font-size: 3rem;
-            color: #ac87cd;
+            color: #fbbf24;
             margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+            color: #f59e0b;
         }
         
         .feature-card p {
-            color: #666;
+            color: #64748b;
             line-height: 1.7;
         }
         
         /* Footer */
         .footer {
-            background: #724784;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
             color: white;
             text-align: center;
             padding: 2rem;
@@ -486,7 +769,8 @@
         
         .footer p {
             margin: 0;
-            opacity: 0.8;
+            opacity: 0.9;
+            font-weight: 500;
         }
         
         /* Responsive Design */
@@ -526,10 +810,12 @@
             .admin-sidebar {
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
+                box-shadow: none;
             }
             
             .admin-sidebar.open {
                 transform: translateX(0);
+                box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
             }
             
             .customer-main-content,
@@ -637,7 +923,9 @@
         <!-- PUBLIC NAVIGATION (Top Navbar Only) -->
         <nav class="public-navbar">
             <div class="nav-container">
-                <a href="#home" class="logo">📚 BookShop</a>
+                <a href="#home" class="logo">
+                    <span class="logo-text">Pahana BookShop</span>
+                </a>
                 <ul class="nav-menu">
                     <li><a href="welcome.jsp">Home</a></li>
                     <li><a href="about.jsp">About</a></li>
@@ -652,7 +940,7 @@
         <!-- Hero Section -->
         <section id="home" class="hero">
             <div class="hero-content">
-                <h1>Welcome to BookShop</h1>
+                <h1>Welcome to Pahana BookShop</h1>
                 <p>Discover thousands of books from classic literature to modern bestsellers. Your journey into the world of knowledge starts here.</p>
                 <div class="cta-buttons">
                     <a href="register.jsp" class="cta-btn cta-primary">Get Started</a>
@@ -667,7 +955,9 @@
             <!-- Navbar -->
             <nav class="public-navbar">
                 <div class="nav-container">
-                    <a href="welcome.jsp" class="logo">📚 BookShop</a>
+                    <a href="welcome.jsp" class="logo">
+                        <span class="logo-text">Pahana BookShop</span>
+                    </a>
                     <ul class="nav-menu">
                         <li><a href="welcome.jsp" class="active">Home</a></li>
                         <li><a href="about.jsp">About</a></li>
@@ -903,9 +1193,11 @@
             const navbar = document.querySelector('.public-navbar, .customer-navbar, .staff-navbar');
             if (navbar) {
                 if (window.scrollY > 50) {
-                    navbar.style.background = 'rgba(114, 71, 132, 0.95)';
+                    navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                    navbar.style.boxShadow = '0 8px 25px -1px rgba(0, 0, 0, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.06)';
                 } else {
-                    navbar.style.background = 'linear-gradient(135deg, #724784, #ac87cd, #724784)';
+                    navbar.style.background = 'white';
+                    navbar.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
                 }
             }
         });
