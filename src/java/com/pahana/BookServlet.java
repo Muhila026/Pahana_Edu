@@ -110,6 +110,14 @@ public class BookServlet extends HttpServlet {
             stmt.close();
             conn.close();
             
+            // Check if redirect is requested
+            String redirect = request.getParameter("redirect");
+            if ("pos".equals(redirect)) {
+                // Redirect back to POS with book data
+                request.getRequestDispatcher("pos.jsp").forward(request, response);
+                return;
+            }
+            
             // Forward to appropriate page based on user role
             HttpSession session = request.getSession();
             String userType = (String) session.getAttribute("userType");
