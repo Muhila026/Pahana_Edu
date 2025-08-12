@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categories - BookShop</title>
+    <title>Categories - Pahana BookShop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,72 +15,168 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
-            background: linear-gradient(135deg, #724784 0%, #ac87cd 100%);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
             min-height: 100vh;
+        }
+
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            --primary-color: #6366f1; /* Modern indigo */
+            --secondary-color: #8b5cf6; /* Modern violet */
+            --accent-color: #a855f7; /* Modern purple */
+            --text-color: #1e293b; /* Dark blue-gray */
+            --light-color: #f8fafc; /* Light gray */
+            --hover-color: #4f46e5;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* ===== PUBLIC NAVIGATION (Top Navbar Only) ===== */
         .public-navbar {
-            background: linear-gradient(135deg, #724784, #ac87cd, #724784);
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .nav-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
+            padding: 0 20px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 0 2rem;
+            justify-content: space-between;
         }
         
         .logo {
-            color: white;
             font-size: 1.8rem;
-            font-weight: bold;
+            font-weight: 700;
+            color: #6366f1;
             text-decoration: none;
+            letter-spacing: -0.5px;
+            padding: 18px 20px 18px 0;
+            display: flex;
+            align-items: center;
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-text {
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% auto;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .logo:hover .logo-text {
+            background-position: 100% 0;
         }
         
         .nav-menu {
-            display: flex;
             list-style: none;
-            gap: 2rem;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            margin-left: auto;
+        }
+        
+        .nav-menu li {
+            position: relative;
         }
         
         .nav-menu a {
-            color: white;
+            display: block;
+            padding: 18px 16px;
+            color: #1e293b;
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            border-bottom: 2px solid transparent;
         }
         
-        .nav-menu a:hover {
-            color: #ffaf24;
-            background: rgba(255,255,255,0.1);
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #6366f1;
+            border-bottom-color: #6366f1;
+        }
+        
+        .nav-menu a.active {
+            font-weight: 600;
+        }
+        
+        .welcome-user {
+            color: #8b5cf6 !important;
+            font-weight: 600 !important;
+            padding: 18px 16px !important;
         }
         
         .login-btn {
-            background: #ff7f42;
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 25px;
-            font-weight: bold;
-            transition: all 0.3s;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            color: white !important;
+            font-weight: 600 !important;
+            border-radius: 6px;
+            margin: 7px 0;
+            padding: 8px 16px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
         }
         
         .login-btn:hover {
-            background: #ffaf24;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+        
+        @media (max-width: 991px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .logo {
+                border-right: none;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                margin-right: 0;
+                justify-content: space-between;
+            }
+            
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                margin: 0;
+            }
+            
+            .nav-menu.show {
+                display: flex;
+            }
+            
+            .nav-menu a {
+                padding: 14px 20px;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            }
+            
+            .welcome-user {
+                padding: 14px 20px !important;
+            }
+            
+            .login-btn {
+                margin: 10px 20px;
+                border-radius: 6px;
+            }
+            
+            .navbar-toggler {
+                position: absolute;
+                right: 20px;
+                top: 20px;
+                border-color: #6366f1;
+            }
         }
 
         /* ===== CUSTOMER NAVIGATION (Top Navbar Only) ===== */
@@ -88,89 +185,110 @@
         }
 
         .customer-navbar {
-            background: linear-gradient(135deg, #724784, #ac87cd, #724784);
-            padding: 1.2rem 0;
-            position: fixed;
-            width: 100%;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .customer-nav-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
+            padding: 0 20px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 0 2rem;
-            gap: 2rem;
+            justify-content: space-between;
         }
 
         .customer-logo {
-            color: white;
             font-size: 1.8rem;
-            font-weight: bold;
+            font-weight: 700;
+            color: #6366f1;
             text-decoration: none;
+            letter-spacing: -0.5px;
+            padding: 18px 20px 18px 0;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .customer-logo-text {
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% auto;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .customer-logo:hover .customer-logo-text {
+            background-position: 100% 0;
         }
 
         .customer-nav-menu {
-            display: flex;
             list-style: none;
-            gap: 0.5rem;
+            display: flex;
             margin: 0;
             padding: 0;
+            margin-left: auto;
             flex-wrap: wrap;
-            justify-content: center;
+        }
+
+        .customer-nav-menu li {
+            position: relative;
         }
 
         .customer-nav-menu a {
-            color: white;
+            display: block;
+            padding: 18px 16px;
+            color: #1e293b;
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s;
-            padding: 0.6rem 1rem;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            border-bottom: 2px solid transparent;
             white-space: nowrap;
-            font-size: 0.9rem;
         }
 
-        .customer-nav-menu a:hover {
-            color: #ffaf24;
-            background: rgba(255,255,255,0.1);
-            transform: translateY(-2px);
+        .customer-nav-menu a:hover,
+        .customer-nav-menu a.active {
+            color: #6366f1;
+            border-bottom-color: #6366f1;
         }
 
         .customer-nav-menu a.active {
-            background: #ff7f42;
-            color: white;
+            font-weight: 600;
         }
 
         .customer-user-info {
             display: flex;
             align-items: center;
             gap: 1rem;
-            color: white;
+            color: #1e293b;
         }
 
         .customer-user-info .welcome-text {
-            font-weight: 500;
-            color: #ffaf24;
+            font-weight: 600;
+            color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         .customer-logout-btn {
-            background: #ff7f42;
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 25px;
-            font-weight: bold;
-            transition: all 0.3s;
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+            color: white !important;
+            font-weight: 600 !important;
+            border-radius: 6px;
+            margin: 7px 0;
+            padding: 8px 16px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -178,8 +296,56 @@
         }
 
         .customer-logout-btn:hover {
-            background: #ffaf24;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        @media (max-width: 991px) {
+            .customer-nav-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .customer-logo {
+                border-right: none;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                margin-right: 0;
+                justify-content: space-between;
+            }
+            
+            .customer-nav-menu {
+                display: none;
+                flex-direction: column;
+                margin: 0;
+            }
+            
+            .customer-nav-menu.show {
+                display: flex;
+            }
+            
+            .customer-nav-menu a {
+                padding: 14px 20px;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            }
+            
+            .customer-user-info {
+                padding: 14px 20px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .customer-logout-btn {
+                margin: 10px 20px;
+                border-radius: 6px;
+                justify-content: center;
+            }
+            
+            .navbar-toggler {
+                position: absolute;
+                right: 20px;
+                top: 20px;
+                border-color: #6366f1;
+            }
         }
 
         .customer-main-content {
@@ -354,7 +520,7 @@
 
         /* Page Header for Public */
         .public-page-header {
-            background: linear-gradient(135deg, #724784 0%, #ac87cd 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             color: white;
             text-align: center;
             padding: 120px 2rem 80px;
@@ -405,7 +571,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #724784, #ac87cd);
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
         }
 
         .category-card:hover {
@@ -440,11 +606,11 @@
         }
 
         .book-count {
-            background: #ffe2b8;
+            background: rgba(99, 102, 241, 0.1);
             padding: 0.5rem 1rem;
             border-radius: 20px;
             font-weight: 500;
-            color: #724784;
+            color: #6366f1;
         }
 
         .category-tags {
@@ -455,8 +621,8 @@
         }
 
         .tag {
-            background: #ffe2b8;
-            color: #724784;
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
             padding: 0.3rem 0.8rem;
             border-radius: 15px;
             font-size: 0.85rem;
@@ -464,7 +630,7 @@
         }
 
         .explore-btn {
-            background: linear-gradient(135deg, #ff7f42, #ffaf24);
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
             color: white;
             text-decoration: none;
             padding: 0.8rem 1.5rem;
@@ -476,12 +642,12 @@
 
         .explore-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 127, 66, 0.4);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
         }
 
         /* Footer */
         .footer {
-            background: #724784;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
             color: white;
             text-align: center;
             padding: 2rem;
@@ -616,7 +782,9 @@
         <!-- PUBLIC NAVIGATION (Top Navbar Only) -->
         <nav class="public-navbar">
             <div class="nav-container">
-                <a href="#home" class="logo">📚 BookShop</a>
+                <a href="#home" class="logo">
+                    <span class="logo-text">Pahana BookShop</span>
+                </a>
                 <ul class="nav-menu">
                     <li><a href="welcome.jsp">Home</a></li>
                     <li><a href="about.jsp">About</a></li>
@@ -635,13 +803,15 @@
         </section>
 
     <% } else if ("customer".equals(navType)) { %>
-        <!-- CUSTOMER NAVIGATION (Top Navbar Only) - Using Public Style -->
+        <!-- CUSTOMER NAVIGATION (Top Navbar Only) -->
        
             <!-- Navbar -->
-            <nav class="public-navbar">
-                <div class="nav-container">
-                    <a href="welcome.jsp" class="logo">📚 BookShop</a>
-                    <ul class="nav-menu">
+            <nav class="customer-navbar">
+                <div class="customer-nav-container">
+                    <a href="welcome.jsp" class="customer-logo">
+                        <span class="customer-logo-text">Pahana BookShop</span>
+                    </a>
+                    <ul class="customer-nav-menu">
                         <li><a href="welcome.jsp">Home</a></li>
                         <li><a href="about.jsp">About</a></li>
                         <li><a href="books.jsp">Books</a></li>
@@ -655,8 +825,8 @@
                         String customerName = (String) session.getAttribute("customerName");
                         String displayName = (customerName != null && !customerName.trim().isEmpty()) ? customerName : username;
                         %>
-                        <li><span style="color: #ffaf24; font-weight: 500;">Welcome, <%= displayName %></span></li>
-                        <li><a href="LogoutServlet" class="login-btn">Logout</a></li>
+                        <li><span class="welcome-text">Welcome, <%= displayName %></span></li>
+                        <li><a href="LogoutServlet" class="customer-logout-btn">Logout</a></li>
                     </ul>
                 </div>
             </nav>
@@ -805,7 +975,7 @@
             } else {
             %>
                 <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
-                    <h3 style="color: #724784; margin-bottom: 1rem;">No Categories Found</h3>
+                    <h3 style="color: #6366f1; margin-bottom: 1rem;">No Categories Found</h3>
                     <p style="color: #666;">Categories will be loaded from the database.</p>
                 </div>
             <%
@@ -825,9 +995,13 @@
             const navbar = document.querySelector('.public-navbar, .customer-navbar, .staff-navbar');
             if (navbar) {
                 if (window.scrollY > 50) {
-                    navbar.style.background = 'rgba(114, 71, 132, 0.95)';
+                    navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                    navbar.style.backdropFilter = 'blur(10px)';
+                    navbar.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
                 } else {
-                    navbar.style.background = 'linear-gradient(135deg, #724784, #ac87cd, #724784)';
+                    navbar.style.background = 'white';
+                    navbar.style.backdropFilter = 'none';
+                    navbar.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
                 }
             }
         });

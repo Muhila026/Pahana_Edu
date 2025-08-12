@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar Template</title>
+    
+    <!-- Include the unified sidebar CSS -->
+    <link rel="stylesheet" href="css/sidebar.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Your page-specific CSS here -->
+    <style>
+        /* Your page-specific styles */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .page-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Layout with Sidebar -->
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="admin-sidebar-header">
+                <h2>Admin Panel</h2>
+                <p>Welcome, Admin User</p>
+            </div>
+            
+            <!-- Sidebar Menu -->
+            <ul class="admin-sidebar-menu">
+                <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="pos.jsp"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
+                <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
+                <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
+                <li><a href="user-management.jsp"><i class="fas fa-users"></i> Manage Users</a></li>
+                <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Customer Support</a></li>
+                <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
+                <li><a href="reports.jsp"><i class="fas fa-chart-bar"></i> Analytics & Reports</a></li>
+                <li><a href="inventory.jsp"><i class="fas fa-boxes"></i> Inventory Management</a></li>
+                <li><a href="settings.jsp"><i class="fas fa-cogs"></i> System Settings</a></li>
+                <li><a href="backup.jsp"><i class="fas fa-database"></i> Backup & Restore</a></li>
+                <li><a href="logs.jsp"><i class="fas fa-file-alt"></i> System Logs</a></li>
+                <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main-content">
+            <div class="main-content">
+                <div class="page-header">
+                    <h1>Admin Dashboard</h1>
+                    <p>Welcome back! Manage your bookstore and help customers find their perfect books.</p>
+                </div>
+                
+                <!-- Your page content here -->
+                <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    <h2>How to Use This Template</h2>
+                    <p>This template shows how to implement the unified sidebar design across all your pages.</p>
+                    
+                    <h3>Steps to Implement:</h3>
+                    <ol>
+                        <li>Include the sidebar CSS file: <code>&lt;link rel="stylesheet" href="css/sidebar.css"&gt;</code></li>
+                        <li>Include the sidebar JS file: <code>&lt;script src="js/sidebar.js"&gt;&lt;/script&gt;</code></li>
+                        <li>Use the HTML structure shown above</li>
+                        <li>Customize the menu items and content as needed</li>
+                    </ol>
+                    
+                    <h3>Features:</h3>
+                    <ul>
+                        <li>✅ Modern gradient design with consistent colors</li>
+                        <li>✅ Responsive design for mobile devices</li>
+                        <li>✅ Smooth animations and hover effects</li>
+                        <li>✅ Mobile toggle button with overlay</li>
+                        <li>✅ Active menu item highlighting</li>
+                        <li>✅ Custom scrollbar styling</li>
+                        <li>✅ Loading states and animations</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Include the unified sidebar JavaScript -->
+    <script src="js/sidebar.js"></script>
+    
+    <!-- Your page-specific JavaScript here -->
+    <script>
+        // Example: Add a new menu item dynamically
+        setTimeout(() => {
+            if (window.SidebarUtils) {
+                window.SidebarUtils.addMenuItem('New Feature', 'new-feature.jsp', 'star', 'start');
+            }
+        }, 2000);
+        
+        // Example: Change theme
+        setTimeout(() => {
+            if (window.SidebarUtils) {
+                // window.SidebarUtils.changeTheme('ocean');
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
