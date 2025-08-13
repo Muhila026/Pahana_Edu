@@ -108,6 +108,58 @@ CREATE TABLE IF NOT EXISTS sale_items (
 );
 
 -- =============================================
+-- 8. Bills/Invoices Table
+-- =============================================
+CREATE TABLE IF NOT EXISTS bills (
+    bill_id INT AUTO_INCREMENT PRIMARY KEY,
+    bill_number VARCHAR(50) NOT NULL UNIQUE,       -- Unique bill number (e.g., BILL-2024-001)
+    sale_id INT NOT NULL,                          -- Reference to sales table
+    customer_name VARCHAR(100),                    -- Customer name (for walk-in customers)
+    customer_email VARCHAR(100),                   -- Customer email
+    customer_phone VARCHAR(20),                    -- Customer phone
+    customer_address TEXT,                         -- Customer address
+    subtotal DECIMAL(10,2) NOT NULL,              -- Subtotal before tax
+    tax_amount DECIMAL(10,2) NOT NULL,            -- Tax amount
+    total_amount DECIMAL(10,2) NOT NULL,          -- Total amount after tax
+    payment_method VARCHAR(50) NOT NULL,           -- Payment method used
+    bill_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Date and time of bill generation
+    created_by VARCHAR(50) NOT NULL,               -- Username of staff who created the bill
+    notes TEXT,                                    -- Additional notes
+    FOREIGN KEY (sale_id) REFERENCES sales(sale_id)
+        ON DELETE CASCADE,                         -- Delete bill when sale is deleted
+    FOREIGN KEY (created_by) REFERENCES users(username)
+        ON DELETE RESTRICT
+);
+
+-- =============================================
+-- 9. Bill Items Table (Individual Items in Bills)
+-- =============================================
+CREATE TABLE IF NOT EXISTS bill_items (
+    bill_item_id INT AUTO_INCREMENT PRIMARY KEY,
+    bill_id INT NOT NULL,                          -- Reference to bills table
+    book_id INT NOT NULL,                          -- Reference to books table
+    book_title VARCHAR(150) NOT NULL,              -- Book title at time of billing
+    book_author VARCHAR(100),                      -- Author at time of billing
+    quantity INT NOT NULL,                         -- Quantity in bill
+    unit_price DECIMAL(10,2) NOT NULL,            -- Unit price at time of billing
+    total_price DECIMAL(10,2) NOT NULL,           -- Total price for this item
+    FOREIGN KEY (bill_id) REFERENCES bills(bill_id)
+        ON DELETE CASCADE,                         -- Delete items when bill is deleted
+    FOREIGN KEY (book_id) REFERENCES books(book_id)
+        ON DELETE RESTRICT
+);
+
+-- =============================================
+-- 10. Bill Number Sequence Table
+-- =============================================
+CREATE TABLE IF NOT EXISTS bill_sequence (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    year INT NOT NULL,
+    sequence INT NOT NULL DEFAULT 1,
+    UNIQUE KEY unique_year_sequence (year, sequence)
+);
+
+-- =============================================
 -- Insert Sample Data
 -- =============================================
 
@@ -120,15 +172,15 @@ INSERT IGNORE INTO roles (role_name) VALUES
 
 -- Users (Admin/Staff Login) - Fixed column names
 INSERT IGNORE INTO users (username, password_, email, phone, role_id) VALUES
-('adminUser', '123', 'admin@pahanaedu.lk', '0712345678', 1),
-('managerUser', '123', 'manager@pahanaedu.lk', '0712345679', 2),
-('staffUser', '123', 'staff@pahanaedu.lk', '0712345680', 3);
+('admin', '123', 'admin@pahanaedu.lk', '0712345678', 1),
+('manager', '123', 'manager@pahanaedu.lk', '0712345679', 2),
+('staff', '123', 'staff@pahanaedu.lk', '0712345680', 3);
 
 -- Customers (Customer Login) - Fixed column names
 INSERT IGNORE INTO customers (account_number, name, email, password_, address, telephone, role_id) VALUES
 ('ACC001', 'Kasun Perera', 'kasun@example.com', '123', '123 Colombo Road, Colombo', '0771234567', 4),
-('ACC002', 'Nimali Jayasekara', 'nimali@example.com', '123', '45 Kandy Road, Kandy', '0777654321', 4);
-
+('ACC002', 'Nimali Jayasekara', 'nimali@example.com', '123', '45 Kandy Road, Kandy', '0777654321', 4),
+('ACC003', 'muhilavijayakumar', 'muhilavijayakumar26@gmail.com', '123', '45 Kandy Road, Kandy', '0777654326', 4);
 -- Insert Sample Book Categories
 INSERT IGNORE INTO categories (category_name, description) VALUES
 ('Fiction', 'Novels and stories that are imaginative or made up'),
@@ -144,6 +196,12 @@ INSERT IGNORE INTO books (title, author, price, stock_quantity, category_id) VAL
 ('Fairy Tales for Kids', 'Various', 800.00, 40, 3),                           -- Children
 ('Sapiens: A Brief History of Humankind', 'Yuval Noah Harari', 1800.00, 25, 2), -- Non-Fiction
 ('The Second World War', 'Antony Beevor', 2000.00, 20, 5);                     -- History
+
+-- Insert Sample Bill Sequence
+INSERT IGNORE INTO bill_sequence (year, sequence) VALUES 
+(2024, 1),
+(2024, 2),
+(2024, 3);
 
 -- =============================================
 -- Create Indexes for Better Performance

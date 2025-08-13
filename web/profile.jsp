@@ -224,6 +224,11 @@
             color: white;
         }
 
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
@@ -235,16 +240,128 @@
             border-top: 1px solid #e2e8f0;
         }
 
+        .role-specific-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .role-specific-section h4 {
+            color: #6366f1;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .customer-layout {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            min-height: 100vh;
+        }
+
+        .customer-navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .customer-nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .customer-logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #6366f1;
+            text-decoration: none;
+        }
+
+        .customer-nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .customer-nav-menu a {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .customer-nav-menu a:hover,
+        .customer-nav-menu a.active {
+            color: #6366f1;
+        }
+
+        .customer-user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .welcome-text {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .customer-logout-btn {
+            background: #ef4444;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .customer-logout-btn:hover {
+            background: #dc2626;
+        }
+
+        .customer-main-content {
+            padding: 0 2rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
         @media (max-width: 768px) {
             .admin-main-content { margin-left: 0; }
             .main-content { padding: 1rem; }
             .profile-grid { grid-template-columns: 1fr; }
             .form-row { grid-template-columns: 1fr; }
+            .customer-nav-container { flex-direction: column; gap: 1rem; }
+            .customer-nav-menu { flex-wrap: wrap; justify-content: center; }
         }
     </style>
 </head>
 <body>
     <%
+    // Determine user type and role for navigation
     String userType = null;
     String role = null;
     String username = null;
@@ -259,7 +376,8 @@
         }
     }
     
-    String navType = "public";
+    // Determine navigation type
+    String navType = "public"; // default
     if (isLoggedIn) {
         if ("admin".equals(userType) || "Admin".equals(role)) {
             navType = "admin";
@@ -274,14 +392,21 @@
     %>
 
     <% if (isLoggedIn) { %>
-        <% if ("admin".equals(navType)) { %>
+        <% if ("admin".equals(navType) || "manager".equals(navType) || "staff".equals(navType)) { %>
+            <!-- MANAGER/ADMIN/STAFF LAYOUT (Sidebar) -->
             <div class="admin-layout">
+                <!-- Sidebar -->
                 <aside class="admin-sidebar">
                     <div class="admin-sidebar-header">
-                        <h2>Admin Panel</h2>
+                        <h2><%= "admin".equals(navType) ? "Admin" : ("manager".equals(navType) ? "Manager" : "Staff") %> Panel</h2>
                         <p>Welcome, <%= username %></p>
                     </div>
                     
+                    <%
+                    // Different sidebar menus for each role
+                    if ("admin".equals(navType)) {
+                    %>
+                    <!-- ADMIN SIDEBAR MENU -->
                     <ul class="admin-sidebar-menu">
                         <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard (Admin)</a></li>
                         <li><a href="pos.jsp"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
@@ -296,105 +421,10 @@
                         <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help (Admin)</a></li>
                         <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                     </ul>
-                </aside>
-
-                <main class="admin-main-content">
-                    <div class="main-content">
-                        <div class="page-header">
-                            <h1>My Profile</h1>
-                            <p>View and manage your profile information</p>
-                        </div>
-                        
-                        <div class="profile-grid">
-                            <!-- Profile Summary -->
-                            <div class="profile-card">
-                                <div class="profile-header">
-                                    <h3><i class="fas fa-user"></i> Profile Summary</h3>
-                                    <p>Your account overview</p>
-                                </div>
-                                
-                                <div class="profile-avatar">
-                                    <div class="avatar">
-                                        <%= username != null ? username.charAt(0).toUpperCase() : "U" %>
-                                    </div>
-                                    <div class="profile-info">
-                                        <div class="profile-name"><%= username != null ? username : "User" %></div>
-                                        <div class="profile-role"><%= role != null ? role : "User" %></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="profile-stats">
-                                    <div class="stat-item">
-                                        <div class="stat-number">Admin</div>
-                                        <div class="stat-label">Role</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <div class="stat-number">Active</div>
-                                        <div class="stat-label">Status</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Profile Details -->
-                            <div class="profile-card">
-                                <div class="profile-header">
-                                    <h3><i class="fas fa-edit"></i> Profile Details</h3>
-                                    <p>Update your personal information</p>
-                                </div>
-                                
-                                <form id="profileForm">
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label for="firstName">First Name</label>
-                                            <input type="text" id="firstName" name="firstName" value="Admin" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="lastName">Last Name</label>
-                                            <input type="text" id="lastName" name="lastName" value="User" required>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="email">Email Address</label>
-                                        <input type="email" id="email" name="email" value="admin@pahanabookshop.com" required>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="phone">Phone Number</label>
-                                        <input type="tel" id="phone" name="phone" value="+1 (555) 123-4567">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="department">Department</label>
-                                        <select id="department" name="department">
-                                            <option value="administration" selected>Administration</option>
-                                            <option value="management">Management</option>
-                                            <option value="operations">Operations</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="profile-actions">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-save"></i> Save Changes
-                                        </button>
-                                        <button type="button" class="btn btn-secondary" onclick="resetForm()">
-                                            <i class="fas fa-undo"></i> Reset
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
-        <% } else if ("manager".equals(navType)) { %>
-            <div class="admin-layout">
-                <aside class="admin-sidebar">
-                    <div class="admin-sidebar-header">
-                        <h2>Manager Panel</h2>
-                        <p>Welcome, <%= username %></p>
-                    </div>
-                    
+                    <%
+                    } else if ("manager".equals(navType)) {
+                    %>
+                    <!-- MANAGER SIDEBAR MENU -->
                     <ul class="admin-sidebar-menu">
                         <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard (Manager)</a></li>
                         <li><a href="pos.jsp"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
@@ -407,105 +437,10 @@
                         <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help (Manager)</a></li>
                         <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                     </ul>
-                </aside>
-
-                <main class="admin-main-content">
-                    <div class="main-content">
-                        <div class="page-header">
-                            <h1>My Profile</h1>
-                            <p>View and manage your profile information</p>
-                        </div>
-                        
-                        <div class="profile-grid">
-                            <!-- Profile Summary -->
-                            <div class="profile-card">
-                                <div class="profile-header">
-                                    <h3><i class="fas fa-user"></i> Profile Summary</h3>
-                                    <p>Your account overview</p>
-                                </div>
-                                
-                                <div class="profile-avatar">
-                                    <div class="avatar">
-                                        <%= username != null ? username.charAt(0).toUpperCase() : "U" %>
-                                    </div>
-                                    <div class="profile-info">
-                                        <div class="profile-name"><%= username != null ? username : "User" %></div>
-                                        <div class="profile-role"><%= role != null ? role : "User" %></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="profile-stats">
-                                    <div class="stat-item">
-                                        <div class="stat-number">Manager</div>
-                                        <div class="stat-label">Role</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <div class="stat-number">Active</div>
-                                        <div class="stat-label">Status</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Profile Details -->
-                            <div class="profile-card">
-                                <div class="profile-header">
-                                    <h3><i class="fas fa-edit"></i> Profile Details</h3>
-                                    <p>Update your personal information</p>
-                                </div>
-                                
-                                <form id="profileForm">
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label for="firstName">First Name</label>
-                                            <input type="text" id="firstName" name="firstName" value="Manager" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="lastName">Last Name</label>
-                                            <input type="text" id="lastName" name="lastName" value="User" required>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="email">Email Address</label>
-                                        <input type="email" id="email" name="email" value="manager@pahanabookshop.com" required>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="phone">Phone Number</label>
-                                        <input type="tel" id="phone" name="phone" value="+1 (555) 123-4567">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="department">Department</label>
-                                        <select id="department" name="department">
-                                            <option value="management" selected>Management</option>
-                                            <option value="operations">Operations</option>
-                                            <option value="sales">Sales</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="profile-actions">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-save"></i> Save Changes
-                                        </button>
-                                        <button type="button" class="btn btn-secondary" onclick="resetForm()">
-                                            <i class="fas fa-undo"></i> Reset
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
-        <% } else if ("staff".equals(navType)) { %>
-            <div class="admin-layout">
-                <aside class="admin-sidebar">
-                    <div class="admin-sidebar-header">
-                        <h2>Staff Panel</h2>
-                        <p>Welcome, <%= username %></p>
-                    </div>
-                    
+                    <%
+                    } else if ("staff".equals(navType)) {
+                    %>
+                    <!-- STAFF SIDEBAR MENU -->
                     <ul class="admin-sidebar-menu">
                         <li><a href="pos.jsp"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
                         <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
@@ -513,8 +448,12 @@
                         <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help (Staff)</a></li>
                         <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                     </ul>
+                    <%
+                    }
+                    %>
                 </aside>
 
+                <!-- Main Content -->
                 <main class="admin-main-content">
                     <div class="main-content">
                         <div class="page-header">
@@ -542,7 +481,7 @@
                                 
                                 <div class="profile-stats">
                                     <div class="stat-item">
-                                        <div class="stat-number">Staff</div>
+                                        <div class="stat-number"><%= role != null ? role : "User" %></div>
                                         <div class="stat-label">Role</div>
                                     </div>
                                     <div class="stat-item">
@@ -559,11 +498,13 @@
                                     <p>Update your personal information</p>
                                 </div>
                                 
+                                <div id="alertContainer"></div>
+                                
                                 <form id="profileForm">
                                     <div class="form-row">
                                         <div class="form-group">
                                             <label for="firstName">First Name</label>
-                                            <input type="text" id="firstName" name="firstName" value="Staff" required>
+                                            <input type="text" id="firstName" name="firstName" value="<%= role != null ? role : "User" %>" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="lastName">Last Name</label>
@@ -573,7 +514,7 @@
                                     
                                     <div class="form-group">
                                         <label for="email">Email Address</label>
-                                        <input type="email" id="email" name="email" value="staff@pahanabookshop.com" required>
+                                        <input type="email" id="email" name="email" value="<%= username != null ? username.toLowerCase() + "@pahanabookshop.com" : "user@pahanabookshop.com" %>" required>
                                     </div>
                                     
                                     <div class="form-group">
@@ -584,11 +525,31 @@
                                     <div class="form-group">
                                         <label for="department">Department</label>
                                         <select id="department" name="department">
-                                            <option value="operations" selected>Operations</option>
-                                            <option value="sales">Sales</option>
-                                            <option value="customer-service">Customer Service</option>
+                                            <% if ("admin".equals(navType)) { %>
+                                                <option value="administration" selected>Administration</option>
+                                                <option value="management">Management</option>
+                                                <option value="operations">Operations</option>
+                                                <option value="it">IT & Systems</option>
+                                            <% } else if ("manager".equals(navType)) { %>
+                                                <option value="management" selected>Management</option>
+                                                <option value="operations">Operations</option>
+                                                <option value="sales">Sales</option>
+                                                <option value="marketing">Marketing</option>
+                                            <% } else if ("staff".equals(navType)) { %>
+                                                <option value="operations" selected>Operations</option>
+                                                <option value="sales">Sales</option>
+                                                <option value="customer-service">Customer Service</option>
+                                                <option value="inventory">Inventory</option>
+                                            <% } %>
                                         </select>
                                     </div>
+                                    
+                                    <% if ("admin".equals(navType) || "manager".equals(navType)) { %>
+                                    <div class="form-group">
+                                        <label for="employeeId">Employee ID</label>
+                                        <input type="text" id="employeeId" name="employeeId" value="EMP-<%= username != null ? username.toUpperCase() : "USER" %>-001" readonly>
+                                    </div>
+                                    <% } %>
                                     
                                     <div class="profile-actions">
                                         <button type="submit" class="btn btn-primary">
@@ -597,15 +558,36 @@
                                         <button type="button" class="btn btn-secondary" onclick="resetForm()">
                                             <i class="fas fa-undo"></i> Reset
                                         </button>
+                                        <button type="button" class="btn btn-danger" onclick="changePassword()">
+                                            <i class="fas fa-key"></i> Change Password
+                                        </button>
                                     </div>
                                 </form>
+                                
+                                <!-- Role-specific sections -->
+                                <% if ("admin".equals(navType)) { %>
+                                <div class="role-specific-section">
+                                    <h4><i class="fas fa-shield-alt"></i> Administrative Settings</h4>
+                                    <p>As an administrator, you have access to system-wide settings and user management.</p>
+                                </div>
+                                <% } else if ("manager".equals(navType)) { %>
+                                <div class="role-specific-section">
+                                    <h4><i class="fas fa-chart-line"></i> Management Overview</h4>
+                                    <p>As a manager, you can view team performance and generate reports.</p>
+                                </div>
+                                <% } else if ("staff".equals(navType)) { %>
+                                <div class="role-specific-section">
+                                    <h4><i class="fas fa-tasks"></i> Staff Information</h4>
+                                    <p>As staff, you can update your availability and contact information.</p>
+                                </div>
+                                <% } %>
                             </div>
                         </div>
                     </div>
                 </main>
             </div>
         <% } else { %>
-            <!-- Customer Profile -->
+            <!-- CUSTOMER LAYOUT (Top Navigation) -->
             <div class="customer-layout">
                 <nav class="customer-navbar">
                     <div class="customer-nav-container">
@@ -613,15 +595,14 @@
                             <span class="customer-logo-text">Pahana BookShop</span>
                         </a>
                         <ul class="customer-nav-menu">
-                            <li><a href="welcome.jsp">Home (Welcome Page)</a></li>
+                            <li><a href="welcome.jsp">Home</a></li>
                             <li><a href="about.jsp">About</a></li>
                             <li><a href="books.jsp">Books</a></li>
                             <li><a href="categories.jsp">Categories</a></li>
                             <li><a href="orders.jsp">My Orders</a></li>
-                            <li><a href="wishlist.jsp">Wishlist</a></li>
                             <li><a href="contact.jsp">Contact</a></li>
                             <li><a href="profile.jsp" class="active">My Profile</a></li>
-                            <li><a href="help.jsp">Help (Customer)</a></li>
+                            <li><a href="help.jsp">Help</a></li>
                         </ul>
                         <div class="customer-user-info">
                             <span class="welcome-text">Welcome, <%= username %></span>
@@ -676,6 +657,8 @@
                                     <p>Update your personal information</p>
                                 </div>
                                 
+                                <div id="alertContainer"></div>
+                                
                                 <form id="profileForm">
                                     <div class="form-row">
                                         <div class="form-group">
@@ -690,7 +673,7 @@
                                     
                                     <div class="form-group">
                                         <label for="email">Email Address</label>
-                                        <input type="email" id="email" name="email" value="customer@pahanabookshop.com" required>
+                                        <input type="email" id="email" name="email" value="<%= username != null ? username.toLowerCase() + "@email.com" : "customer@email.com" %>" required>
                                     </div>
                                     
                                     <div class="form-group">
@@ -703,6 +686,18 @@
                                         <textarea id="address" name="address" rows="3" placeholder="Enter your shipping address"></textarea>
                                     </div>
                                     
+                                    <div class="form-group">
+                                        <label for="preferences">Reading Preferences</label>
+                                        <select id="preferences" name="preferences">
+                                            <option value="fiction">Fiction</option>
+                                            <option value="non-fiction">Non-Fiction</option>
+                                            <option value="mystery">Mystery & Thriller</option>
+                                            <option value="romance">Romance</option>
+                                            <option value="sci-fi">Science Fiction</option>
+                                            <option value="biography">Biography</option>
+                                        </select>
+                                    </div>
+                                    
                                     <div class="profile-actions">
                                         <button type="submit" class="btn btn-primary">
                                             <i class="fas fa-save"></i> Save Changes
@@ -710,8 +705,17 @@
                                         <button type="button" class="btn btn-secondary" onclick="resetForm()">
                                             <i class="fas fa-undo"></i> Reset
                                         </button>
+                                        <button type="button" class="btn btn-danger" onclick="changePassword()">
+                                            <i class="fas fa-key"></i> Change Password
+                                        </button>
                                     </div>
                                 </form>
+                                
+                                <!-- Customer-specific section -->
+                                <div class="role-specific-section">
+                                    <h4><i class="fas fa-shopping-bag"></i> Customer Benefits</h4>
+                                    <p>As a customer, you can track orders, manage wishlists, and receive personalized recommendations.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -719,6 +723,7 @@
             </div>
         <% } %>
     <% } else { %>
+        <!-- NOT LOGGED IN -->
         <div style="text-align: center; padding: 4rem 2rem;">
             <h1 style="color: #ef4444; margin-bottom: 1rem;">Access Denied</h1>
             <p style="color: #64748b; margin-bottom: 2rem;">Please login to view your profile.</p>
@@ -728,15 +733,110 @@
 
     <script src="js/sidebar.js"></script>
     <script>
+        // Profile management functionality
+        let originalFormData = {};
+
+        // Initialize form data tracking
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('profileForm');
+            if (form) {
+                // Store original form data
+                const formData = new FormData(form);
+                for (let [key, value] of formData.entries()) {
+                    originalFormData[key] = value;
+                }
+            }
+            
+            // Ensure profile menu item is marked as active
+            if (window.SidebarUtils && window.SidebarUtils.setActiveMenuItem) {
+                window.SidebarUtils.setActiveMenuItem('My Profile');
+            }
+        });
+
         function resetForm() {
-            document.getElementById('profileForm').reset();
-            alert('Form reset to original values');
+            const form = document.getElementById('profileForm');
+            if (form) {
+                form.reset();
+                showAlert('Form reset to original values', 'success');
+            }
         }
 
+        function changePassword() {
+            const newPassword = prompt('Enter new password:');
+            if (newPassword && newPassword.length >= 6) {
+                showAlert('Password changed successfully!', 'success');
+            } else if (newPassword) {
+                showAlert('Password must be at least 6 characters long', 'error');
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            if (alertContainer) {
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type}`;
+                alert.textContent = message;
+                alert.style.display = 'block';
+                
+                alertContainer.appendChild(alert);
+                
+                // Auto-hide after 3 seconds
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                    alert.remove();
+                }, 3000);
+            }
+        }
+
+        // Form submission handling
         document.getElementById('profileForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Profile updated successfully!');
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            
+            // Validate form
+            if (validateForm(data)) {
+                // Simulate form submission
+                showAlert('Profile updated successfully!', 'success');
+                
+                // Update original form data
+                Object.assign(originalFormData, data);
+            }
         });
+
+        function validateForm(data) {
+            if (!data.firstName || !data.lastName || !data.email) {
+                showAlert('Please fill in all required fields', 'error');
+                return false;
+            }
+            
+            if (data.email && !isValidEmail(data.email)) {
+                showAlert('Please enter a valid email address', 'error');
+                return false;
+            }
+            
+            if (data.phone && !isValidPhone(data.phone)) {
+                showAlert('Please enter a valid phone number', 'error');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function isValidPhone(phone) {
+            const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+            return phoneRegex.test(phone.replace(/[\s\-\(\)]/g, ''));
+        }
     </script>
 </body>
 </html>
