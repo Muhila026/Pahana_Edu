@@ -794,7 +794,7 @@
                     <li><a href="books.jsp">Books</a></li>
                     <li><a href="categories.jsp">Categories</a></li>
                     <li><a href="contact.jsp">Contact</a></li>
-                    <li><a href="help.jsp">Help (Public - How to Login and Benefits)</a></li>
+                    <li><a href="help.jsp">Help</a></li>
                     <li><a href="login.jsp" class="login-btn">Login</a></li>
                 </ul>
             </div>
@@ -830,7 +830,7 @@
                         <li><a href="wishlist.jsp">Wishlist</a></li>
                         <li><a href="contact.jsp">Contact</a></li>
                         <li><a href="profile.jsp">My Profile</a></li>
-                        <li><a href="help.jsp">Help (Customer)</a></li>
+                        <li><a href="help.jsp">Help</a></li>
                         <%
                         // Get customer full name from session
                         String customerName = (String) session.getAttribute("customerName");
@@ -922,7 +922,7 @@
                     <li><a href="pos.jsp"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
                     <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
                     <li><a href="profile.jsp"><i class="fas fa-user"></i> My Profile</a></li>
-                    <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help (Staff)</a></li>
+                    <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help</a></li>
                     <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
                 <%

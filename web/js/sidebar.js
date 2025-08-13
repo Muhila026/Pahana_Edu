@@ -14,7 +14,7 @@ class SidebarManager {
         this.createToggleButton();
         this.bindEvents();
         this.setActiveMenuItem();
-        this.addLoadingState();
+        // Removed automatic loading state
     }
 
     // Create overlay for mobile sidebar
@@ -114,12 +114,55 @@ class SidebarManager {
     // Set active menu item based on current page
     setActiveMenuItem() {
         const currentPath = window.location.pathname;
+        const currentPage = currentPath.split('/').pop(); // Get just the filename
         const menuItems = document.querySelectorAll('.admin-sidebar-menu a');
         
+        // First, remove all active classes
+        menuItems.forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // Special handling for POS page
+        if (currentPage === 'pos.jsp') {
+            // Find and mark the POS menu item as active
+            menuItems.forEach(item => {
+                if (item.textContent.trim().includes('Point of Sale')) {
+                    item.classList.add('active');
+                    return;
+                }
+            });
+            return;
+        }
+        
+        // For other pages, find the exact match and mark it as active
         menuItems.forEach(item => {
             const href = item.getAttribute('href');
-            if (href && currentPath.includes(href.split('?')[0])) {
+            if (href) {
+                const hrefPage = href.split('/').pop().split('?')[0]; // Get filename without query params
+                
+                // Exact match for the current page
+                if (hrefPage === currentPage) {
+                    item.classList.add('active');
+                    return; // Found the match, no need to continue
+                }
+            }
+        });
+    }
+
+    // Manually set a specific menu item as active
+    setSpecificMenuItemActive(menuText) {
+        const menuItems = document.querySelectorAll('.admin-sidebar-menu a');
+        
+        // First, remove all active classes
+        menuItems.forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // Then, find the menu item with the specified text and mark it as active
+        menuItems.forEach(item => {
+            if (item.textContent.trim().includes(menuText)) {
                 item.classList.add('active');
+                return;
             }
         });
     }
@@ -135,14 +178,24 @@ class SidebarManager {
     }
 
     // Refresh sidebar content
-    refreshSidebar() {
-        this.sidebar.classList.add('loading');
-        
-        // Simulate refresh delay
-        setTimeout(() => {
-            this.sidebar.classList.remove('loading');
+    refreshSidebar(showLoading = false) {
+        if (showLoading) {
+            this.sidebar.classList.add('loading');
+            
+            // Simulate refresh delay
+            setTimeout(() => {
+                this.sidebar.classList.remove('loading');
+                this.setActiveMenuItem();
+            }, 800);
+        } else {
+            // Just refresh without loading state
             this.setActiveMenuItem();
-        }, 800);
+        }
+    }
+
+    // Clear loading state
+    clearLoadingState() {
+        this.sidebar.classList.remove('loading');
     }
 
     // Add new menu item dynamically
@@ -272,6 +325,20 @@ window.SidebarUtils = {
     changeTheme: function(theme) {
         if (window.sidebarManager) {
             window.sidebarManager.changeTheme(theme);
+        }
+    },
+    
+    // Set specific menu item as active from external code
+    setActiveMenuItem: function(menuText) {
+        if (window.sidebarManager) {
+            window.sidebarManager.setSpecificMenuItemActive(menuText);
+        }
+    },
+    
+    // Clear loading state from external code
+    clearLoading: function() {
+        if (window.sidebarManager) {
+            window.sidebarManager.clearLoadingState();
         }
     }
 };

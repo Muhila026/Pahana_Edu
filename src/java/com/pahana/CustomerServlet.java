@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,9 @@ public class CustomerServlet extends HttpServlet {
         switch (action) {
             case "list":
                 listCustomers(request, response);
+                break;
+            case "search":
+                searchCustomers(request, response);
                 break;
             case "view":
                 viewCustomer(request, response);
@@ -156,6 +160,60 @@ public class CustomerServlet extends HttpServlet {
         }
 
         request.getRequestDispatcher("customer-management.jsp").forward(request, response);
+    }
+
+    private void searchCustomers(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        String searchTerm = request.getParameter("searchTerm");
+        List<Customer> customers = new ArrayList<>();
+
+        try (Connection conn = getConnection()) {
+            String sql = "SELECT customer_id, name, email, telephone as phone, address FROM customers " +
+                        "WHERE name LIKE ? OR email LIKE ? OR telephone LIKE ? " +
+                        "ORDER BY name LIMIT 10";
+            
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                String searchPattern = "%" + searchTerm + "%";
+                stmt.setString(1, searchPattern);
+                stmt.setString(2, searchPattern);
+                stmt.setString(3, searchPattern);
+                
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        Customer customer = new Customer();
+                        customer.setCustomerId(rs.getInt("customer_id"));
+                        customer.setName(rs.getString("name"));
+                        customer.setEmail(rs.getString("email"));
+                        customer.setPhone(rs.getString("phone"));
+                        customer.setAddress(rs.getString("address"));
+                        customers.add(customer);
+                    }
+                }
+            }
+            
+        } catch (SQLException e) {
+            // Log error but don't throw exception to avoid breaking POS functionality
+            System.err.println("Error searching customers: " + e.getMessage());
+        }
+
+        // Return results as HTML table that can be parsed by JavaScript
+        response.setContentType("text/html");
+        response.setCharacterEncoding("UTF-8");
+        
+        PrintWriter out = response.getWriter();
+        out.println("<table style='display: none;'>"); // Hidden table for data extraction
+        
+        for (Customer customer : customers) {
+            out.println("<tr data-customer-id='" + customer.getCustomerId() + "'>");
+            out.println("<td class='customer-name'>" + customer.getName() + "</td>");
+            out.println("<td class='customer-email'>" + (customer.getEmail() != null ? customer.getEmail() : "") + "</td>");
+            out.println("<td class='customer-phone'>" + (customer.getPhone() != null ? customer.getPhone() : "") + "</td>");
+            out.println("<td class='customer-address'>" + (customer.getAddress() != null ? customer.getAddress() : "") + "</td>");
+            out.println("</tr>");
+        }
+        
+        out.println("</table>");
     }
 
     private void viewCustomer(HttpServletRequest request, HttpServletResponse response)
