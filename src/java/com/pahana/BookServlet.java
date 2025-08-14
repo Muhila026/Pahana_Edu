@@ -66,7 +66,7 @@ public class BookServlet extends HttpServlet {
         
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydatabase", "root", "password");
             
             String sql = "SELECT b.*, c.category_name FROM books b " +
                         "LEFT JOIN categories c ON b.category_id = c.category_id " +

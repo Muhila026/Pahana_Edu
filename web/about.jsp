@@ -62,7 +62,7 @@
         .logo {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #6366f1;
+            color: var(--primary-color);
             text-decoration: none;
             letter-spacing: -0.5px;
             padding: 18px 20px 18px 0;
@@ -72,7 +72,7 @@
         }
         
         .logo-text {
-            background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -99,7 +99,7 @@
         .nav-menu a {
             display: block;
             padding: 18px 16px;
-            color: #1e293b;
+            color: var(--text-color);
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
@@ -110,8 +110,8 @@
         
         .nav-menu a:hover,
         .nav-menu a.active {
-            color: #6366f1;
-            border-bottom-color: #6366f1;
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
         }
         
         .nav-menu a.active {
@@ -119,7 +119,7 @@
         }
         
         .login-btn {
-            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
             color: white !important;
             font-weight: 600 !important;
             border-radius: 6px;
@@ -131,7 +131,7 @@
         
         .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 12px rgba(13, 30, 76, 0.3);
         }
         
         @media (max-width: 991px) {
@@ -195,7 +195,7 @@
         .customer-logo {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #6366f1;
+            color: var(--primary-color);
             text-decoration: none;
             letter-spacing: -0.5px;
             padding: 18px 20px 18px 0;
@@ -205,7 +205,7 @@
         }
 
         .customer-logo-text {
-            background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -233,7 +233,7 @@
         .customer-nav-menu a {
             display: block;
             padding: 18px 16px;
-            color: #1e293b;
+            color: var(--text-color);
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
@@ -245,8 +245,8 @@
 
         .customer-nav-menu a:hover,
         .customer-nav-menu a.active {
-            color: #6366f1;
-            border-bottom-color: #6366f1;
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
         }
 
         .customer-nav-menu a.active {
@@ -262,11 +262,11 @@
 
         .customer-user-info .welcome-text {
             font-weight: 600;
-            color: #8b5cf6;
-            background: rgba(139, 92, 246, 0.1);
+            color: var(--secondary-color);
+            background: rgba(196, 140, 179, 0.1);
             padding: 0.5rem 1rem;
             border-radius: 8px;
-            border: 1px solid rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(196, 140, 179, 0.2);
         }
 
         .customer-logout-btn {
