@@ -894,6 +894,7 @@
                     <li><a href="user-management.jsp"><i class="fas fa-users"></i> Manage Users</a></li>
                     <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Manage Customer</a></li>
                     <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
+                    <li><a href="discount.jsp"><i class="fas fa-shopping-cart"></i> Discounts</a></li>
                     <li><a href="settings.jsp"><i class="fas fa-cogs"></i> System Settings</a></li>
                     <li><a href="profile.jsp"><i class="fas fa-user"></i> My Profile</a></li>
                     <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help</a></li>
