@@ -211,7 +211,7 @@
                         </div>
 
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="code" name="code" placeholder="123456" maxlength="6" pattern="\\d{6}" required>
+                            <input type="text" class="form-control" id="code" name="code" placeholder="123456" maxlength="6" pattern="[0-9]{6}" required>
                             <label for="code"><i class="fas fa-key me-2"></i>Verification code</label>
                         </div>
 
@@ -291,25 +291,102 @@
 
             requestForm.addEventListener('submit', function (e) {
                 e.preventDefault();
+                const email = emailInput.value.trim();
+                if (!email) return;
+
                 sendCodeBtn.classList.add('btn-loading');
                 sendCodeBtn.disabled = true;
-                setTimeout(() => {
+
+                // First, check if email exists in system (customers or users) via CustomerServlet
+                const checkXhr = new XMLHttpRequest();
+                checkXhr.open('POST', 'CustomerServlet?action=check-email-exists', true);
+                checkXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                checkXhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                checkXhr.onreadystatechange = function () {
+                    if (checkXhr.readyState === 4) {
+                        try {
+                            const resp = JSON.parse(checkXhr.responseText || '{}');
+                            if (checkXhr.status === 200 && resp.status === 'success' && resp.exists) {
+                                // Send verification code
+                                const sendXhr = new XMLHttpRequest();
+                                sendXhr.open('POST', 'CustomerServlet?action=send-verification', true);
+                                sendXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                                sendXhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                                sendXhr.onreadystatechange = function () {
+                                    if (sendXhr.readyState === 4) {
+                                        sendCodeBtn.classList.remove('btn-loading');
+                                        sendCodeBtn.disabled = false;
+                                        if (sendXhr.status === 200) {
+                                            try {
+                                                const s = JSON.parse(sendXhr.responseText || '{}');
+                                                if (s.status === 'success') {
+                                                    // Move to verify step
+                                                    emailReadonly.value = email;
+                                                    stepRequest.classList.remove('active');
+                                                    stepVerify.classList.add('active');
+                                                    startResendCountdown(60);
+                                                } else {
+                                                    showInlineAlert(stepRequest, s.message || 'Failed to send verification code', 'danger');
+                                                }
+                                            } catch (_) {
+                                                // Fallback assume success
+                                                emailReadonly.value = email;
+                                                stepRequest.classList.remove('active');
+                                                stepVerify.classList.add('active');
+                                                startResendCountdown(60);
+                                            }
+                                        } else {
+                                            showInlineAlert(stepRequest, 'Failed to send verification code. Please try again.', 'danger');
+                                        }
+                                    }
+                                };
+                                sendXhr.send('email=' + encodeURIComponent(email) + '&context=forgot-password');
+                            } else {
+                                sendCodeBtn.classList.remove('btn-loading');
+                                sendCodeBtn.disabled = false;
+                                showInlineAlert(stepRequest, 'This email is not registered.', 'danger');
+                            }
+                        } catch (err) {
+                            sendCodeBtn.classList.remove('btn-loading');
+                            sendCodeBtn.disabled = false;
+                            showInlineAlert(stepRequest, 'System error. Please try again.', 'danger');
+                        }
+                    }
+                };
+                checkXhr.onerror = function () {
                     sendCodeBtn.classList.remove('btn-loading');
                     sendCodeBtn.disabled = false;
-                    emailReadonly.value = emailInput.value;
-                    stepRequest.classList.remove('active');
-                    stepVerify.classList.add('active');
-                    startResendCountdown(60);
-                }, 1200);
+                    showInlineAlert(stepRequest, 'Network error. Please try again.', 'danger');
+                };
+                checkXhr.send('email=' + encodeURIComponent(email));
             });
 
             resendBtn.addEventListener('click', function () {
+                const email = emailReadonly.value.trim();
+                if (!email) return;
                 resendBtn.classList.add('btn-loading');
                 resendBtn.disabled = true;
-                setTimeout(() => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'CustomerServlet?action=send-verification', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        resendBtn.classList.remove('btn-loading');
+                        if (xhr.status === 200) {
+                            startResendCountdown(60);
+                        } else {
+                            showInlineAlert(stepVerify, 'Failed to resend code. Try again.', 'danger');
+                            resendBtn.disabled = false;
+                        }
+                    }
+                };
+                xhr.onerror = function () {
                     resendBtn.classList.remove('btn-loading');
-                    startResendCountdown(60);
-                }, 800);
+                    showInlineAlert(stepVerify, 'Network error. Try again.', 'danger');
+                    resendBtn.disabled = false;
+                };
+                xhr.send('email=' + encodeURIComponent(email) + '&context=forgot-password');
             });
 
             changeEmail.addEventListener('click', function (e) {
@@ -319,29 +396,86 @@
             });
 
             resetForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const email = emailReadonly.value.trim();
+                const code = document.getElementById('code').value.trim();
                 const newPassword = document.getElementById('newPassword').value;
                 const confirmPassword = document.getElementById('confirmPassword').value;
-                if (newPassword !== confirmPassword) {
-                    e.preventDefault();
-                    const alert = document.createElement('div');
-                    alert.className = 'alert alert-danger';
-                    alert.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>Passwords do not match';
-                    resetForm.prepend(alert);
-                    setTimeout(() => { alert.remove(); }, 4000);
+                if (!email || !code) {
+                    showInlineAlert(resetForm, 'Please enter the verification code.', 'danger');
                     return;
                 }
-                e.preventDefault();
+                if (!newPassword || !confirmPassword) {
+                    showInlineAlert(resetForm, 'Please fill in both password fields.', 'danger');
+                    return;
+                }
+                if (newPassword !== confirmPassword) {
+                    showInlineAlert(resetForm, 'Passwords do not match.', 'danger');
+                    return;
+                }
                 resetBtn.classList.add('btn-loading');
                 resetBtn.disabled = true;
-                setTimeout(() => {
+
+                // Step 1: verify code
+                const verifyXhr = new XMLHttpRequest();
+                verifyXhr.open('POST', 'CustomerServlet?action=verify-email', true);
+                verifyXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                verifyXhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                verifyXhr.onreadystatechange = function () {
+                    if (verifyXhr.readyState === 4) {
+                        if (verifyXhr.status === 200) {
+                            let ok = false;
+                            try {
+                                const resp = JSON.parse(verifyXhr.responseText || '{}');
+                                ok = resp.status === 'success' || resp.success === true;
+                            } catch (_) {}
+                            if (ok) {
+                                // Step 2: reset password
+                                const resetXhr = new XMLHttpRequest();
+                                resetXhr.open('POST', 'CustomerServlet?action=reset-password', true);
+                                resetXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                                resetXhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                                resetXhr.onreadystatechange = function () {
+                                    if (resetXhr.readyState === 4) {
+                                        resetBtn.classList.remove('btn-loading');
+                                        resetBtn.disabled = false;
+                                        if (resetXhr.status === 200) {
+                                            try {
+                                                const r = JSON.parse(resetXhr.responseText || '{}');
+                                                if (r.status === 'success') {
+                                                    showInlineAlert(resetForm, 'Password reset successfully! Redirecting to login...', 'success');
+                                                    setTimeout(() => { window.location.href = 'login.jsp'; }, 1500);
+                                                } else {
+                                                    showInlineAlert(resetForm, r.message || 'Failed to reset password.', 'danger');
+                                                }
+                                            } catch (_) {
+                                                showInlineAlert(resetForm, 'Password reset successfully! Redirecting to login...', 'success');
+                                                setTimeout(() => { window.location.href = 'login.jsp'; }, 1500);
+                                            }
+                                        } else {
+                                            showInlineAlert(resetForm, 'Failed to reset password. Please try again.', 'danger');
+                                        }
+                                    }
+                                };
+                                resetXhr.send('email=' + encodeURIComponent(email) + '&newPassword=' + encodeURIComponent(newPassword));
+                            } else {
+                                resetBtn.classList.remove('btn-loading');
+                                resetBtn.disabled = false;
+                                showInlineAlert(resetForm, 'Invalid verification code.', 'danger');
+                            }
+                        } else {
+                            resetBtn.classList.remove('btn-loading');
+                            resetBtn.disabled = false;
+                            showInlineAlert(resetForm, 'Failed to verify code. Please try again.', 'danger');
+                        }
+                    }
+                };
+                verifyXhr.onerror = function () {
                     resetBtn.classList.remove('btn-loading');
                     resetBtn.disabled = false;
-                    const ok = document.createElement('div');
-                    ok.className = 'alert alert-success';
-                    ok.innerHTML = '<i class="fas fa-check-circle me-2"></i>Password reset successful (demo)';
-                    resetForm.prepend(ok);
-                    setTimeout(() => { ok.remove(); }, 4000);
-                }, 1200);
+                    showInlineAlert(resetForm, 'Network error during verification. Please try again.', 'danger');
+                };
+                verifyXhr.send('email=' + encodeURIComponent(email) + '&code=' + encodeURIComponent(code));
             });
 
             setTimeout(() => {
@@ -361,6 +495,14 @@
                     card.style.transform = 'translateY(0)';
                 }, 100);
             });
+
+            function showInlineAlert(container, message, type) {
+                const div = document.createElement('div');
+                div.className = 'alert alert-' + (type === 'success' ? 'success' : 'danger');
+                div.innerHTML = (type === 'success' ? '<i class="fas fa-check-circle me-2"></i>' : '<i class="fas fa-exclamation-circle me-2"></i>') + message;
+                container.prepend(div);
+                setTimeout(() => { div.remove(); }, 4000);
+            }
         </script>
     </body>
 </html>
