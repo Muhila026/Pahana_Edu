@@ -640,8 +640,8 @@
                                         <% } %>
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-warning" onclick="openUpdateStockModal(<%= book.getBookId() %>, '<%= book.getTitle() %>', <%= book.getStockQuantity() %>)">
-                                            <i class="fas fa-edit"></i> Update Stock
+                                        <button class="btn btn-sm btn-warning" data-book-id="<%= book.getBookId() %>" data-book-title="<%= book.getTitle() != null ? book.getTitle().replace("&","&amp;").replace("\"","&quot;").replace("<","&lt;").replace(">","&gt;").replace("'","&#39;") : "" %>" data-current-stock="<%= book.getStockQuantity() %>" onclick="openUpdateStockModalFromButton(this)">
+                                            <i class="fas fa-plus"></i> Add Stock
                                         </button>
                                     </td>
                                 </tr>
@@ -663,18 +663,18 @@
                     </div>
                 </div>
 
-                <!-- Update Stock Modal -->
+                <!-- Add Stock Modal -->
                 <div class="modal fade" id="updateStockModal" tabindex="-1" aria-labelledby="updateStockModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="updateStockModalLabel">
-                            <i class="fas fa-edit me-2"></i>Update Stock
+                            <i class="fas fa-plus me-2"></i>Add Stock
                                 </h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <form action="StockServlet" method="post">
-                                <input type="hidden" name="action" value="update">
+                                <input type="hidden" name="action" value="add">
                         <input type="hidden" id="updateBookId" name="bookId">
                                 <div class="modal-body">
                                     <div class="mb-3">
@@ -686,15 +686,15 @@
                                 <input type="number" class="form-control" id="currentStock" readonly>
                                     </div>
                                     <div class="mb-3">
-                                <label for="newStock" class="form-label">New Stock Quantity *</label>
+                                <label for="newStock" class="form-label">Add Quantity *</label>
                                 <input type="number" class="form-control" id="newStock" name="stockQuantity" 
-                                               min="0" required placeholder="Enter new stock quantity">
+                                               min="1" required placeholder="Enter quantity to add">
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                     <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save me-2"></i>Update Stock
+                                <i class="fas fa-plus me-2"></i>Add Stock
                                     </button>
                                 </div>
                             </form>
@@ -749,6 +749,13 @@
             const modal = new bootstrap.Modal(document.getElementById('updateStockModal'));
             modal.show();
             }
+
+        function openUpdateStockModalFromButton(buttonEl) {
+            const bookId = buttonEl.getAttribute('data-book-id');
+            const bookTitle = buttonEl.getAttribute('data-book-title') || '';
+            const currentStock = buttonEl.getAttribute('data-current-stock');
+            openUpdateStockModal(bookId, bookTitle, currentStock);
+        }
         </script>
     </body>
 </html> 
