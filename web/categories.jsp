@@ -520,11 +520,14 @@
 
         /* Page Header for Public */
         .public-page-header {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: linear-gradient(0deg, rgba(15,23,42,0.55), rgba(15,23,42,0.55)), url('IMG/books.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             color: white;
             text-align: center;
-            padding: 120px 2rem 80px;
-            margin-bottom: 4rem;
+            padding: 100px 2rem 70px;
+            margin-bottom: 3rem;
         }
 
         .public-page-header h1 {
@@ -539,6 +542,11 @@
             max-width: 600px;
             margin: 0 auto;
         }
+
+        /* Category Pills */
+        .category-pills { max-width: 1000px; margin: -2rem auto 2rem; padding: 0 2rem; display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+        .category-pill { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); color: #6366f1; padding: 0.35rem 0.9rem; border-radius: 999px; text-decoration: none; font-weight: 500; transition: all 0.2s; }
+        .category-pill:hover { background: #6366f1; color: #fff; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(99,102,241,0.25); }
 
         /* Categories Section */
         .categories {
@@ -798,9 +806,17 @@
 
         <!-- Page Header -->
         <section class="public-page-header">
-            <h1>Book Categories</h1>
-            <p>Explore our diverse collection of books organized by categories. Find your next favorite read in our carefully curated sections.</p>
+            <h1>Browse Categories</h1>
+            <p>School to University, Professional studies and Sinhala/English literature — curated for Sri Lankan learners.</p>
         </section>
+        <div class="category-pills">
+            <a class="category-pill" href="BookCategoryServlet?action=list&redirect=categories.jsp">All</a>
+            <a class="category-pill" href="BookServlet?action=search&categoryFilter=School&redirect=books.jsp">School</a>
+            <a class="category-pill" href="BookServlet?action=search&categoryFilter=University&redirect=books.jsp">University</a>
+            <a class="category-pill" href="BookServlet?action=search&categoryFilter=Professional&redirect=books.jsp">Professional</a>
+            <a class="category-pill" href="BookServlet?action=search&categoryFilter=Literature&redirect=books.jsp">Literature</a>
+            <a class="category-pill" href="BookServlet?action=search&categoryFilter=Kids&redirect=books.jsp">Kids</a>
+        </div>
 
     <% } else if ("customer".equals(navType)) { %>
         <!-- CUSTOMER NAVIGATION (Top Navbar Only) -->

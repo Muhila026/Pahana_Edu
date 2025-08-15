@@ -414,7 +414,10 @@
         
         /* Page Header */
         .page-header {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: linear-gradient(0deg, rgba(15,23,42,0.55), rgba(15,23,42,0.55)), url('IMG/store.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             padding: 8rem 2rem 4rem;
             text-align: center;
             color: white;
@@ -921,35 +924,35 @@
                         <i class="fas fa-map-marker-alt"></i>
                         <div>
                             <strong>Address</strong>
-                            <span>123 Book Street, Reading City, RC 12345</span>
+                            <span>123 Galle Road, Colombo 04, Sri Lanka</span>
                         </div>
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-phone"></i>
                         <div>
                             <strong>Phone</strong>
-                            <span>+1 (555) 123-4567</span>
+                            <span>+94 11 234 5678</span>
                         </div>
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-envelope"></i>
                         <div>
                             <strong>Email</strong>
-                            <span>info@bookshop.com</span>
+                            <span>support@pahana-edu.lk</span>
                         </div>
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-clock"></i>
                         <div>
                             <strong>Business Hours</strong>
-                            <span>Mon-Fri: 9AM-6PM, Sat: 10AM-4PM</span>
+                            <span>Mon–Sat: 9:00 AM – 7:00 PM, Sun: 10:00 AM – 5:00 PM</span>
                         </div>
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-globe"></i>
                         <div>
                             <strong>Website</strong>
-                            <span>www.bookshop.com</span>
+                            <span>www.pahana-edu.lk</span>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -1064,7 +1067,7 @@
                 <div style="text-align: center;">
                     <i class="fas fa-map-marked-alt" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
                     <p>Interactive Map Coming Soon</p>
-                    <p style="font-size: 1rem; margin-top: 1rem;">123 Book Street, Reading City, RC 12345</p>
+                    <p style="font-size: 1rem; margin-top: 1rem;">123 Galle Road, Colombo 04, Sri Lanka</p>
                 </div>
             </div>
         </div>

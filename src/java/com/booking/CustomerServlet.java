@@ -685,14 +685,30 @@ public class CustomerServlet extends HttpServlet {
             return;
         }
         
-        // Handle email verification (no authentication required)
-        if ("sendVerificationCode".equals(action)) {
+        // Forgot-password public endpoints (no authentication required)
+        if ("sendVerificationCode".equals(action)) { // legacy
             handleSendVerificationCode(request, response);
             return;
         }
-        
-        if ("verifyEmail".equals(action)) {
+        if ("verifyEmail".equals(action)) { // legacy
             handleVerifyEmail(request, response);
+            return;
+        }
+        // New endpoints compatible with friend's code
+        if ("send-verification".equals(action)) {
+            handleSendVerificationCodeV2(request, response);
+            return;
+        }
+        if ("verify-email".equals(action)) {
+            handleVerifyEmailCodeV2(request, response);
+            return;
+        }
+        if ("check-email-exists".equals(action)) {
+            handleCheckEmailExistsV2(request, response);
+            return;
+        }
+        if ("reset-password".equals(action)) {
+            handlePasswordResetV2(request, response);
             return;
         }
         
@@ -1148,5 +1164,169 @@ public class CustomerServlet extends HttpServlet {
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("{\"success\": false, \"message\": \"Error: " + e.getMessage() + "\"}");
         }
+    }
+
+    // ===================== Forgot Password V2 (session-based, JSON with status) =====================
+
+    private void handleSendVerificationCodeV2(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        try {
+            String email = request.getParameter("email");
+            String context = request.getParameter("context"); // optional
+            if (email == null || email.trim().isEmpty()) {
+                response.getWriter().write("{\"status\":\"error\",\"message\":\"Email is required\"}");
+                return;
+            }
+
+            EmailService svc = emailService != null ? emailService : new EmailService();
+            String code = svc.generateVerificationCode();
+
+            HttpSession session = request.getSession();
+            session.setAttribute("verification_code_" + email, code);
+            session.setAttribute("verification_email", email);
+
+            boolean sent = svc.sendVerificationEmail(email.trim(), code);
+            if (sent) {
+                response.getWriter().write("{\"status\":\"success\",\"message\":\"Verification code sent to " + escapeJson(email) + "\"}");
+            } else {
+                response.getWriter().write("{\"status\":\"error\",\"message\":\"Failed to send verification email\"}");
+            }
+        } catch (Exception e) {
+            response.getWriter().write("{\"status\":\"error\",\"message\":\"Error: " + escapeJson(e.getMessage()) + "\"}");
+        }
+    }
+
+    private void handleVerifyEmailCodeV2(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        try {
+            String email = request.getParameter("email");
+            String code = request.getParameter("code");
+            if (email == null || code == null || email.trim().isEmpty() || code.trim().isEmpty()) {
+                response.getWriter().write("{\"status\":\"error\",\"message\":\"Email and verification code are required\"}");
+                return;
+            }
+
+            HttpSession session = request.getSession();
+            String storedCode = (String) session.getAttribute("verification_code_" + email);
+            String storedEmail = (String) session.getAttribute("verification_email");
+
+            boolean isValid = storedCode != null && storedCode.equals(code) && storedEmail != null && storedEmail.equals(email);
+            if (isValid) {
+                session.setAttribute("email_verified_" + email, true);
+                session.removeAttribute("verification_code_" + email);
+                response.getWriter().write("{\"status\":\"success\",\"message\":\"Email verified successfully\"}");
+            } else {
+                response.getWriter().write("{\"status\":\"error\",\"message\":\"Invalid verification code\"}");
+            }
+        } catch (Exception e) {
+            response.getWriter().write("{\"status\":\"error\",\"message\":\"Error: " + escapeJson(e.getMessage()) + "\"}");
+        }
+    }
+
+    private void handleCheckEmailExistsV2(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        try {
+            String email = request.getParameter("email");
+            if (email == null || email.trim().isEmpty()) {
+                response.getWriter().write("{\"status\":\"error\",\"message\":\"Email is required\"}");
+                return;
+            }
+            boolean exists = isEmailExistsCustomers(email.trim()) || isEmailExistsUsers(email.trim());
+            response.getWriter().write("{\"status\":\"success\",\"exists\":" + exists + "}");
+        } catch (Exception e) {
+            response.getWriter().write("{\"status\":\"error\",\"message\":\"Error: " + escapeJson(e.getMessage()) + "\"}");
+        }
+    }
+
+    private void handlePasswordResetV2(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        try {
+            String email = request.getParameter("email");
+            String newPassword = request.getParameter("newPassword");
+            if (email == null || newPassword == null || email.trim().isEmpty() || newPassword.trim().isEmpty()) {
+                response.getWriter().write("{\"status\":\"error\",\"message\":\"Email and new password are required\"}");
+                return;
+            }
+            HttpSession session = request.getSession();
+            Boolean verified = (Boolean) session.getAttribute("email_verified_" + email);
+            if (verified == null || !verified) {
+                response.getWriter().write("{\"status\":\"error\",\"message\":\"Email must be verified before password reset\"}");
+                return;
+            }
+
+            boolean updated = false;
+            // Prefer updating in customers if exists there; else users
+            if (isEmailExistsCustomers(email.trim())) {
+                updated = updateCustomerPasswordByEmail(email.trim(), newPassword.trim());
+            } else if (isEmailExistsUsers(email.trim())) {
+                updated = updateUserPasswordByEmail(email.trim(), newPassword.trim());
+            }
+
+            if (updated) {
+                session.removeAttribute("email_verified_" + email);
+                response.getWriter().write("{\"status\":\"success\",\"message\":\"Password reset successfully\"}");
+            } else {
+                response.getWriter().write("{\"status\":\"error\",\"message\":\"Failed to update password\"}");
+            }
+        } catch (Exception e) {
+            response.getWriter().write("{\"status\":\"error\",\"message\":\"Error: " + escapeJson(e.getMessage()) + "\"}");
+        }
+    }
+
+    // ===================== Helpers for V2 =====================
+
+    private boolean isEmailExistsCustomers(String email) {
+        String sql = "SELECT COUNT(*) FROM customers WHERE email = ?";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) { if (rs.next()) return rs.getInt(1) > 0; }
+        } catch (SQLException e) {
+            System.err.println("Error checking customer email: " + e.getMessage());
+        }
+        return false;
+    }
+
+    private boolean isEmailExistsUsers(String email) {
+        String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) { if (rs.next()) return rs.getInt(1) > 0; }
+        } catch (SQLException e) {
+            System.err.println("Error checking user email: " + e.getMessage());
+        }
+        return false;
+    }
+
+    private boolean updateCustomerPasswordByEmail(String email, String newPassword) {
+        String sql = "UPDATE customers SET password = ?, updated_at = CURRENT_TIMESTAMP WHERE email = ?";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, newPassword);
+            ps.setString(2, email);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating customer password: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private boolean updateUserPasswordByEmail(String email, String newPassword) {
+        String sql = "UPDATE users SET password = ?, updated_at = CURRENT_TIMESTAMP WHERE email = ?";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, newPassword);
+            ps.setString(2, email);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating user password: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private String escapeJson(String s) {
+        if (s == null) return "";
+        return s.replace("\\", "\\\\").replace("\"", "\\\"");
     }
 } 

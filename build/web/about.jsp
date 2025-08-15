@@ -537,14 +537,78 @@
         }
         
         .about-image {
-            background: #6366f1;
+            background: linear-gradient(0deg, rgba(0,0,0,0.25), rgba(0,0,0,0.25)), url('IMG/books.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             height: 400px;
             border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #fff;
             font-size: 4rem;
+        }
+
+        /* Highlights */
+        .highlights {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        .highlight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .highlight-card {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.12);
+            transition: transform 0.2s ease;
+        }
+        .highlight-card:hover { transform: translateY(-6px); }
+        .highlight-card h3 { color: #6366f1; margin-bottom: 0.5rem; }
+        .highlight-card p { color: #64748b; }
+
+        /* Stats */
+        .stats {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #ffffff;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .stat-card { background: rgba(255,255,255,0.08); padding: 1.5rem; border-radius: 14px; border: 1px solid rgba(255,255,255,0.15); }
+        .stat-card h3 { margin: 0; font-size: 2rem; }
+        .stat-card p { margin: 0.5rem 0 0; opacity: 0.95; }
+
+        /* Store Info */
+        .store-info {
+            padding: 4rem 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 2rem auto;
+            max-width: 1200px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .store-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .store-card { background: #fff; border: 1px solid rgba(99,102,241,0.12); border-radius: 12px; padding: 1.5rem; }
+        .store-card h3 { color: #6366f1; margin-bottom: 0.5rem; }
+        .store-card p { color: #64748b; margin: 0.25rem 0; }
+
+        @media (max-width: 768px) {
+            .store-grid { grid-template-columns: 1fr; }
         }
         
         /* Mission & Vision */
@@ -624,13 +688,11 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background: var(--primary-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            object-fit: cover;
+            display: block;
             margin: 0 auto 1rem;
-            color: white;
-            font-size: 2rem;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+            border: 3px solid #fff;
         }
         
         .team-member h3 {
@@ -871,8 +933,8 @@
 
     <!-- Page Header -->
     <section class="page-header">
-        <h1>About BookShop</h1>
-        <p>Your premier online destination for discovering, purchasing, and enjoying books from around the world</p>
+        <h1>About Pahana BookShop</h1>
+        <p>Colombo’s community-first bookstore and e-commerce platform connecting readers with great books, fair prices, and friendly service.</p>
     </section>
 
     <!-- About Section -->
@@ -881,13 +943,33 @@
             <div class="about-content">
                 <div class="about-text">
                     <h2>Our Story</h2>
-                    <p>BookShop was founded with a simple yet powerful mission: to make knowledge accessible to everyone. We believe that books have the power to transform lives, expand horizons, and connect people across cultures and generations.</p>
-                    <p>Our carefully curated collection includes everything from timeless classics to contemporary bestsellers, academic texts to leisure reading, and everything in between. Whether you're a student, professional, or casual reader, we have something for you.</p>
-                    <p>Since our inception, we've been committed to providing exceptional customer service, competitive prices, and a seamless shopping experience. Our team of book enthusiasts works tirelessly to ensure that every customer finds their perfect book.</p>
+                    <p>Pahana BookShop began as a small, family-run store in Colombo and has grown into a modern hybrid bookstore—combining a warm in-store experience with an easy-to-use online platform.</p>
+                    <p>We specialize in school and university texts, competitive exam prep, Sinhala and English literature, and a curated range of business, technology, and personal development titles. Our goal is to make learning accessible and enjoyable for everyone—from young students to lifelong learners.</p>
+                    <p>With real‑time stock, secure checkout, and fast pickup or delivery, we serve thousands of customers each month while keeping our community feel—personal recommendations, seasonal reading lists, and special events.</p>
                 </div>
-                <div class="about-image">
-                    📚
-                </div>
+                <div class="about-image" aria-label="Inside Pahana BookShop"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Highlights -->
+    <section class="highlights">
+        <div class="highlight-grid">
+            <div class="highlight-card">
+                <h3>School & Exam Books</h3>
+                <p>From Grade 1 to A/L, past papers, model papers, and study guides.</p>
+            </div>
+            <div class="highlight-card">
+                <h3>University & Professional</h3>
+                <p>Engineering, IT, Accounting, Medicine, Law, and more.</p>
+            </div>
+            <div class="highlight-card">
+                <h3>Literature & Kids</h3>
+                <p>Sinhala/English novels, story books, activity books, and comics.</p>
+            </div>
+            <div class="highlight-card">
+                <h3>Stationery & Gifts</h3>
+                <p>Notebooks, art supplies, planners, and gift packs for every occasion.</p>
             </div>
         </div>
     </section>
@@ -898,16 +980,43 @@
             <div class="mission-vision-grid">
                 <div class="mission-card">
                     <h3>Our Mission</h3>
-                    <p>To democratize access to knowledge by providing a comprehensive, user-friendly platform where readers can discover, purchase, and enjoy books from around the world. We strive to foster a love for reading and learning in every community we serve.</p>
+                    <p>Make quality learning resources affordable and accessible, while offering genuine guidance that helps every reader choose the right book for their journey.</p>
                 </div>
                 <div class="mission-card">
                     <h3>Our Vision</h3>
-                    <p>To become the world's most trusted and beloved online bookstore, connecting millions of readers with the books that inspire, educate, and entertain them. We envision a world where everyone has access to the transformative power of literature.</p>
+                    <p>Be Sri Lanka’s most trusted education-focused bookstore—online and offline—known for service, selection, and community impact.</p>
                 </div>
                 <div class="mission-card">
                     <h3>Our Values</h3>
-                    <p>Integrity, customer satisfaction, innovation, and community engagement are the cornerstones of our business. We believe in treating every customer like family and every book like a treasure waiting to be discovered.</p>
+                    <p>Integrity, student success, inclusivity, and continuous improvement. We partner with parents, teachers, and institutions to support learning outcomes.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-card"><h3>25,000+</h3><p>Titles in stock</p></div>
+            <div class="stat-card"><h3>10,000+</h3><p>Students served yearly</p></div>
+            <div class="stat-card"><h3>48h</h3><p>Average delivery in Colombo</p></div>
+            <div class="stat-card"><h3>4.8/5</h3><p>Customer rating</p></div>
+        </div>
+    </section>
+
+    <!-- Store Info / Visit Us -->
+    <section class="store-info">
+        <div class="store-grid">
+            <div class="store-card">
+                <h3>Visit Our Store</h3>
+                <p>123 Galle Road, Colombo 04</p>
+                <p>Mon–Sat: 9:00 AM – 7:00 PM | Sun: 10:00 AM – 5:00 PM</p>
+                <p>Hotline: +94 11 234 5678</p>
+            </div>
+            <div class="store-card">
+                <h3>Bulk & Institutional Orders</h3>
+                <p>Email: sales@pahana-edu.lk</p>
+                <p>We support schools, tuition classes, and companies with quotations and delivery.</p>
             </div>
         </div>
     </section>
@@ -918,24 +1027,24 @@
                          <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 3rem; color: #6366f1;">Our Team</h2>
             <div class="team-grid">
                 <div class="team-member">
-                                         <div style="width: 120px; height: 120px; border-radius: 50%; background: #6366f1; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">👨‍💼</div>
-                    <h3>John Smith</h3>
-                    <p>Founder & CEO</p>
+                    <img src="IMG/admin.jpg" alt="Founder & CEO">
+                    <h3>Nimal Perera</h3>
+                    <p>Founder & Admin</p>
                 </div>
                 <div class="team-member">
-                                         <div style="width: 120px; height: 120px; border-radius: 50%; background: #6366f1; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">👩‍💼</div>
-                    <h3>Sarah Johnson</h3>
-                    <p>Head of Operations</p>
+                    <img src="IMG/manager.jpg" alt="Head of Operations">
+                    <h3>Tharanga Fernando</h3>
+                    <p>Manager</p>
                 </div>
                 <div class="team-member">
-                                         <div style="width: 120px; height: 120px; border-radius: 50%; background: #6366f1; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">👨‍💻</div>
-                    <h3>Mike Chen</h3>
-                    <p>Lead Developer</p>
+                    <img src="IMG/staff.jpg" alt="Lead Developer">
+                    <h3>Chaminda Silva</h3>
+                    <p>Employee</p>
                 </div>
                 <div class="team-member">
-                                         <div style="width: 120px; height: 120px; border-radius: 50%; background: #6366f1; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">👩‍🎨</div>
-                    <h3>Emily Davis</h3>
-                    <p>Creative Director</p>
+                    <img src="IMG/staff2.jpg" alt="Creative Director">
+                    <h3>Kavindi Jayasinghe</h3>
+                    <p>Employee</p>
                 </div>
             </div>
         </div>

@@ -300,15 +300,18 @@
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.6) 0%, rgba(118, 75, 162, 0.6) 100%), url('IMG/store.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 60vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             color: white;
             padding: 0 2rem;
-            margin-top: 70px;
+            margin-top: 0;
         }
         
         .hero-content h1 {
@@ -507,6 +510,7 @@
                 flex-direction: column;
                 gap: 1rem;
             }
+            .hero { min-height: 45vh; }
             
             .cta-btn {
                 width: 80%;
@@ -805,8 +809,18 @@
         </div>
     <% } %>
 
-    <!-- Features Section (for public users) -->
+    <!-- Hero + Features Sections (for public users) -->
     <% if ("public".equals(navType)) { %>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Discover Your Next Favorite Book</h1>
+                <p>Thousands of titles across genres. Read more, learn more, enjoy more.</p>
+                <div class="cta-buttons">
+                    <a href="BookServlet?action=list&redirect=books.jsp" class="cta-btn cta-primary">Browse Books</a>
+                    <a href="about.jsp" class="cta-btn cta-secondary">Learn More</a>
+                </div>
+            </div>
+        </section>
         <section class="features">
             <div class="container">
                 <h2 class="section-title">Why Choose Pahana Edu Online?</h2>
