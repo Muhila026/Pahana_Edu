@@ -72,7 +72,7 @@
         }
         
         .logo-text {
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -119,7 +119,7 @@
         }
         
         .login-btn {
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            background: var(--primary-color);
             color: white !important;
             font-weight: 600 !important;
             border-radius: 6px;
@@ -205,7 +205,7 @@
         }
 
         .customer-logo-text {
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -262,15 +262,15 @@
 
         .customer-user-info .welcome-text {
             font-weight: 600;
-            color: var(--secondary-color);
-            background: rgba(196, 140, 179, 0.1);
+            color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.1);
             padding: 0.5rem 1rem;
             border-radius: 8px;
-            border: 1px solid rgba(196, 140, 179, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         .customer-logout-btn {
-            background: linear-gradient(90deg, #ef4444, #dc2626);
+            background: var(--primary-color);
             color: white !important;
             font-weight: 600 !important;
             border-radius: 6px;
@@ -443,13 +443,13 @@
         }
 
         .staff-navbar {
-            background: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            position: sticky;
+            background: linear-gradient(135deg, #724784, #ac87cd, #724784);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .staff-tabs {
@@ -463,23 +463,20 @@
         }
 
         .staff-tab {
-            background: rgba(99, 102, 241, 0.1);
-            color: #6366f1;
+            background: rgba(255,255,255,0.1);
+            color: white;
             text-decoration: none;
             padding: 0.8rem 1.5rem;
-            border-radius: 8px;
+            border-radius: 25px;
             font-weight: 500;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s;
             white-space: nowrap;
-            border: 1px solid rgba(99, 102, 241, 0.2);
         }
 
         .staff-tab:hover,
         .staff-tab.active {
-            background: #6366f1;
+            background: #ff7f42;
             color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
         .staff-main-content {
@@ -540,7 +537,7 @@
         }
         
         .about-image {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            background: #6366f1;
             height: 400px;
             border-radius: 15px;
             display: flex;
@@ -627,7 +624,7 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            background: var(--primary-color);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -638,7 +635,7 @@
         
         .team-member h3 {
             margin-bottom: 0.5rem;
-            color: #6366f1;
+            color: var(--primary-color);
         }
         
         .team-member p {
@@ -769,8 +766,8 @@
                 <ul class="nav-menu">
                     <li><a href="welcome.jsp">Home</a></li>
                     <li><a href="about.jsp" class="active">About</a></li>
-                    <li><a href="books.jsp">Books</a></li>
-                    <li><a href="categories.jsp">Categories</a></li>
+                    <li><a href="BookServlet?action=list&redirect=books.jsp">Books</a></li>
+                    <li><a href="BookCategoryServlet?action=list&redirect=categories.jsp">Categories</a></li>
                     <li><a href="contact.jsp">Contact</a></li>
                     <li><a href="login.jsp" class="login-btn">Login</a></li>
                 </ul>
@@ -789,8 +786,8 @@
                     <ul class="customer-nav-menu">
                         <li><a href="welcome.jsp">Home</a></li>
                         <li><a href="about.jsp" class="active">About</a></li>
-                        <li><a href="books.jsp">Books</a></li>
-                        <li><a href="categories.jsp">Categories</a></li>
+                        <li><a href="BookServlet?action=list&redirect=books.jsp">Books</a></li>
+                        <li><a href="BookCategoryServlet?action=list&redirect=categories.jsp">Categories</a></li>
                         <li><a href="dashboard.jsp">My Profile</a></li>
                         <li><a href="orders.jsp">My Orders</a></li>
                         <li><a href="wishlist.jsp">Wishlist</a></li>
@@ -822,16 +819,17 @@
                 %>
                 <!-- ADMIN SIDEBAR MENU -->
                 <ul class="admin-sidebar-menu">
-                    <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
-                    <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
-                    <li><a href="users.jsp"><i class="fas fa-users"></i> Manage Users</a></li>
-                    <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
-                    <li><a href="reports.jsp"><i class="fas fa-chart-bar"></i> Analytics & Reports</a></li>
-                    <li><a href="inventory.jsp"><i class="fas fa-boxes"></i> Inventory Management</a></li>
-                    <li><a href="settings.jsp"><i class="fas fa-cogs"></i> System Settings</a></li>
-                    <li><a href="backup.jsp"><i class="fas fa-database"></i> Backup & Restore</a></li>
-                    <li><a href="logs.jsp"><i class="fas fa-file-alt"></i> System Logs</a></li>
+                    <li><a href="dashboard.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="pos.jsp"><i class="fas fa-cash-register"></i> POS</a></li>
+                    <li><a href="transaction.jsp"><i class="fas fa-exchange-alt"></i> Transaction</a></li>
+                    <li><a href="customer.jsp"><i class="fas fa-users"></i> Customer</a></li>
+                    <li><a href="BookCategoryServlet?action=list&redirect=book_category.jsp"><i class="fas fa-tags"></i> Book Categories</a></li>
+                    <li><a href="book.jsp"><i class="fas fa-book"></i> Book</a></li>
+                    <li><a href="stock.jsp"><i class="fas fa-boxes"></i> Stock</a></li>
+                    <li><a href="user.jsp"><i class="fas fa-user"></i> User</a></li>
+                    <li><a href="user_role.jsp"><i class="fas fa-user-tag"></i> UserRole</a></li>
+                    <li><a href="profile.jsp"><i class="fas fa-user-circle"></i> Profile</a></li>
+                    <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help</a></li>
                     <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
                 <%
@@ -839,15 +837,15 @@
                 %>
                 <!-- MANAGER SIDEBAR MENU -->
                 <ul class="admin-sidebar-menu">
-                    <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
-                    <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
-                    <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> Process Orders</a></li>
-                    <li><a href="reports.jsp"><i class="fas fa-chart-bar"></i> Sales Reports</a></li>
-                    <li><a href="staff.jsp"><i class="fas fa-user-tie"></i> Staff Management</a></li>
-                    <li><a href="customers.jsp"><i class="fas fa-users"></i> Customer Support</a></li>
-                    <li><a href="inventory.jsp"><i class="fas fa-boxes"></i> Stock Management</a></li>
-                    <li><a href="promotions.jsp"><i class="fas fa-tags"></i> Promotions</a></li>
+                    <li><a href="dashboard.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="pos.jsp"><i class="fas fa-cash-register"></i> POS</a></li>
+                    <li><a href="transaction.jsp"><i class="fas fa-exchange-alt"></i> Transaction</a></li>
+                    <li><a href="customer.jsp"><i class="fas fa-users"></i> Customer</a></li>
+                    <li><a href="BookCategoryServlet?action=list&redirect=book_category.jsp"><i class="fas fa-tags"></i> Book Categories</a></li>
+                    <li><a href="book.jsp"><i class="fas fa-book"></i> Book</a></li>
+                    <li><a href="stock.jsp"><i class="fas fa-boxes"></i> Stock</a></li>
+                    <li><a href="profile.jsp"><i class="fas fa-user-circle"></i> Profile</a></li>
+                    <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help</a></li>
                     <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
                 <%
@@ -859,14 +857,15 @@
         <!-- STAFF NAVIGATION (Horizontal Tabs) -->
         <div class="staff-layout">
             <nav class="staff-navbar">
-                <div class="staff-tabs">
-                    <a href="welcome.jsp" class="staff-tab"><i class="fas fa-home"></i> Dashboard</a>
-                    <a href="books.jsp" class="staff-tab"><i class="fas fa-book"></i> Books</a>
-                    <a href="categories.jsp" class="staff-tab"><i class="fas fa-tags"></i> Categories</a>
-                    <a href="orders.jsp" class="staff-tab"><i class="fas fa-shopping-cart"></i> Orders</a>
-                    <a href="customers.jsp" class="staff-tab"><i class="fas fa-users"></i> Customers</a>
-                    <a href="LogoutServlet" class="staff-tab"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                </div>
+                            <div class="staff-tabs">
+                <a href="dashboard.jsp" class="staff-tab"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="pos.jsp" class="staff-tab"><i class="fas fa-cash-register"></i> POS</a>
+                <a href="transaction.jsp" class="staff-tab"><i class="fas fa-exchange-alt"></i> Transaction</a>
+                <a href="customer.jsp" class="staff-tab"><i class="fas fa-users"></i> Customer</a>
+                <a href="profile.jsp" class="staff-tab"><i class="fas fa-user-circle"></i> Profile</a>
+                <a href="help.jsp" class="staff-tab"><i class="fas fa-question-circle"></i> Help</a>
+                <a href="LogoutServlet" class="staff-tab"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
             </nav>
     <% } %>
 
@@ -919,22 +918,22 @@
                          <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 3rem; color: #6366f1;">Our Team</h2>
             <div class="team-grid">
                 <div class="team-member">
-                                         <div style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #8b5cf6); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">👨‍💼</div>
+                                         <div style="width: 120px; height: 120px; border-radius: 50%; background: #6366f1; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">👨‍💼</div>
                     <h3>John Smith</h3>
                     <p>Founder & CEO</p>
                 </div>
                 <div class="team-member">
-                                         <div style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #8b5cf6); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">👩‍💼</div>
+                                         <div style="width: 120px; height: 120px; border-radius: 50%; background: #6366f1; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">👩‍💼</div>
                     <h3>Sarah Johnson</h3>
                     <p>Head of Operations</p>
                 </div>
                 <div class="team-member">
-                                         <div style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #8b5cf6); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">👨‍💻</div>
+                                         <div style="width: 120px; height: 120px; border-radius: 50%; background: #6366f1; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">👨‍💻</div>
                     <h3>Mike Chen</h3>
                     <p>Lead Developer</p>
                 </div>
                 <div class="team-member">
-                                         <div style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #8b5cf6); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">👩‍🎨</div>
+                                         <div style="width: 120px; height: 120px; border-radius: 50%; background: #6366f1; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">👩‍🎨</div>
                     <h3>Emily Davis</h3>
                     <p>Creative Director</p>
                 </div>

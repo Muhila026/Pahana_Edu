@@ -1,2 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/BookShop"/>
+<Context path="/Pahana_Web">
+  <Resource auth="Container" driverClassName="com.mysql.cj.jdbc.Driver" maxIdle="10" maxTotal="20" maxWaitMillis="-1" name="jdbc/booking" password="password" type="javax.sql.DataSource" url="jdbc:mysql://localhost:3306/pahana_bookshop?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true" username="root"/>
+</Context>

@@ -806,8 +806,8 @@
                 <ul class="nav-menu">
                     <li><a href="welcome.jsp">Home</a></li>
                     <li><a href="about.jsp">About</a></li>
-                    <li><a href="books.jsp">Books</a></li>
-                    <li><a href="categories.jsp">Categories</a></li>
+                    <li><a href="BookServlet?action=list&redirect=books.jsp">Books</a></li>
+                    <li><a href="BookCategoryServlet?action=list&redirect=categories.jsp">Categories</a></li>
                     <li><a href="contact.jsp">Contact</a></li>
                     <li><a href="login.jsp" class="login-btn">Login</a></li>
                 </ul>
@@ -832,8 +832,8 @@
                     <ul class="customer-nav-menu">
                         <li><a href="welcome.jsp">Home</a></li>
                         <li><a href="about.jsp">About</a></li>
-                        <li><a href="books.jsp" class="active">Books</a></li>
-                        <li><a href="categories.jsp">Categories</a></li>
+                        <li><a href="BookServlet?action=list&redirect=books.jsp" class="active">Books</a></li>
+                        <li><a href="BookCategoryServlet?action=list&redirect=categories.jsp">Categories</a></li>
                         <li><a href="dashboard.jsp">My Profile</a></li>
                         <li><a href="orders.jsp">My Orders</a></li>
                         <li><a href="wishlist.jsp">Wishlist</a></li>
@@ -876,7 +876,7 @@
                 <!-- ADMIN SIDEBAR MENU -->
                 <ul class="admin-sidebar-menu">
                     <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
+                    <li><a href="BookCategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
                     <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
                     <li><a href="users.jsp"><i class="fas fa-users"></i> Manage Users</a></li>
                     <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
@@ -893,7 +893,7 @@
                 <!-- MANAGER SIDEBAR MENU -->
                 <ul class="admin-sidebar-menu">
                     <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
+                    <li><a href="BookCategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
                     <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
                     <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> Process Orders</a></li>
                     <li><a href="reports.jsp"><i class="fas fa-chart-bar"></i> Sales Reports</a></li>
@@ -975,16 +975,21 @@
                 <select id="categoryFilter" name="categoryFilter">
                     <option value="all">All Categories</option>
                     <%
-                    java.util.List<com.pahana.CategoryServlet.Category> categories = 
-                        (java.util.List<com.pahana.CategoryServlet.Category>) request.getAttribute("categories");
-                    if (categories != null) {
-                        for (com.pahana.CategoryServlet.Category category : categories) {
+                    java.util.List<com.booking.BookCategoryServlet.BookCategory> categories = 
+                        (java.util.List<com.booking.BookCategoryServlet.BookCategory>) request.getAttribute("categories");
+                    if (categories != null && !categories.isEmpty()) {
+                        for (com.booking.BookCategoryServlet.BookCategory category : categories) {
                             String selected = (request.getAttribute("categoryFilter") != null && 
                                              request.getAttribute("categoryFilter").equals(String.valueOf(category.getCategoryId()))) ? "selected" : "";
                     %>
                         <option value="<%= category.getCategoryId() %>" <%= selected %>><%= category.getCategoryName() %></option>
                     <%
                         }
+                    } else {
+                        // If no categories available, show default option
+                        %>
+                        <option value="all">All Categories</option>
+                        <%
                     }
                     %>
                 </select>
@@ -1013,11 +1018,11 @@
         <div class="books-grid">
             <%
             // Get books from request attribute
-            java.util.List<com.pahana.BookServlet.Book> books = 
-                (java.util.List<com.pahana.BookServlet.Book>) request.getAttribute("books");
+            java.util.List<com.booking.BookServlet.Book> books = 
+                (java.util.List<com.booking.BookServlet.Book>) request.getAttribute("books");
             
             if (books != null && !books.isEmpty()) {
-                for (com.pahana.BookServlet.Book book : books) {
+                for (com.booking.BookServlet.Book book : books) {
             %>
                 <div class="book-card">
                     <span class="book-icon">📖</span>
@@ -1037,10 +1042,14 @@
             <%
                 }
             } else {
-            %>
+                // If no books available, show message and provide manual refresh
+                %>
                 <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
-                    <h3 style="color: #6366f1; margin-bottom: 1rem;">No Books Found</h3>
-                    <p style="color: #666;">No books match your search criteria. Try adjusting your search terms.</p>
+                    <h3 style="color: #6366f1; margin-bottom: 1rem;">No Books Available</h3>
+                    <p style="color: #666;">No books are currently available. Please try refreshing the page.</p>
+                    <button onclick="window.location.reload()" style="background: #6366f1; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; margin-top: 1rem;">
+                        <i class="fas fa-refresh"></i> Refresh Page
+                    </button>
                 </div>
             <%
             }
@@ -1098,9 +1107,9 @@
         window.addEventListener('load', function() {
             // Check if books are already loaded (from servlet)
             const books = document.querySelectorAll('.book-card');
-            if (books.length === 0 || (books.length === 1 && books[0].textContent.includes('No books'))) {
-                // Redirect to servlet to load books
-                window.location.href = 'BookServlet?action=list';
+            if (books.length === 0 || (books.length === 1 && books[0].textContent.includes('Loading'))) {
+                // Redirect to servlet to load books (public access)
+                window.location.href = 'BookServlet?action=list&redirect=books.jsp';
             }
         });
     </script>

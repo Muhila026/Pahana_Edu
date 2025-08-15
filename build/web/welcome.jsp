@@ -791,10 +791,9 @@
                 <ul class="nav-menu">
                     <li><a href="welcome.jsp">Home</a></li>
                     <li><a href="about.jsp">About</a></li>
-                    <li><a href="books.jsp">Books</a></li>
-                    <li><a href="categories.jsp">Categories</a></li>
+                    <li><a href="BookServlet?action=list&redirect=books.jsp">Books</a></li>
+                    <li><a href="BookCategoryServlet?action=list&redirect=categories.jsp">Categories</a></li>
                     <li><a href="contact.jsp">Contact</a></li>
-                    <li><a href="help.jsp">Help</a></li>
                     <li><a href="login.jsp" class="login-btn">Login</a></li>
                 </ul>
             </div>
@@ -824,13 +823,12 @@
                     <ul class="nav-menu">
                         <li><a href="welcome.jsp" class="active">Home</a></li>
                         <li><a href="about.jsp">About</a></li>
-                        <li><a href="books.jsp">Books</a></li>
-                        <li><a href="categories.jsp">Categories</a></li>
+                        <li><a href="BookServlet?action=list&redirect=books.jsp">Books</a></li>
+                        <li><a href="BookCategoryServlet?action=list&redirect=categories.jsp">Categories</a></li>
                         <li><a href="orders.jsp">My Orders</a></li>
                         <li><a href="wishlist.jsp">Wishlist</a></li>
                         <li><a href="contact.jsp">Contact</a></li>
                         <li><a href="profile.jsp">My Profile</a></li>
-                        <li><a href="help.jsp">Help</a></li>
                         <%
                         // Get customer full name from session
                         String customerName = (String) session.getAttribute("customerName");
@@ -894,7 +892,6 @@
                     <li><a href="user-management.jsp"><i class="fas fa-users"></i> Manage Users</a></li>
                     <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Manage Customer</a></li>
                     <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
-                    <li><a href="discount.jsp"><i class="fas fa-shopping-cart"></i> Discounts</a></li>
                     <li><a href="settings.jsp"><i class="fas fa-cogs"></i> System Settings</a></li>
                     <li><a href="profile.jsp"><i class="fas fa-user"></i> My Profile</a></li>
                     <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help</a></li>

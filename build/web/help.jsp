@@ -1,720 +1,761 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="com.booking.HelpServlet.HelpSection"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html lang="en">
-<head>
+    <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Help & Support - Pahana BookShop</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support - BookShop</title>
+    
+        <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/sidebar.css">
-    <style>
+    
+        <style>
         :root {
             --primary-color: #6366f1;
-            --secondary-color: #8b5cf6;
-            --accent-color: #a855f7;
-            --text-color: #1e293b;
-            --light-color: #f8fafc;
-            --hover-color: #4f46e5;
+            --primary-hover: #4f46e5;
+            --secondary-color: #64748b;
             --success-color: #10b981;
             --warning-color: #f59e0b;
             --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --background-color: #f8fafc;
+            --card-background: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --sidebar-bg: #1e293b;
+            --sidebar-hover: #334155;
+            --accent-color: #f97316;
         }
-        
+
         * {
-            margin: 0;
-            padding: 0;
+                margin: 0;
+                padding: 0;
             box-sizing: border-box;
         }
 
         body {
-            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            font-family: 'Inter', sans-serif;
+            background: var(--background-color);
+            color: var(--text-primary);
+            }
+
+            /* Sidebar Styles */
+            .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+                width: 280px;
+            background: var(--sidebar-bg);
+                color: white;
+                overflow-y: auto;
+                z-index: 1000;
+            transition: all 0.3s ease;
+            }
+
+            .sidebar-header {
+                padding: 2rem 1.5rem;
+            border-bottom: 1px solid var(--sidebar-hover);
+                text-align: center;
+            }
+
+                .sidebar-title {
+            font-size: 1.4rem;
+                font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-subtitle {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+        .sidebar-nav {
+            padding: 1.5rem 0;
+            }
+
+            .nav-item {
+            margin-bottom: 0.5rem;
+            }
+
+            .nav-link {
+                display: flex;
+                align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: #cbd5e1;
+                text-decoration: none;
+                transition: all 0.3s ease;
+            border-radius: 0;
+                font-weight: 500;
+            }
+
+
+
+            .nav-link.active {
+            background: var(--accent-color);
+                color: white;
+            }
+
+            .nav-link i {
+            width: 20px;
+            margin-right: 12px;
+                font-size: 1.1rem;
+            }
+
+            .sidebar-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--sidebar-hover);
+                margin-top: auto;
+            }
+
+            .logout-btn {
+                width: 100%;
+            background: var(--danger-color);
+            border: none;
+                color: white;
+                padding: 0.75rem 1rem;
+                border-radius: 8px;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+            font-weight: 500;
+            }
+
+            .logout-btn:hover {
+            background: #dc2626;
+                color: white;
+                text-decoration: none;
+            transform: translateY(-2px);
+            }
+
+        /* Main Content */
+            .main-content {
+                margin-left: 280px;
+                padding: 2rem;
             min-height: 100vh;
         }
 
-        .main-content {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
         .page-header {
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
-            margin-bottom: 2rem;
-            text-align: center;
-            border: 1px solid rgba(99, 102, 241, 0.1);
-        }
-
-        .page-header h1 {
-            color: #6366f1;
-            margin-bottom: 0.5rem;
-            font-weight: 700;
-        }
-
-        .page-header p {
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        .help-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .help-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.1);
-        }
-
-        .help-header {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #f1f5f9;
-        }
-
-        .help-header h3 {
-            color: #6366f1;
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .help-header p {
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
-        .help-content {
-            color: #1e293b;
-            line-height: 1.7;
-        }
-
-        .help-content h4 {
-            color: #6366f1;
-            margin: 1.5rem 0 0.5rem 0;
-            font-size: 1.1rem;
-        }
-
-        .help-content ul {
-            margin: 1rem 0;
-            padding-left: 1.5rem;
-        }
-
-        .help-content li {
-            margin-bottom: 0.5rem;
-        }
-
-        .help-content p {
-            margin-bottom: 1rem;
-        }
-
-        .contact-info {
-            background: #f8fafc;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            margin-top: 1.5rem;
-        }
-
-        .contact-info h4 {
-            color: #6366f1;
-            margin-bottom: 1rem;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-            color: #64748b;
-        }
-
-        .contact-item i {
-            color: #6366f1;
-            width: 20px;
-        }
-
-        .public-help {
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.1);
-            margin-bottom: 2rem;
-        }
-
-        .public-help h2 {
-            color: #6366f1;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .benefit-item {
-            background: #f8fafc;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            text-align: center;
-        }
-
-        .benefit-item i {
-            font-size: 2rem;
-            color: #6366f1;
-            margin-bottom: 1rem;
-        }
-
-        .benefit-item h4 {
-            color: #1e293b;
-            margin-bottom: 0.5rem;
-        }
-
-        .benefit-item p {
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
-        .login-section {
-            text-align: center;
-            margin-top: 2rem;
-            padding: 2rem;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
             color: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+                margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
         }
 
-        .login-section h3 {
-            margin-bottom: 1rem;
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
         }
 
-        .login-section p {
-            margin-bottom: 1.5rem;
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
             opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            }
+
+            /* Content Cards */
+            .content-card {
+            background: var(--card-background);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            }
+
+            .card-title {
+                font-size: 1.5rem;
+                font-weight: 600;
+            color: var(--text-primary);
+                margin-bottom: 1.5rem;
+                display: flex;
+                align-items: center;
+            gap: 0.75rem;
         }
 
-        .login-btn {
-            background: white;
-            color: #6366f1;
-            padding: 0.8rem 2rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-block;
-            transition: all 0.3s ease;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
         }
 
         @media (max-width: 768px) {
-            .admin-main-content { margin-left: 0; }
-            .main-content { padding: 1rem; }
-            .help-grid { grid-template-columns: 1fr; }
-            .benefits-grid { grid-template-columns: 1fr; }
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .page-header {
+                padding: 2rem 1.5rem;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
         }
-    </style>
-</head>
-<body>
-    <%
-    String userType = null;
-    String role = null;
-    String username = null;
-    boolean isLoggedIn = false;
-    
-    if (session != null && session.getAttribute("loggedIn") != null) {
-        isLoggedIn = (Boolean) session.getAttribute("loggedIn");
-        if (isLoggedIn) {
-            userType = (String) session.getAttribute("userType");
-            role = (String) session.getAttribute("role");
-            username = (String) session.getAttribute("username");
-        }
-    }
-    
-    String navType = "public";
-    if (isLoggedIn) {
-        if ("admin".equals(userType) || "Admin".equals(role)) {
-            navType = "admin";
-        } else if ("Manager".equals(role)) {
-            navType = "manager";
-        } else if ("Staff".equals(role)) {
-            navType = "staff";
-        } else {
-            navType = "customer";
-        }
-    }
-    %>
 
-    <% if ("public".equals(navType)) { %>
-        <!-- PUBLIC HELP PAGE -->
-        <nav class="public-navbar">
-            <div class="nav-container">
-                <a href="welcome.jsp" class="logo">
-                    <span class="logo-text">Pahana BookShop</span>
-                </a>
-                <ul class="nav-menu">
-                    <li><a href="welcome.jsp">Home</a></li>
-                    <li><a href="about.jsp">About</a></li>
-                    <li><a href="books.jsp">Books</a></li>
-                    <li><a href="categories.jsp">Categories</a></li>
-                    <li><a href="contact.jsp">Contact</a></li>
-                    <li><a href="help.jsp" class="active">Help (Public - How to Login and Benefits)</a></li>
-                    <li><a href="login.jsp" class="login-btn">Login</a></li>
-                </ul>
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+
+        /* Overlay for mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .sidebar-overlay.open {
+            display: block;
+        }
+
+        /* Help Section Styling */
+            .help-section {
+                margin-bottom: 2rem;
+            }
+
+        .help-section h3 {
+            color: var(--primary-color);
+                margin-bottom: 1rem;
+            font-weight: 600;
+            }
+
+            .help-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .help-section ul {
+            color: var(--text-secondary);
+                line-height: 1.6;
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .help-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .contact-info h3 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-info .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-info i {
+            font-size: 1.2rem;
+        }
+
+        /* Ensure content visibility */
+        .help-section h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .help-section ol {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .help-section ol li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Additional styling for better visibility */
+        .content-card .help-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-info {
+            margin-top: 2rem;
+        }
+
+        .contact-info .contact-item span {
+            font-weight: 500;
+        }
+
+        /* Custom Action Button Styles */
+        .btn-edit {
+            background: var(--accent-color);
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #ea580c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+            color: white;
+        }
+
+        .btn-delete {
+            background: var(--danger-color);
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <%
+            // Check if user is logged in
+            String username = (String) session.getAttribute("username");
+            String role = (String) session.getAttribute("role");
+            
+            if (username == null || role == null) {
+                response.sendRedirect("login.jsp?error=Please login first.");
+                return;
+            }
+            
+        // Get help sections from request attributes (loaded by HelpServlet)
+        List<HelpSection> helpSections = (List<HelpSection>) request.getAttribute("helpSections");
+        
+        // If no help sections loaded, redirect to HelpServlet to load them
+        if (helpSections == null) {
+            response.sendRedirect("HelpServlet?action=list");
+            return;
+        }
+    %>
+    
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title">
+                <% 
+                String userRole = (String) session.getAttribute("role");
+                if (userRole != null) {
+                    if (userRole.equals("ADMIN")) {
+                        out.print("ADMIN Panel");
+                    } else if (userRole.equals("MANAGER")) {
+                        out.print("MANAGER Panel");
+                    } else if (userRole.equals("STAFF")) {
+                        out.print("STAFF Panel");
+                    } else if (userRole.equals("CUSTOMER")) {
+                        out.print("CUSTOMER Panel");
+                    } else {
+                        out.print("UserRole Panel");
+                    }
+                } else {
+                    out.print("UserRole Panel");
+                }
+                %>
             </div>
+            <div class="sidebar-subtitle">Welcome, <%= session.getAttribute("username") != null ? session.getAttribute("username") : "User" %></div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <% 
+            if ("ADMIN".equals(role) || "MANAGER".equals(role)) { 
+            %>
+                <!-- ADMIN and MANAGER see all menu items -->
+                <div class="nav-item">
+                    <a href="dashboard.jsp" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Dashboard
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="pos.jsp" class="nav-link">
+                        <i class="fas fa-cash-register"></i>
+                        POS
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="TransactionServlet?action=list" class="nav-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        Transaction
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="CustomerServlet?action=list" class="nav-link">
+                        <i class="fas fa-user-friends"></i>
+                        Customer
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="BookCategoryServlet?action=list" class="nav-link">
+                        <i class="fas fa-tags"></i>
+                        Book Categories
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="BookServlet?action=list" class="nav-link">
+                        <i class="fas fa-book"></i>
+                        Book
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="StockServlet?action=list" class="nav-link">
+                        <i class="fas fa-boxes"></i>
+                        Stock
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="UserServlet?action=list" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        User
+                    </a>
+                </div>
+
+                <div class="nav-item">
+                    <a href="UserRoleServlet?action=list" class="nav-link">
+                        <i class="fas fa-user-shield"></i>
+                        UserRole
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="profile.jsp" class="nav-link">
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="help.jsp" class="nav-link active">
+                        <i class="fas fa-question-circle"></i>
+                        Help
+                    </a>
+                </div>
+            <% } else if ("STAFF".equals(role)) { %>
+                <!-- STAFF see limited menu items -->
+                <div class="nav-item">
+                    <a href="dashboard.jsp" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Dashboard
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="pos.jsp" class="nav-link">
+                        <i class="fas fa-cash-register"></i>
+                        POS
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="TransactionServlet?action=list" class="nav-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        Transaction
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="CustomerServlet?action=list" class="nav-link">
+                        <i class="fas fa-user-friends"></i>
+                        Customer
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="profile.jsp" class="nav-link">
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                    </div>
+                
+                <div class="nav-item">
+                    <a href="help.jsp" class="nav-link active">
+                        <i class="fas fa-question-circle"></i>
+                        Help
+                    </a>
+                        </div>
+            <% } else if ("CUSTOMER".equals(role)) { %>
+                <!-- CUSTOMER see minimal menu items -->
+                <div class="nav-item">
+                    <a href="TransactionServlet?action=list" class="nav-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        Transaction
+                    </a>
+                    </div>
+                
+                <div class="nav-item">
+                    <a href="profile.jsp" class="nav-link">
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                </div>
+
+                <div class="nav-item">
+                    <a href="help.jsp" class="nav-link active">
+                        <i class="fas fa-question-circle"></i>
+                        Help
+                    </a>
+                </div>
+            <% } else { %>
+                <!-- Default fallback for unknown roles -->
+                <div class="nav-item">
+                    <a href="profile.jsp" class="nav-link">
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="help.jsp" class="nav-link active">
+                        <i class="fas fa-question-circle"></i>
+                        Help
+                    </a>
+                </div>
+                <% } %>
         </nav>
 
-        <main class="main-content">
-            <div class="page-header">
-                <h1>Help & Support</h1>
-                <p>Learn how to use our platform and discover the benefits of joining Pahana BookShop</p>
-            </div>
-            
-            <div class="public-help">
-                <h2>How to Login and Get Started</h2>
-                <p>Getting started with Pahana BookShop is easy! Follow these simple steps to create your account and start exploring our vast collection of books.</p>
-                
-                <div class="benefits-grid">
-                    <div class="benefit-item">
-                        <i class="fas fa-user-plus"></i>
-                        <h4>Easy Registration</h4>
-                        <p>Create your account in minutes with just your email and basic information</p>
-                    </div>
-                    <div class="benefit-item">
-                        <i class="fas fa-book"></i>
-                        <h4>Access to Books</h4>
-                        <p>Browse thousands of books across all genres and categories</p>
-                    </div>
-                    <div class="benefit-item">
-                        <i class="fas fa-shopping-cart"></i>
-                        <h4>Order Management</h4>
-                        <p>Track your orders and manage your purchase history</p>
-                    </div>
-                    <div class="benefit-item">
-                        <i class="fas fa-heart"></i>
-                        <h4>Wishlist Feature</h4>
-                        <p>Save books you want to read later in your personal wishlist</p>
-                    </div>
-                    <div class="benefit-item">
-                        <i class="fas fa-tags"></i>
-                        <h4>Special Offers</h4>
-                        <p>Get access to exclusive discounts and promotional offers</p>
-                    </div>
-                    <div class="benefit-item">
-                        <i class="fas fa-headset"></i>
-                        <h4>Customer Support</h4>
-                        <p>24/7 customer support to help with any questions</p>
-                    </div>
-                </div>
-                
-                <div class="login-section">
-                    <h3>Ready to Get Started?</h3>
-                    <p>Join thousands of readers who have already discovered the joy of reading with Pahana BookShop</p>
-                    <a href="login.jsp" class="login-btn">Login / Register Now</a>
-                </div>
-            </div>
-        </main>
-    <% } else if (isLoggedIn) { %>
-        <% if ("admin".equals(navType)) { %>
-            <div class="admin-layout">
-                <aside class="admin-sidebar">
-                    <div class="admin-sidebar-header">
-                        <h2>Admin Panel</h2>
-                        <p>Welcome, <%= username %></p>
-                    </div>
-                    
-                    <ul class="admin-sidebar-menu">
-                        <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard (Admin)</a></li>
-                        <li><a href="pos.jsp"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
-                        <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
-                        <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
-                        <li><a href="user-management.jsp"><i class="fas fa-users"></i> Manage Users</a></li>
-                        <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Manage Customer</a></li>
-                        <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
-                        <li><a href="reports.jsp"><i class="fas fa-chart-bar"></i> Analytics & Reports</a></li>
-                        <li><a href="settings.jsp"><i class="fas fa-cogs"></i> System Settings</a></li>
-                        <li><a href="profile.jsp"><i class="fas fa-user"></i> My Profile</a></li>
-                        <li><a href="help.jsp" class="active"><i class="fas fa-question-circle"></i> Help (Admin)</a></li>
-                        <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                    </ul>
-                </aside>
+        <div class="sidebar-footer">
+            <a href="LogoutServlet" class="logout-btn">
+                <i class="fas fa-sign-out-alt me-2"></i>Logout
+            </a>
+        </div>
+    </div>
 
-                <main class="admin-main-content">
-                    <div class="main-content">
-                        <div class="page-header">
-                            <h1>Help (Admin)</h1>
-                            <p>Administrative help and system management guidance</p>
-                        </div>
-                        
-                        <div class="help-grid">
-                            <div class="help-card">
-                                <div class="help-header">
-                                    <h3><i class="fas fa-cogs"></i> System Management</h3>
-                                    <p>Essential administrative functions</p>
-                                </div>
-                                <div class="help-content">
-                                    <h4>User Management</h4>
-                                    <ul>
-                                        <li>Create and manage user accounts</li>
-                                        <li>Assign roles and permissions</li>
-                                        <li>Monitor user activity</li>
-                                        <li>Reset passwords when needed</li>
-                                    </ul>
-                                    
-                                    <h4>System Settings</h4>
-                                    <ul>
-                                        <li>Configure store information</li>
-                                        <li>Set security parameters</li>
-                                        <li>Manage email settings</li>
-                                        <li>Configure notifications</li>
-                                    </ul>
-                                    
-                                    <div class="contact-info">
-                                        <h4>Need Help?</h4>
-                                        <div class="contact-item">
-                                            <i class="fas fa-envelope"></i>
-                                            <span>admin-support@pahanabookshop.com</span>
-                                        </div>
-                                        <div class="contact-item">
-                                            <i class="fas fa-phone"></i>
-                                            <span>+1 (555) 123-4567</span>
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-question-circle me-3"></i>Help & Support
+            </h1>
+            <p class="page-subtitle">Get help with using the BookShop management system</p>
+        </div>
+
+        <!-- Dynamic Help Content from Database -->
+        <% if (helpSections != null && !helpSections.isEmpty()) { %>
+            <% for (HelpSection helpSection : helpSections) { %>
+                <div class="content-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-info-circle"></i><%= helpSection.getTitle() %>
+                        <% if ("ADMIN".equals(role) || "MANAGER".equals(role)) { %>
+                            <div class="btn-group">
+                                <a href="HelpServlet?action=view&help_id=<%= helpSection.getHelpId() %>" class="btn btn-sm btn-info">
+                                    <i class="fas fa-eye"></i>View
+                                </a>
+                                <a href="HelpServlet?action=edit&help_id=<%= helpSection.getHelpId() %>" class="btn btn-edit btn-sm">
+                                    <i class="fas fa-edit"></i>Edit
+                                </a>
+                                <button class="btn btn-delete btn-sm" onclick="deleteHelpSection(<%= helpSection.getHelpId() %>, '<%= helpSection.getTitle() %>')">
+                                    <i class="fas fa-trash"></i>Delete
+                                </button>
+                            </div>
+                        <% } %>
+                    </h3>
+                    <div class="help-section">
+                        <%= helpSection.getContent() %>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-
-                            <div class="help-card">
-                                <div class="help-header">
-                                    <h3><i class="fas fa-chart-bar"></i> Reports & Analytics</h3>
-                                    <p>Business intelligence tools</p>
-                                </div>
-                                <div class="help-content">
-                                    <h4>Sales Reports</h4>
-                                    <ul>
-                                        <li>View daily, weekly, and monthly sales</li>
-                                        <li>Analyze customer behavior</li>
-                                        <li>Track inventory performance</li>
-                                        <li>Generate custom reports</li>
-                                    </ul>
-                                    
-                                    <h4>System Monitoring</h4>
-                                    <ul>
-                                        <li>Monitor system performance</li>
-                                        <li>Track user activity logs</li>
-                                        <li>View error reports</li>
-                                        <li>System health status</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
-        <% } else if ("manager".equals(navType)) { %>
-            <div class="admin-layout">
-                <aside class="admin-sidebar">
-                    <div class="admin-sidebar-header">
-                        <h2>Manager Panel</h2>
-                        <p>Welcome, <%= username %></p>
-                    </div>
-                    
-                    <ul class="admin-sidebar-menu">
-                        <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard (Manager)</a></li>
-                        <li><a href="pos.jsp"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
-                        <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
-                        <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
-                        <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Manage Customer</a></li>
-                        <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
-                        <li><a href="reports.jsp"><i class="fas fa-chart-bar"></i> Analytics & Reports</a></li>
-                        <li><a href="profile.jsp"><i class="fas fa-user"></i> My Profile</a></li>
-                        <li><a href="help.jsp" class="active"><i class="fas fa-question-circle"></i> Help (Manager)</a></li>
-                        <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                    </ul>
-                </aside>
-
-                <main class="admin-main-content">
-                    <div class="main-content">
-                        <div class="page-header">
-                            <h1>Help (Manager)</h1>
-                            <p>Management guidance and operational support</p>
-                        </div>
-                        
-                        <div class="help-grid">
-                            <div class="help-card">
-                                <div class="help-header">
-                                    <h3><i class="fas fa-book"></i> Inventory Management</h3>
-                                    <p>Book and category management</p>
-                                </div>
-                                <div class="help-content">
-                                    <h4>Book Management</h4>
-                                    <ul>
-                                        <li>Add new books to inventory</li>
-                                        <li>Update book information and prices</li>
-                                        <li>Manage stock quantities</li>
-                                        <li>Organize books by categories</li>
-                                    </ul>
-                                    
-                                    <h4>Category Management</h4>
-                                    <ul>
-                                        <li>Create and edit book categories</li>
-                                        <li>Organize books by genre</li>
-                                        <li>Set category descriptions</li>
-                                        <li>Manage category hierarchy</li>
-                                    </ul>
-                                    
-                                    <div class="contact-info">
-                                        <h4>Need Help?</h4>
-                                        <div class="contact-item">
-                                            <i class="fas fa-envelope"></i>
-                                            <span>manager-support@pahanabookshop.com</span>
-                                        </div>
-                                        <div class="contact-item">
-                                            <i class="fas fa-phone"></i>
-                                            <span>+1 (555) 123-4567</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="help-card">
-                                <div class="help-header">
-                                    <h3><i class="fas fa-shopping-cart"></i> Order Management</h3>
-                                    <p>Customer order processing</p>
-                                </div>
-                                <div class="help-content">
-                                    <h4>Order Processing</h4>
-                                    <ul>
-                                        <li>View and process customer orders</li>
-                                        <li>Update order status</li>
-                                        <li>Handle returns and refunds</li>
-                                        <li>Generate shipping labels</li>
-                                    </ul>
-                                    
-                                    <h4>Customer Support</h4>
-                                    <ul>
-                                        <li>Manage customer accounts</li>
-                                        <li>Handle customer inquiries</li>
-                                        <li>Process customer requests</li>
-                                        <li>Maintain customer relationships</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
-        <% } else if ("staff".equals(navType)) { %>
-            <div class="admin-layout">
-                <aside class="admin-sidebar">
-                    <div class="admin-sidebar-header">
-                        <h2>Staff Panel</h2>
-                        <p>Welcome, <%= username %></p>
-                    </div>
-                    
-                    <ul class="admin-sidebar-menu">
-                        <li><a href="pos.jsp"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
-                        <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
-                        <li><a href="profile.jsp"><i class="fas fa-user"></i> My Profile</a></li>
-                        <li><a href="help.jsp" class="active"><i class="fas fa-question-circle"></i> Help (Staff)</a></li>
-                        <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                    </ul>
-                </aside>
-
-                <main class="admin-main-content">
-                    <div class="main-content">
-                        <div class="page-header">
-                            <h1>Help (Staff)</h1>
-                            <p>Daily operations and customer service guidance</p>
-                        </div>
-                        
-                        <div class="help-grid">
-                            <div class="help-card">
-                                <div class="help-header">
-                                    <h3><i class="fas fa-cash-register"></i> Point of Sale</h3>
-                                    <p>POS system operation</p>
-                                </div>
-                                <div class="help-content">
-                                    <h4>Processing Sales</h4>
-                                    <ul>
-                                        <li>Scan books or search by title</li>
-                                        <li>Add items to cart</li>
-                                        <li>Apply discounts if applicable</li>
-                                        <li>Process payment methods</li>
-                                        <li>Generate receipts</li>
-                                    </ul>
-                                    
-                                    <h4>Customer Service</h4>
-                                    <ul>
-                                        <li>Help customers find books</li>
-                                        <li>Check inventory availability</li>
-                                        <li>Process returns and exchanges</li>
-                                        <li>Answer customer questions</li>
-                                    </ul>
-                                    
-                                    <div class="contact-info">
-                                        <h4>Need Help?</h4>
-                                        <div class="contact-item">
-                                            <i class="fas fa-envelope"></i>
-                                            <span>staff-support@pahanabookshop.com</span>
-                                        </div>
-                                        <div class="contact-item">
-                                            <i class="fas fa-phone"></i>
-                                            <span>+1 (555) 123-4567</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="help-card">
-                                <div class="help-header">
-                                    <h3><i class="fas fa-shopping-cart"></i> Order Management</h3>
-                                    <p>Order processing and tracking</p>
-                                </div>
-                                <div class="help-content">
-                                    <h4>Order Processing</h4>
-                                    <ul>
-                                        <li>View pending orders</li>
-                                        <li>Update order status</li>
-                                        <li>Prepare orders for shipping</li>
-                                        <li>Handle customer inquiries</li>
-                                    </ul>
-                                    
-                                    <h4>Inventory Checks</h4>
-                                    <ul>
-                                        <li>Check book availability</li>
-                                        <li>Report low stock items</li>
-                                        <li>Update inventory counts</li>
-                                        <li>Locate books in store</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
+            <% } %>
         <% } else { %>
-            <!-- Customer Help -->
-            <div class="customer-layout">
-                <nav class="customer-navbar">
-                    <div class="customer-nav-container">
-                        <a href="welcome.jsp" class="customer-logo">
-                            <span class="customer-logo-text">Pahana BookShop</span>
-                        </a>
-                        <ul class="customer-nav-menu">
-                            <li><a href="welcome.jsp">Home (Welcome Page)</a></li>
-                            <li><a href="about.jsp">About</a></li>
-                            <li><a href="books.jsp">Books</a></li>
-                            <li><a href="categories.jsp">Categories</a></li>
-                            <li><a href="orders.jsp">My Orders</a></li>
-                            <li><a href="wishlist.jsp">Wishlist</a></li>
-                            <li><a href="contact.jsp">Contact</a></li>
-                            <li><a href="profile.jsp">My Profile</a></li>
-                            <li><a href="help.jsp" class="active">Help (Customer)</a></li>
-                        </ul>
-                        <div class="customer-user-info">
-                            <span class="welcome-text">Welcome, <%= username %></span>
-                            <a href="LogoutServlet" class="customer-logout-btn">
-                                <i class="fas fa-sign-out-alt"></i> Logout
-                            </a>
-                        </div>
-                    </div>
-                </nav>
-
-                <main class="customer-main-content">
-                    <div class="main-content">
-                        <div class="page-header">
-                            <h1>Help (Customer)</h1>
-                            <p>Customer support and guidance</p>
-                        </div>
-                        
-                        <div class="help-grid">
-                            <div class="help-card">
-                                <div class="help-header">
-                                    <h3><i class="fas fa-shopping-cart"></i> Ordering & Shopping</h3>
-                                    <p>How to place and track orders</p>
-                                </div>
-                                <div class="help-content">
-                                    <h4>Placing Orders</h4>
-                                    <ul>
-                                        <li>Browse books by category or search</li>
-                                        <li>Add books to your cart</li>
-                                        <li>Review your order before checkout</li>
-                                        <li>Choose shipping and payment options</li>
-                                        <li>Receive order confirmation</li>
-                                    </ul>
-                                    
-                                    <h4>Order Tracking</h4>
-                                    <ul>
-                                        <li>View order history in My Orders</li>
-                                        <li>Track shipping status</li>
-                                        <li>Download invoices</li>
-                                        <li>Request returns if needed</li>
-                                    </ul>
-                                    
-                                    <div class="contact-info">
-                                        <h4>Need Help?</h4>
-                                        <div class="contact-item">
-                                            <i class="fas fa-envelope"></i>
-                                            <span>customer-support@pahanabookshop.com</span>
-                                        </div>
-                                        <div class="contact-item">
-                                            <i class="fas fa-phone"></i>
-                                            <span>+1 (555) 123-4567</span>
-                                        </div>
-                                    </div>
+            <!-- Fallback content if no help sections found -->
+            <div class="content-card">
+                <h3 class="card-title">
+                    <i class="fas fa-info-circle"></i>Getting Started
+                </h3>
+                <div class="help-section">
+                    <h4>Welcome to BookShop Management System</h4>
+                    <p>This system helps you manage your bookstore operations efficiently. Here's how to get started:</p>
+                    <ul>
+                        <li><strong>Dashboard:</strong> View overview of your bookstore operations</li>
+                        <li><strong>POS:</strong> Process sales and transactions</li>
+                        <li><strong>Books:</strong> Manage your book inventory</li>
+                        <li><strong>Customers:</strong> Handle customer accounts</li>
+                        <li><strong>Users:</strong> Manage staff access</li>
+                    </ul>
                                 </div>
                             </div>
+                            <% } %>
 
-                            <div class="help-card">
-                                <div class="help-header">
-                                    <h3><i class="fas fa-user"></i> Account Management</h3>
-                                    <p>Managing your profile and preferences</p>
-                                </div>
-                                <div class="help-content">
-                                    <h4>Profile Management</h4>
-                                    <ul>
-                                        <li>Update personal information</li>
-                                        <li>Change password</li>
-                                        <li>Manage shipping addresses</li>
-                                        <li>Set notification preferences</li>
-                                    </ul>
-                                    
-                                    <h4>Wishlist Features</h4>
-                                    <ul>
-                                        <li>Save books for later</li>
-                                        <li>Organize your reading list</li>
-                                        <li>Share wishlist with friends</li>
-                                        <li>Get notified of price changes</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </main>
+        <!-- Add New Help Section Button (Admin/Manager only) -->
+                        <% if ("ADMIN".equals(role) || "MANAGER".equals(role)) { %>
+            <div class="content-card">
+                <h3 class="card-title">
+                    <i class="fas fa-plus-circle"></i>Manage Help Content
+                </h3>
+                <div class="help-section">
+                    <p>Add new help sections or manage existing ones:</p>
+                    <a href="HelpServlet?action=create" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>Add New Help Section
+                    </a>
+                </div>
             </div>
         <% } %>
-    <% } %>
 
-    <script src="js/sidebar.js"></script>
-</body>
-</html>
+        <!-- Contact Information -->
+        <div class="contact-info">
+            <h3><i class="fas fa-headset me-2"></i>Need More Help?</h3>
+            <p>If you need additional assistance, please contact our support team:</p>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <span>muhilavijayakumar@gmail.com</span>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <span>+94 76 594 7337</span>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-clock"></i>
+                <span>Monday - Sunday, 9:00 AM - 6:00 PM</span>
+            </div>
+        </div>
+
+        <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script>
+        // Mobile sidebar functionality
+            function toggleSidebar() {
+                const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('open');
+            }
+
+        function closeSidebar() {
+                const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebar.classList.remove('open');
+            overlay.classList.remove('open');
+        }
+
+        // Close sidebar when clicking on a link (mobile)
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) {
+                    closeSidebar();
+                }
+            });
+        });
+
+        // Close sidebar on window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024) {
+                closeSidebar();
+            }
+        });
+
+        // Help section management functions
+        function deleteHelpSection(helpId, title) {
+            if (confirm('Are you sure you want to delete the help section "' + title + '"?')) {
+                window.location.href = 'HelpServlet?action=delete&help_id=' + helpId;
+            }
+        }
+        </script>
+    </body>
+</html> 

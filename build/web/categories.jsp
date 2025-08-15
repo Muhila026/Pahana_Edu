@@ -788,8 +788,8 @@
                 <ul class="nav-menu">
                     <li><a href="welcome.jsp">Home</a></li>
                     <li><a href="about.jsp">About</a></li>
-                    <li><a href="books.jsp">Books</a></li>
-                    <li><a href="categories.jsp">Categories</a></li>
+                    <li><a href="BookServlet?action=list&redirect=books.jsp">Books</a></li>
+                    <li><a href="BookCategoryServlet?action=list&redirect=categories.jsp">Categories</a></li>
                     <li><a href="contact.jsp">Contact</a></li>
                     <li><a href="login.jsp" class="login-btn">Login</a></li>
                 </ul>
@@ -814,8 +814,8 @@
                     <ul class="customer-nav-menu">
                         <li><a href="welcome.jsp">Home</a></li>
                         <li><a href="about.jsp">About</a></li>
-                        <li><a href="books.jsp">Books</a></li>
-                        <li><a href="categories.jsp" class="active">Categories</a></li>
+                        <li><a href="BookServlet?action=list&redirect=books.jsp">Books</a></li>
+                        <li><a href="BookCategoryServlet?action=list&redirect=categories.jsp" class="active">Categories</a></li>
                         <li><a href="dashboard.jsp">My Profile</a></li>
                         <li><a href="orders.jsp">My Orders</a></li>
                         <li><a href="wishlist.jsp">Wishlist</a></li>
@@ -858,7 +858,7 @@
                 <!-- ADMIN SIDEBAR MENU -->
                 <ul class="admin-sidebar-menu">
                     <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
+                    <li><a href="BookCategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
                     <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
                     <li><a href="users.jsp"><i class="fas fa-users"></i> Manage Users</a></li>
                     <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
@@ -875,7 +875,7 @@
                 <!-- MANAGER SIDEBAR MENU -->
                 <ul class="admin-sidebar-menu">
                     <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
+                    <li><a href="BookCategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
                     <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
                     <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> Process Orders</a></li>
                     <li><a href="reports.jsp"><i class="fas fa-chart-bar"></i> Sales Reports</a></li>
@@ -947,16 +947,16 @@
         <div class="categories-grid">
             <%
             // Get categories from request attribute
-            java.util.List<com.pahana.CategoryServlet.Category> categories = 
-                (java.util.List<com.pahana.CategoryServlet.Category>) request.getAttribute("categories");
+            java.util.List<com.booking.BookCategoryServlet.BookCategory> categories = 
+                (java.util.List<com.booking.BookCategoryServlet.BookCategory>) request.getAttribute("categories");
             
             if (categories != null && !categories.isEmpty()) {
-                for (com.pahana.CategoryServlet.Category category : categories) {
+                for (com.booking.BookCategoryServlet.BookCategory category : categories) {
             %>
                 <div class="category-card">
                     <span class="category-icon">📚</span>
                     <h3 class="category-title"><%= category.getCategoryName() %></h3>
-                    <p class="category-description"><%= category.getDescription() != null ? category.getDescription() : "Explore amazing books in this category." %></p>
+                    <p class="category-description">Explore amazing books in this category.</p>
                     <div class="category-stats">
                         <span class="book-count">
                             <i class="fas fa-book"></i> 25+ Books
@@ -1034,8 +1034,8 @@
             // Check if categories are already loaded (from servlet)
             const categories = document.querySelectorAll('.category-card');
             if (categories.length === 0 || (categories.length === 1 && categories[0].textContent.includes('No categories'))) {
-                // Redirect to servlet to load categories
-                window.location.href = 'CategoryServlet?action=list';
+                // Redirect to servlet to load categories and return to this page
+                window.location.href = 'BookCategoryServlet?action=list&redirect=categories.jsp';
             }
         });
     </script>

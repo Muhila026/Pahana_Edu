@@ -281,14 +281,86 @@
             transform: scale(0.85) translateY(-1rem) translateX(0.15rem);
             color: var(--primary-color);
         }
+        
+        /* New Form Styling for Add Customer Design */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .input-group .btn {
+            border-left: none;
+        }
+        
+        .input-group .form-control {
+            border-right: none;
+        }
+        
+        .input-group .form-control:focus {
+            border-right: 1px solid var(--primary-color);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #5a6268;
+        }
+        
+        .alert {
+            margin-bottom: 1rem;
+        }
+        
+        /* Username field specific styling */
+        #username {
+            text-transform: lowercase;
+        }
+        
+        /* Form layout improvements */
+        .row {
+            margin-left: -0.5rem;
+            margin-right: -0.5rem;
+        }
+        
+        .col-md-6 {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+        
+        /* Button spacing */
+        .gap-2 > * {
+            margin-left: 0.5rem;
+        }
+        
+        .gap-2 > *:first-child {
+            margin-left: 0;
+        }
     </style>
 </head>
 <body>
     <div class="register-container">
         <!-- Header Section -->
         <div class="register-header">
-            <h1><i class="fas fa-user-plus me-2"></i>Create Account</h1>
-            <p>Join Pahana BookShop and start your reading journey</p>
+            <h1><i class="fas fa-user-plus me-2"></i>Add New Customer</h1>
+            <p>Create a new customer account with full access to our services</p>
         </div>
 
         <!-- Body Section -->
@@ -308,52 +380,82 @@
 
             <!-- Registration Form -->
             <form id="registrationForm" action="SignupServlet" method="POST">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="name" name="name" 
-                           placeholder="Full Name" required>
-                    <label for="name">
-                        <i class="fas fa-user me-2"></i>Full Name <span class="required">*</span>
-                    </label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="name" class="form-label">
+                                <i class="fas fa-user me-2"></i>Customer Name <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="name" name="name" 
+                                   placeholder="Enter customer name" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="telephone" class="form-label">
+                                <i class="fas fa-phone me-2"></i>Phone Number <span class="required">*</span>
+                            </label>
+                            <input type="tel" class="form-control" id="telephone" name="telephone" 
+                                   placeholder="Enter phone number" required>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-floating">
-                    <input type="email" class="form-control" id="email" name="email" 
-                           placeholder="Email Address" required>
-                    <label for="email">
-                        <i class="fas fa-envelope me-2"></i>Email Address <span class="required">*</span>
-                    </label>
-                </div>
-
-                <div class="form-floating">
-                    <input type="tel" class="form-control" id="telephone" name="telephone" 
-                           placeholder="Phone Number" required>
-                    <label for="telephone">
-                        <i class="fas fa-phone me-2"></i>Phone Number <span class="required">*</span>
-                    </label>
-                </div>
-
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="address" name="address" 
-                           placeholder="Address" required>
-                    <label for="address">
+                <div class="form-group mb-3">
+                    <label for="address" class="form-label">
                         <i class="fas fa-map-marker-alt me-2"></i>Address <span class="required">*</span>
                     </label>
+                    <textarea class="form-control" id="address" name="address" 
+                              placeholder="Enter customer address" rows="3" required></textarea>
                 </div>
 
-                <div class="form-floating password-field">
-                    <input type="password" class="form-control" id="password" name="password" 
-                           placeholder="Password" required>
-                    <label for="password">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="username" class="form-label">
+                                <i class="fas fa-user me-2"></i>Username <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="username" name="username" 
+                                   placeholder="Enter username" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="email" class="form-label">
+                                <i class="fas fa-envelope me-2"></i>Email <span class="required">*</span>
+                            </label>
+                            <div class="input-group">
+                                <input type="email" class="form-control" id="email" name="email" 
+                                       placeholder="Enter email address" required>
+                                <button type="button" class="btn btn-outline-primary" onclick="validateEmail()">
+                                    <i class="fas fa-envelope"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="password" class="form-label">
                         <i class="fas fa-lock me-2"></i>Password <span class="required">*</span>
                     </label>
-                    <button type="button" class="password-toggle" onclick="togglePassword()">
-                        <i class="fas fa-eye"></i>
-                    </button>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password" name="password" 
+                               placeholder="Enter password" required>
+                        <button type="button" class="btn btn-outline-secondary" onclick="togglePassword()">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <button type="submit" class="btn btn-register" id="registerBtn">
-                    <i class="fas fa-user-plus me-2"></i>Create Account
-                </button>
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <button type="button" class="btn btn-secondary" onclick="clearForm()">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="registerBtn">
+                        <i class="fas fa-plus me-2"></i>Add Customer
+                    </button>
+                </div>
             </form>
 
             <!-- Login Link -->
@@ -384,17 +486,74 @@
                 toggleBtn.classList.add('fa-eye');
             }
         }
+        
+        // Email Validation Function
+        function validateEmail() {
+            const emailInput = document.getElementById('email');
+            const email = emailInput.value.trim();
+            
+            if (email && email.match(/^[A-Za-z0-9+_.-]+@(.+)$/)) {
+                showAlert('Email format is valid!', 'success');
+            } else {
+                showAlert('Please enter a valid email address!', 'warning');
+            }
+        }
+        
+        // Clear Form Function
+        function clearForm() {
+            document.getElementById('registrationForm').reset();
+            showAlert('Form cleared successfully!', 'info');
+        }
+        
+        // Email Validation Function
+        function validateEmail() {
+            const emailInput = document.getElementById('email');
+            const email = emailInput.value.trim();
+            
+            if (email && email.match(/^[A-Za-z0-9+_.-]+@(.+)$/)) {
+                showAlert('Email format is valid!', 'success');
+            } else {
+                showAlert('Please enter a valid email address!', 'warning');
+            }
+        }
+        
+        // Clear Form Function
+        function clearForm() {
+            document.getElementById('registrationForm').reset();
+            showAlert('Form cleared successfully!', 'info');
+        }
+        
+        // Show Alert Function
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            const form = document.getElementById('registrationForm');
+            form.parentNode.insertBefore(alertDiv, form);
+            
+            // Auto-dismiss after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
 
                  // Form Submission with Loading State
          document.getElementById('registrationForm').addEventListener('submit', function(e) {
              // Client-side validation
              var name = document.getElementById('name').value.trim();
+             var username = document.getElementById('username').value.trim();
              var email = document.getElementById('email').value.trim();
              var telephone = document.getElementById('telephone').value.trim();
              var address = document.getElementById('address').value.trim();
              var password = document.getElementById('password').value.trim();
              
-             if (!name || !email || !telephone || !address || !password) {
+             if (!name || !username || !email || !telephone || !address || !password) {
                  e.preventDefault();
                  showAlert('Please fill in all required fields!', 'danger');
                  return false;

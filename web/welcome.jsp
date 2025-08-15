@@ -791,10 +791,9 @@
                 <ul class="nav-menu">
                     <li><a href="welcome.jsp">Home</a></li>
                     <li><a href="about.jsp">About</a></li>
-                    <li><a href="books.jsp">Books</a></li>
-                    <li><a href="categories.jsp">Categories</a></li>
+                    <li><a href="BookServlet?action=list&redirect=books.jsp">Books</a></li>
+                    <li><a href="BookCategoryServlet?action=list&redirect=categories.jsp">Categories</a></li>
                     <li><a href="contact.jsp">Contact</a></li>
-                    <li><a href="help.jsp">Help</a></li>
                     <li><a href="login.jsp" class="login-btn">Login</a></li>
                 </ul>
             </div>
@@ -824,13 +823,12 @@
                     <ul class="nav-menu">
                         <li><a href="welcome.jsp" class="active">Home</a></li>
                         <li><a href="about.jsp">About</a></li>
-                        <li><a href="books.jsp">Books</a></li>
-                        <li><a href="categories.jsp">Categories</a></li>
+                        <li><a href="BookServlet?action=list&redirect=books.jsp">Books</a></li>
+                        <li><a href="BookCategoryServlet?action=list&redirect=categories.jsp">Categories</a></li>
                         <li><a href="orders.jsp">My Orders</a></li>
                         <li><a href="wishlist.jsp">Wishlist</a></li>
                         <li><a href="contact.jsp">Contact</a></li>
                         <li><a href="profile.jsp">My Profile</a></li>
-                        <li><a href="help.jsp">Help</a></li>
                         <%
                         // Get customer full name from session
                         String customerName = (String) session.getAttribute("customerName");

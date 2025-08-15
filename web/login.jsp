@@ -208,29 +208,6 @@
             border-left: 4px solid var(--success-color);
         }
 
-        .divider {
-            text-align: center;
-            margin: 30px 0;
-            position: relative;
-        }
-
-        .divider::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: var(--border-color);
-        }
-
-        .divider span {
-            background: var(--card-background);
-            padding: 0 20px;
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
         .register-link {
             text-align: center;
             margin-top: 20px;
@@ -246,40 +223,6 @@
         .register-link a:hover {
             color: var(--primary-hover);
             text-decoration: underline;
-        }
-
-        .social-login {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .social-btn {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            background: white;
-            color: var(--text-secondary);
-            text-decoration: none;
-            text-align: center;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .social-btn:hover {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.1);
-        }
-
-        .social-btn i {
-            font-size: 18px;
         }
 
         /* Forgot Password Styling */
@@ -377,7 +320,7 @@
     <div class="login-container">
         <!-- Header Section -->
         <div class="login-header">
-            <h1></i>Pahana BookShop</h1>
+            <h1>Pahana BookShop</h1>
             <p>Welcome back! Please sign in to your account</p>
         </div>
 
@@ -439,12 +382,6 @@
                 </button>
             </form>
 
-            <!-- Divider -->
-            <div class="divider">
-                <span>or continue with</span>
-            </div>
-
-        
             <!-- Register Link -->
             <div class="register-link">
                 <p>Don't have an account? 
@@ -503,24 +440,6 @@
             }
         }
 
-        // Social Login Functions
-        function socialLogin(provider) {
-            // Add your social login logic here
-            console.log(`Social login with ${provider}`);
-            
-            // Example: Show loading state
-            const btn = event.target.closest('.social-btn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
-            btn.style.pointerEvents = 'none';
-            
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.style.pointerEvents = 'auto';
-                alert(`${provider} login functionality needs to be implemented`);
-            }, 1500);
-        }
-
         // Input Focus Effects
         document.querySelectorAll('.form-control').forEach(input => {
             input.addEventListener('focus', function() {
@@ -558,4 +477,3 @@
     </script>
 </body>
 </html>
-

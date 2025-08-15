@@ -794,8 +794,8 @@
                 <ul class="nav-menu">
                     <li><a href="welcome.jsp">Home</a></li>
                     <li><a href="about.jsp">About</a></li>
-                    <li><a href="books.jsp">Books</a></li>
-                    <li><a href="categories.jsp">Categories</a></li>
+                    <li><a href="BookServlet?action=list&redirect=books.jsp">Books</a></li>
+                    <li><a href="BookCategoryServlet?action=list&redirect=categories.jsp">Categories</a></li>
                     <li><a href="contact.jsp" class="active">Contact</a></li>
                     <li><a href="login.jsp" class="login-btn">Login</a></li>
                 </ul>
@@ -814,8 +814,8 @@
                     <ul class="customer-nav-menu">
                         <li><a href="welcome.jsp">Home</a></li>
                         <li><a href="about.jsp">About</a></li>
-                        <li><a href="books.jsp">Books</a></li>
-                        <li><a href="categories.jsp">Categories</a></li>
+                        <li><a href="BookServlet?action=list&redirect=books.jsp">Books</a></li>
+                        <li><a href="BookCategoryServlet?action=list&redirect=categories.jsp">Categories</a></li>
                         <li><a href="dashboard.jsp">My Profile</a></li>
                         <li><a href="orders.jsp">My Orders</a></li>
                         <li><a href="wishlist.jsp">Wishlist</a></li>

@@ -1,1885 +1,1779 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="com.booking.BookServlet.Book"%>
+<%@page import="com.booking.CustomerServlet.Customer"%>
+<%@page import="com.booking.TransactionServlet.Transaction,com.booking.TransactionServlet.TransactionItem"%>
+<%@page import="com.booking.BookServlet"%>
+<%@page import="com.booking.CustomerServlet"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Point of Sale - Pahana BookShop</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/sidebar.css">
-    <style>
-        :root {
-            --primary-color: #6366f1;
-            --secondary-color: #8b5cf6;
-            --accent-color: #a855f7;
-            --text-color: #1e293b;
-            --light-color: #f8fafc;
-            --hover-color: #4f46e5;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-
-        html {
-            height: 100%;
-            overflow: hidden;
-            scroll-behavior: smooth;
-        }
-
-        /* Sidebar styles are now in css/sidebar.css */
-
-        /* Standalone POS Layout */
-        .pos-standalone-layout {
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* POS Header */
-        .pos-header {
-            background: white;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            flex-shrink: 0;
-        }
-
-        .pos-header-left h1 {
-            color: #6366f1;
-            margin: 0;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .pos-header-left p {
-            color: #64748b;
-            margin: 0.25rem 0 0 0;
-            font-size: 0.9rem;
-        }
-
-        .pos-header-right {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: #f8fafc;
-            color: #475569;
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: 1px solid #e2e8f0;
-        }
-
-        .nav-link:hover {
-            background: #6366f1;
-            color: white;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-        }
-
-        .nav-link.logout {
-            background: #fef2f2;
-            color: #dc2626;
-            border-color: #fecaca;
-        }
-
-        .nav-link.logout:hover {
-            background: #dc2626;
-            color: white;
-            border-color: #dc2626;
-        }
-
-        /* POS Main Content */
-        .pos-main-content {
-            flex: 1;
-            overflow: hidden;
-        }
-
-        /* Scroll to Top Button */
-        .scroll-to-top-btn {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: #6366f1;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
-            z-index: 10;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .scroll-to-top-btn:hover {
-            background: #4f46e5;
-            transform: scale(1.1);
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
-        }
-
-        /* Scroll Indicators */
-        .scroll-indicator {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #6366f1, #8b5cf6);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .scroll-indicator.visible {
-            opacity: 1;
-        }
-
-        /* Main Content Styles */
-        .main-content {
-            padding: 1rem;
-            width: 100%;
-            margin: 0;
-            max-width: none;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e1 #f1f5f9;
-        }
-
-        .main-content::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .main-content::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 4px;
-        }
-
-        .main-content::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-
-        .main-content::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-
-
-        /* POS Grid Layout */
-        .pos-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-            height: calc(100vh - 120px);
-            overflow: hidden;
-        }
-
-        /* Product Search Section */
-        .product-search {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.1);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .search-header {
-            margin-bottom: 1rem;
-            flex-shrink: 0;
-        }
-
-        .search-header h3 {
-            color: #6366f1;
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .search-form {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            flex-shrink: 0;
-        }
-
-        .search-input {
-            flex: 1;
-            padding: 0.8rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #6366f1;
-        }
-
-        .search-btn {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .search-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
-        }
-
-        /* Product List */
-        .product-list {
-            flex: 1;
-            overflow-y: auto;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            min-height: 300px;
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e1 #f1f5f9;
-        }
-
-        .product-list::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .product-list::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 4px;
-        }
-
-        .product-list::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-
-        .product-list::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        .product-item {
-            display: flex;
-            align-items: center;
-            padding: 1rem;
-            border-bottom: 1px solid #f1f5f9;
-            transition: background-color 0.3s ease;
-        }
-
-        .product-item:hover {
-            background-color: #f8fafc;
-        }
-
-        .product-item:last-child {
-            border-bottom: none;
-        }
-
-        .product-info {
-            flex: 1;
-        }
-
-        .product-name {
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 0.25rem;
-        }
-
-        .product-details {
-            font-size: 0.9rem;
-            color: #64748b;
-        }
-
-        .product-stock {
-            font-size: 0.8rem;
-            color: #475569;
-            margin-top: 0.25rem;
-        }
-
-        .add-to-cart-btn {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .add-to-cart-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        /* Cart Section */
-        .cart-section {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.1);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .cart-header {
-            margin-bottom: 1rem;
-            flex-shrink: 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .cart-scroll-indicator {
-            font-size: 0.8rem;
-            color: #64748b;
-            background: #f1f5f9;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .cart-header h3 {
-            color: #6366f1;
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .cart-items {
-            margin-bottom: 1.5rem;
-            flex: 1;
-            overflow-y: auto;
-            min-height: 200px;
-            max-height: 350px;
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e1 #f1f5f9;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 0.5rem;
-            background: #f8fafc;
-        }
-
-        .cart-items::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .cart-items::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 4px;
-        }
-
-        .cart-items::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-
-        .cart-items::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        /* Cart scroll hint */
-        .cart-scroll-hint {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            background: rgba(99, 102, 241, 0.1);
-            color: #6366f1;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            pointer-events: none;
-            opacity: 0.7;
-        }
-
-        .cart-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1rem;
-            border-bottom: 1px solid #f1f5f9;
-            background: white;
-            margin-bottom: 0.5rem;
-            border-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
-        }
-
-        .cart-item:hover {
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-            transform: translateY(-1px);
-        }
-
-        .cart-item:last-child {
-            border-bottom: none;
-        }
-
-        .cart-item-info {
-            flex: 1;
-        }
-
-        .cart-item-name {
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 0.25rem;
-        }
-
-        .cart-item-price {
-            color: #6366f1;
-            font-weight: 600;
-        }
-
-        .cart-item-controls {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .quantity-btn {
-            background: #f1f5f9;
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .quantity-btn:hover {
-            background: #e2e8f0;
-        }
-
-        .quantity-display {
-            padding: 0.5rem;
-            min-width: 40px;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        .remove-item-btn {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-            border: none;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .remove-item-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-        }
-
-        /* Cart Summary */
-        .cart-summary {
-            border-top: 2px solid #f1f5f9;
-            padding-top: 1rem;
-            flex-shrink: 0;
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-top: 1rem;
-        }
-
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-
-        .summary-row.total {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #6366f1;
-            border-top: 1px solid #f1f5f9;
-            padding-top: 1rem;
-            margin-top: 1rem;
-        }
-
-        /* Discount Button Styling */
-        .discount-btn {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            font-weight: 500;
-            display: inline-block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            min-width: 120px;
-            height: auto;
-            line-height: 1.2;
-        }
-
-        .discount-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-        }
-
-        .discount-btn:disabled {
-            background: #9ca3af;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Quick Discount Buttons */
-        .quick-discount-btn {
-            background: linear-gradient(135deg, #8b5cf6, #a855f7);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.85rem;
-            font-weight: 500;
-            border: 1px solid #e2e8f0;
-        }
-
-        .quick-discount-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-            background: linear-gradient(135deg, #7c3aed, #9333ea);
-        }
-
-        .checkout-btn {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            margin-top: 1rem;
-        }
-
-        .checkout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
-        }
-
-        /* Bill Section Styles */
-        .bill-section {
-            margin-top: 1.5rem;
-            padding: 1.5rem;
-            border-top: 1px solid #e2e8f0;
-            background: #f8fafc;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .bill-section::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .bill-section::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 3px;
-        }
-
-        .bill-section::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 3px;
-        }
-
-        .bill-section::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        .bill-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .form-group {
-            flex: 1;
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-            color: #475569;
-            font-weight: 500;
-        }
-
-        .bill-input {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-            font-family: inherit;
-        }
-
-        .bill-input:focus {
-            outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .bill-input[type="email"] {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .bill-input[type="email"]:focus {
-            outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .bill-input[type="textarea"] {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .bill-input[type="textarea"]:focus {
-            outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        textarea.bill-input {
-            resize: vertical;
-            min-height: 60px;
-        }
-
-        /* Bill Section Specific Styles */
-        .bill-section h4 {
-            color: #6366f1;
-            margin: 0 0 1.5rem 0;
-            font-size: 1.2rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .bill-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 1rem;
-            align-items: flex-start;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-            color: #475569;
-            font-weight: 500;
-        }
-
-        .bill-input {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-            font-family: inherit;
-            background: white;
-        }
-
-        .bill-input:focus {
-            outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        select.bill-input {
-            cursor: pointer;
-        }
-
-        /* Responsive adjustments for bill form */
-        @media (max-width: 768px) {
-            .form-row {
-                flex-direction: column;
-                gap: 0.5rem;
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BookShop - Point of Sale</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Bootstrap Icons -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f8f9fa;
+                margin: 0;
+                padding: 0;
             }
-            
-            .bill-input {
-                font-size: 16px; /* Prevents zoom on mobile */
+
+            .main-container {
+                display: flex;
+                min-height: 100vh;
             }
-        }
 
 
 
-
-
-
-
-        /* Full Screen Layout */
-        .admin-main-content {
-            width: 100%;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1200px) {
-            .pos-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
+            /* Bill Modal Styles */
+            .bill-container {
+                max-width: 100%;
+                margin: 0 auto;
+                padding: 0;
             }
-        }
 
-        @media (max-width: 768px) {
-            /* Mobile responsive styles */
-            
-            .main-content {
-                padding: 0.75rem;
+            .bill-header {
+                text-align: center;
+                border-bottom: 2px solid #dee2e6;
+                padding-bottom: 15px;
+                margin-bottom: 15px;
             }
-            
-            .pos-grid {
-                height: calc(100vh - 150px);
-                gap: 1rem;
+
+            .bill-header h4 {
+                color: #1e3c72;
+                margin-bottom: 10px;
+                font-weight: bold;
             }
-            
-            .page-header {
-                padding: 1rem;
-                margin-bottom: 1rem;
+
+            .bill-header p {
+                margin-bottom: 5px;
+                color: #6c757d;
+                font-size: 0.9rem;
             }
-            
-            .product-search,
-            .cart-section {
-                padding: 1rem;
+
+            .bill-items {
+                margin-bottom: 15px;
             }
-            
-            .search-form {
-                flex-direction: column;
+
+            .bill-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 0;
+                border-bottom: 1px solid #f1f3f4;
+                font-size: 0.95rem;
             }
-            
+
+            .bill-item:last-child {
+                border-bottom: none;
+            }
+
+            .bill-total {
+                border-top: 2px solid #dee2e6;
+                padding-top: 15px;
+                font-weight: bold;
+                font-size: 1.1rem;
+                color: #1e3c72;
+            }
+
+            /* Modal specific styles */
+            #billModal .modal-content {
+                border-radius: 12px;
+                border: none;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            }
+
+            #billModal .modal-header {
+                background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+                color: white;
+                border-bottom: none;
+                border-radius: 12px 12px 0 0;
+            }
+
+            #billModal .modal-title {
+                color: white;
+                font-weight: 600;
+            }
+
+            #billModal .btn-close-white {
+                filter: invert(1);
+            }
+
+            /* Enhanced Cart Item Styles */
             .cart-item {
-                flex-direction: column;
+                background: white;
+                border: 1px solid #e9ecef;
+                border-radius: 8px;
+                padding: 12px;
+                margin-bottom: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            }
+
+            .cart-item-info {
+                display: flex;
+                justify-content: space-between;
                 align-items: flex-start;
-                gap: 1rem;
+                margin-bottom: 8px;
             }
-            
-            /* Mobile header adjustments */
-            .pos-header {
-                padding: 0.75rem 1rem;
-                flex-direction: column;
-                gap: 1rem;
-                align-items: stretch;
+
+            .cart-item-title {
+                flex: 1;
+                font-weight: 600;
+                color: #2c3e50;
+                margin-bottom: 4px;
             }
-            
-            .pos-header-right {
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-            
-            .nav-link {
+
+            .cart-item-details {
+                flex: 1;
                 font-size: 0.85rem;
-                padding: 0.4rem 0.8rem;
             }
-            
-            /* Mobile bill section adjustments */
-            .bill-section {
-                padding: 1rem;
-                margin-top: 1rem;
+
+            .cart-item-price {
+                text-align: right;
+                color: #28a745;
+                font-weight: 600;
             }
-            
-            .form-row {
+
+            .cart-item-quantity {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                background: #f8f9fa;
+                padding: 6px 12px;
+                border-radius: 6px;
+            }
+
+            .quantity-btn {
+                background: #007bff;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                cursor: pointer;
+                transition: background-color 0.2s;
+            }
+
+            .quantity-btn:hover {
+                background: #0056b3;
+            }
+
+            .quantity-btn:active {
+                transform: scale(0.95);
+            }
+
+            /* Order Summary Styles */
+            #orderSummary .d-flex {
+                border-bottom: 1px solid #f1f3f4;
+                padding: 8px 0;
+            }
+
+            #orderSummary .d-flex:last-child {
+                border-bottom: none;
+            }
+
+            #orderSummary .text-start {
+                flex: 1;
+            }
+
+            #orderSummary .text-end {
+                min-width: 80px;
+                text-align: right;
+            }
+
+            #orderSummary strong {
+                color: #2c3e50;
+            }
+
+            #orderSummary small {
+                font-size: 0.8rem;
+                color: #6c757d;
+            }
+
+
+
+            /* Main Content Styles */
+            .main-content {
+                flex: 1;
+                padding: 0;
+                background-color: #f8f9fa;
+            }
+
+            /* Point of Sale Main Section Styles */
+            .pos-main-section {
+                padding: 2rem;
+                background-color: #f8f9fa;
+            }
+
+            .pos-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 1.5rem;
+                padding-bottom: 0.75rem;
+                border-bottom: 1px solid #e9ecef;
+            }
+
+            .pos-title-section {
+                display: flex;
                 flex-direction: column;
+                gap: 0.1rem;
+            }
+
+            .pos-section-title {
+                color: #6f42c1;
+                font-size: 1.8rem;
+                font-weight: 700;
+                margin: 0;
+                line-height: 1.2;
+            }
+
+            .welcome-text {
+                color: #6c757d;
+                font-size: 0.9rem;
+                font-weight: 500;
+                margin: 0;
+                line-height: 1.2;
+            }
+
+            .pos-navbar {
+                display: flex;
+                align-items: center;
                 gap: 0.75rem;
             }
-            
-            .form-group {
-                margin-bottom: 0.75rem;
+
+            .pos-nav-link {
+                display: flex;
+                align-items: center;
+                padding: 0.6rem 1rem;
+                color: #495057;
+                text-decoration: none;
+                border-radius: 6px;
+                border: 1px solid #dee2e6;
+                background: white;
+                transition: all 0.3s ease;
+                font-weight: 500;
+                font-size: 0.9rem;
             }
-        }
-    </style>
-</head>
-<body>
-    <%
-    // Determine user type and role for navigation
-    String userType = null;
-    String role = null;
-    String username = null;
-    boolean isLoggedIn = false;
-    
-    if (session != null && session.getAttribute("loggedIn") != null) {
-        isLoggedIn = (Boolean) session.getAttribute("loggedIn");
-        if (isLoggedIn) {
-            userType = (String) session.getAttribute("userType");
-            role = (String) session.getAttribute("role");
-            username = (String) session.getAttribute("username");
-        }
-    }
-    
-    // Determine navigation type
-    String navType = "public"; // default
-    if (isLoggedIn) {
-        if ("admin".equals(userType) || "Admin".equals(role)) {
-            navType = "admin";
-        } else if ("Manager".equals(role)) {
-            navType = "manager";
-        } else if ("Staff".equals(role)) {
-            navType = "staff";
-        } else {
-            navType = "customer";
-        }
-    }
-    %>
 
-    <% if ("admin".equals(navType) || "manager".equals(navType) || "staff".equals(navType)) { %>
-        <!-- STANDALONE POS PAGE (No Sidebar) -->
-        <div class="pos-standalone-layout">
-            <!-- Header with User Info and Navigation -->
-            <header class="pos-header">
-                <div class="pos-header-left">
-                    <h1><i class="fas fa-cash-register"></i> Point of Sale</h1>
-                    <p>Welcome, <%= username %> (<%= "admin".equals(navType) ? "Admin" : ("manager".equals(navType) ? "Manager" : "Staff") %>)</p>
-                </div>
-                <div class="pos-header-right">
-                    <a href="welcome.jsp" class="nav-link" title="Back to Dashboard">
-                        <i class="fas fa-home"></i> Dashboard
-                    </a>
-                    <a href="orders.jsp" class="nav-link" title="View Orders">
-                        <i class="fas fa-shopping-cart"></i> Orders
-                    </a>
-                    <a href="profile.jsp" class="nav-link" title="My Profile">
-                        <i class="fas fa-user"></i> Profile
-                    </a>
-                    <a href="LogoutServlet" class="nav-link logout" title="Logout">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
-                </div>
-            </header>
-
-            <!-- Main Content -->
-            <main class="pos-main-content">
-                <div class="main-content">
-                    <!-- POS Grid Layout -->
-                    <div class="pos-grid">
-                        <!-- Product Search Section -->
-                        <div class="product-search">
-                            <div class="search-header">
-                                <h3><i class="fas fa-search"></i> Product Search</h3>
-                                <p>Search for books by title, author, or ISBN</p>
-                                <div id="searchResultsCount" style="margin-top: 0.5rem; font-size: 0.9rem; color: #6366f1; font-weight: 500;"></div>
-                            </div>
-                            
-                            <form class="search-form" onsubmit="event.preventDefault(); searchProducts();">
-                                <input type="text" class="search-input" placeholder="Search for books..." id="productSearch" oninput="debounceSearch()">
-                                <button type="submit" class="search-btn">
-                                    <i class="fas fa-search"></i> Search
-                                </button>
-                                <button type="button" class="search-btn" style="background: linear-gradient(135deg, #10b981, #059669);" onclick="refreshProductsFromDatabase()">
-                                    <i class="fas fa-sync-alt"></i> Refresh
-                                </button>
-                            </form>
-                            
-                            <div class="product-list" id="productList">
-                                <!-- Products will be loaded dynamically from database -->
-                                <%
-                                // Get books from request attribute (if available from BookServlet)
-                                java.util.List<com.pahana.BookServlet.Book> books = 
-                                    (java.util.List<com.pahana.BookServlet.Book>) request.getAttribute("books");
-                                
-                                if (books != null && !books.isEmpty()) {
-                                    for (com.pahana.BookServlet.Book book : books) {
-                                        // Only show books with stock > 0
-                                        if (book.getStockQuantity() > 0) {
-                                %>
-                                    <div class="product-item" data-title="<%= book.getTitle().toLowerCase() %>" data-author="<%= book.getAuthor() != null ? book.getAuthor().toLowerCase() : "" %>" data-category="<%= book.getCategoryName() != null ? book.getCategoryName().toLowerCase() : "" %>">
-                                        <div class="product-info">
-                                            <div class="product-name"><%= book.getTitle() %></div>
-                                            <div class="product-details">
-                                                <%= book.getAuthor() != null ? book.getAuthor() : "Unknown Author" %> • 
-                                                <%= book.getCategoryName() != null ? book.getCategoryName() : "Uncategorized" %> • 
-                                                Rs. <%= book.getPrice() != null ? book.getPrice().toString() : "0.00" %>
-                                            </div>
-                                            <div class="product-stock">Stock: <%= book.getStockQuantity() %></div>
-                                        </div>
-                                        <button class="add-to-cart-btn" data-title="<%= book.getTitle() %>" data-price="<%= book.getPrice() != null ? book.getPrice() : 0 %>" data-bookid="<%= book.getBookId() %>">
-                                            <i class="fas fa-plus"></i> Add
-                                        </button>
-                                    </div>
-                                <%
-                                        }
-                                    }
-                                } else {
-                                    // If no books from servlet, show loading message and load from database
-                                %>
-                                    <div id="loadingMessage" style="text-align: center; padding: 2rem; color: #64748b;">
-                                        <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                                        <p>Loading books from database...</p>
-                                    </div>
-                                    <div id="noBooksMessage" style="text-align: center; padding: 2rem; color: #64748b; display: none;">
-                                        <i class="fas fa-book-open" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                                        <p>No books found in database</p>
-                                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Please add some books first or check your database connection.</p>
-                                        <button class="search-btn" onclick="refreshProductsFromDatabase()" style="margin-top: 1rem;">
-                                            <i class="fas fa-sync-alt"></i> Try Again
-                                        </button>
-                                    </div>
-                                <%
-                                }
-                                %>
-                            </div>
-                        </div>
-                        
-                        <!-- Cart Section -->
-                        <div class="cart-section">
-                            <div class="cart-header">
-                                <h3><i class="fas fa-shopping-cart"></i> Shopping Cart</h3>
-                                <p>Review items and complete purchase</p>
-                            </div>
-                            
-                            <div class="cart-items" id="cartItems">
-                                <!-- Cart items will be displayed here -->
-                            </div>
-                            
-                            <div class="cart-summary">
-                                <div class="summary-row">
-                                    <span>Subtotal:</span>
-                                    <span id="subtotal">Rs. 0.00</span>
-                                </div>
-                                <div class="summary-row">
-                                    <span>Tax (8%):</span>
-                                    <span id="tax">Rs. 0.00</span>
-                                </div>
-                                <div class="summary-row">
-                                    <span>Discount:</span>
-                                    <button type="button" class="discount-btn" onclick="showDiscountModal()" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important;">
-                                        <i class="fas fa-percentage"></i> Apply Discount
-                                    </button>
-                                </div>
-                                <div class="summary-row total">
-                                    <span>Total:</span>
-                                    <span id="total">Rs. 0.00</span>
-                                </div>
-                                
-                                <!-- Bill Section -->
-                                <div class="bill-section">
-                                    
-                                    <div class="bill-form">
-                                        
-                                        
-                                        <div class="form-row">
-                                            
-                                            <div class="form-group">
-                                                <label for="paymentMethod">Payment Method:</label>
-                                                <select id="paymentMethod" class="bill-input">
-                                                    <option value="Cash">Cash</option>
-                                                    <option value="Credit Card">Credit Card</option>
-                                                    <option value="Debit Card">Debit Card</option>
-                                                    <option value="Bank Transfer">Bank Transfer</option>
-                                                    <option value="Digital Wallet">Digital Wallet</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        
-                                        
-                                    </div>
-                                </div>
-                                
-                                <button class="checkout-btn" onclick="processCheckout()">
-                                    <i class="fas fa-credit-card"></i> Process Payment & Generate Bill
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
-
-        <!-- Discount Modal -->
-        <div id="discountModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
-            <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
-            <div style="background: white; padding: 2rem; border-radius: 12px; max-width: 400px; width: 90%;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                    <h3 style="color: #6366f1; margin: 0;">Customer Discount</h3>
-                    <button onclick="closeDiscountModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
-                </div>
-                
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; color: #475569; font-weight: 500;">Customer Phone Number:</label>
-                    <input type="text" id="customerPhoneForDiscount" placeholder="Enter customer phone number" style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem;">
-                </div>
-                
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; color: #475569; font-weight: 500;">Discount Amount:</label>
-                    <div style="display: flex; gap: 0.5rem; align-items: center;">
-                        <input type="number" id="discountAmount" placeholder="0" min="0" step="0.01" style="flex: 1; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem;">
-                        <select id="discountType" style="padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem; background: white; cursor: pointer;">
-                            <option value="amount">Rs.</option>
-                            <option value="percentage">%</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; color: #475569; font-weight: 500;">Quick Discount Options:</label>
-                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                        <button type="button" class="quick-discount-btn" onclick="applyQuickDiscount('percentage', 10)">
-                            10% Off
-                        </button>
-                        <button type="button" class="quick-discount-btn" onclick="applyQuickDiscount('amount', 500)">
-                            Rs. 500 Off
-                        </button>
-                        <button type="button" class="quick-discount-btn" onclick="applyQuickDiscount('percentage', 15)">
-                            15% Off
-                        </button>
-                    </div>
-                </div>
-                
-                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-                    <button type="button" onclick="closeDiscountModal()" style="background: #64748b; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer;">Cancel</button>
-                    <button type="button" onclick="applyDiscount()" style="background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer;">Apply Discount</button>
-                </div>
-            </div>
-            </div>
-        </div>
-    <% } else { %>
-        <!-- Access Denied for non-staff users -->
-        <div style="text-align: center; padding: 4rem 2rem;">
-            <h1 style="color: #ef4444; margin-bottom: 1rem;">Access Denied</h1>
-            <p style="color: #64748b; margin-bottom: 2rem;">You don't have permission to access the Point of Sale system.</p>
-            <a href="welcome.jsp" style="background: #6366f1; color: white; padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 8px; display: inline-block;">Return to Home</a>
-        </div>
-    <% } %>
-
-
-    <script>
-        // Simple cart functionality
-        let cart = [];
-
-        // Set up event listeners for add to cart buttons
-        function setupAddToCartListeners() {
-            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-                // Remove existing listeners to avoid duplicates
-                button.removeEventListener('click', handleAddToCart);
-                button.addEventListener('click', handleAddToCart);
-            });
-        }
-
-        // Refresh all event listeners and update display
-        function refreshProductDisplay() {
-            setupAddToCartListeners();
-            updateTotals();
-            
-            // Update the book count
-            const productItems = document.querySelectorAll('.product-item');
-            if (productItems.length > 0) {
-                document.getElementById('searchResultsCount').textContent = 'Showing ' + productItems.length + ' books';
+            .pos-nav-link:hover {
+                background: #f8f9fa;
+                color: #212529;
+                text-decoration: none;
+                border-color: #adb5bd;
             }
-        }
 
-        function handleAddToCart() {
-            const title = this.getAttribute('data-title');
-            const price = parseFloat(this.getAttribute('data-price'));
-            const bookId = parseInt(this.getAttribute('data-bookid'));
-            addToCart(title, price, bookId);
-        }
-
-        // Set up initial event listeners
-        document.addEventListener('DOMContentLoaded', setupAddToCartListeners);
-
-        function addToCart(name, price, bookId) {
-            const existingItem = cart.find(item => item.name === name);
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({ name, price, quantity: 1, bookId: bookId });
+            .pos-nav-link.logout-link {
+                color: #dc3545;
+                background: #f8d7da;
+                border-color: #f5c6cb;
             }
-            
-            // Update stock display
-            updateStockDisplay(name, -1);
-            
-            updateCartDisplay();
-            updateTotals();
-        }
 
-        function updateStockDisplay(bookName, change) {
-            const productItems = document.querySelectorAll('.product-item');
-            productItems.forEach(item => {
-                const itemName = item.querySelector('.product-name').textContent;
-                if (itemName === bookName) {
-                    const stockElement = item.querySelector('.product-stock');
-                    if (stockElement) {
-                        const currentStock = parseInt(stockElement.textContent.match(/\d+/)[0]);
-                        const newStock = Math.max(0, currentStock + change);
-                        stockElement.textContent = 'Stock: ' + newStock;
-                        
-                        // Disable add button if stock is 0
-                        const addButton = item.querySelector('.add-to-cart-btn');
-                        if (newStock === 0) {
-                            addButton.disabled = true;
-                            addButton.style.background = '#9ca3af';
-                            addButton.style.cursor = 'not-allowed';
-                        }
-                    }
-                }
-            });
-        }
-
-        function updateQuantity(index, change) {
-            const item = cart[index];
-            const oldQuantity = item.quantity;
-            item.quantity += change;
-            
-            if (item.quantity <= 0) {
-                cart.splice(index, 1);
-                // Restore all stock when item is completely removed
-                updateStockDisplay(item.name, oldQuantity);
-            } else {
-                // Update stock based on quantity change
-                updateStockDisplay(item.name, -change);
+            .pos-nav-link.logout-link:hover {
+                background: #dc3545;
+                color: white;
+                border-color: #dc3545;
             }
-            
-            updateCartDisplay();
-            updateTotals();
-        }
 
-        function removeItem(index) {
-            const removedItem = cart[index];
-            cart.splice(index, 1);
-            
-            // Restore stock when item is removed
-            updateStockDisplay(removedItem.name, removedItem.quantity);
-            
-            updateCartDisplay();
-            updateTotals();
-        }
-
-        function updateCartDisplay() {
-            const cartItems = document.getElementById('cartItems');
-            cartItems.innerHTML = '';
-            
-            cart.forEach((item, index) => {
-                const cartItem = document.createElement('div');
-                cartItem.className = 'cart-item';
-                cartItem.innerHTML = '<div class="cart-item-info">' +
-                    '<div class="cart-item-name">' + item.name + '</div>' +
-                    '<div class="cart-item-price">Rs. ' + item.price.toFixed(2) + '</div>' +
-                    '</div>' +
-                    '<div class="cart-item-controls">' +
-                        '<button class="quantity-btn" onclick="updateQuantity(' + index + ', -1)">-</button>' +
-                        '<span class="quantity-display">' + item.quantity + '</span>' +
-                        '<button class="quantity-btn" onclick="updateQuantity(' + index + ', 1)">+</button>' +
-                        '<button class="remove-item-btn" onclick="removeItem(' + index + ')">' +
-                            '<i class="fas fa-trash"></i>' +
-                        '</button>' +
-                    '</div>';
-                cartItems.appendChild(cartItem);
-            });
-            
-            // Update cart scroll indicator
-            updateCartScrollIndicator();
-        }
-
-        function updateTotals() {
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const tax = subtotal * 0.08;
-            
-            // Calculate discount from modal or stored value
-            const discountAmount = parseFloat(document.getElementById('discountAmount').value) || 0;
-            const discountType = document.getElementById('discountType').value;
-            let discount = 0;
-            
-            if (discountAmount > 0) {
-                if (discountType === 'percentage') {
-                    discount = (subtotal * discountAmount) / 100;
-                } else {
-                    discount = discountAmount;
-                }
-                
-                // Ensure discount doesn't exceed subtotal
-                discount = Math.min(discount, subtotal);
+            /* POS Container Styles */
+            .pos-container {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                gap: 2rem;
+                height: calc(100vh - 200px);
             }
-            
-            const total = subtotal + tax - discount;
-            
-            document.getElementById('subtotal').textContent = 'Rs. ' + subtotal.toFixed(2);
-            document.getElementById('tax').textContent = 'Rs. ' + tax.toFixed(2);
-            document.getElementById('total').textContent = 'Rs. ' + total.toFixed(2);
-        }
 
-        function updateCartScrollIndicator() {
-            const cartItems = document.getElementById('cartItems');
-            const cartHeader = document.querySelector('.cart-header h3');
-            
-            // Remove existing indicator
-            const existingIndicator = document.querySelector('.cart-scroll-indicator');
-            if (existingIndicator) {
-                existingIndicator.remove();
+            .product-search-section, .cart-section {
+                background: white;
+                border-radius: 12px;
+                padding: 1.5rem;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                display: flex;
+                flex-direction: column;
             }
-            
-            // Add scroll indicator if cart has many items
-            if (cart.length > 5) {
-                const indicator = document.createElement('div');
-                indicator.className = 'cart-scroll-indicator';
-                indicator.innerHTML = `<i class="fas fa-arrow-down"></i> Scroll to see more items (${cart.length} total)`;
-                cartHeader.parentNode.appendChild(indicator);
-            }
-        }
 
-        // Discount Modal Functions
-        function showDiscountModal() {
-            if (cart.length === 0) {
-                alert('Please add items to cart before applying discount.');
-                return;
+            .section-title {
+                font-size: 1.3rem;
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 1.5rem;
+                display: flex;
+                align-items: center;
+                padding-bottom: 0.5rem;
+                border-bottom: 2px solid #e9ecef;
             }
-            document.getElementById('discountModal').style.display = 'flex';
-            document.getElementById('customerPhoneForDiscount').focus();
-        }
 
-        function closeDiscountModal() {
-            document.getElementById('discountModal').style.display = 'none';
-            // Clear the modal inputs
-            document.getElementById('customerPhoneForDiscount').value = '';
-            document.getElementById('discountAmount').value = '';
-            document.getElementById('discountType').value = 'amount';
-        }
 
-        function applyDiscount() {
-            const customerPhone = document.getElementById('customerPhoneForDiscount').value.trim();
-            const discountAmount = parseFloat(document.getElementById('discountAmount').value);
-            const discountType = document.getElementById('discountType').value;
-            
-            if (!customerPhone) {
-                alert('Please enter customer phone number.');
-                document.getElementById('customerPhoneForDiscount').focus();
-                return;
+
+            /* Product Search Styles */
+            .search-header {
+                margin-bottom: 1.5rem;
             }
-            
-            if (!discountAmount || discountAmount <= 0) {
-                alert('Please enter a valid discount amount.');
-                document.getElementById('discountAmount').focus();
-                return;
-            }
-            
-            // Here you would typically verify the customer phone number
-            // For now, we'll just apply the discount
-            // In a real system, you'd check against your customer database
-            
-            // Store discount info for checkout
-            window.currentDiscount = {
-                customerPhone: customerPhone,
-                amount: discountAmount,
-                type: discountType
-            };
-            
-            // Save discount usage to database
-            saveDiscountUsage(window.currentDiscount);
-            
-            // Update totals with discount
-            updateTotals();
-            
-            // Close modal
-            closeDiscountModal();
-            
-            // Show success message
-            alert('Discount applied successfully!\nCustomer: ' + customerPhone + '\nDiscount: ' + discountAmount + (discountType === 'percentage' ? '%' : ' Rs.'));
-        }
 
-        function applyQuickDiscount(type, value) {
-            // Set the discount type and amount
-            document.getElementById('discountType').value = type;
-            document.getElementById('discountAmount').value = value;
-            
-            // Focus on customer phone for quick entry
-            document.getElementById('customerPhoneForDiscount').focus();
-            
-            // Show a small confirmation
-            const typeText = type === 'percentage' ? '%' : 'Rs.';
-            const message = `Quick discount set: ${value}${typeText}`;
-            
-            // Create a temporary notification
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: linear-gradient(135deg, #10b981, #059669);
+            .search-description {
+                color: #6c757d;
+                margin-bottom: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .search-status {
+                color: #6c757d;
+                font-size: 0.85rem;
+                font-style: italic;
+            }
+
+            .search-controls {
+                margin-bottom: 1.5rem;
+            }
+
+            .search-input-group {
+                display: flex;
+                gap: 1rem;
+                align-items: center;
+            }
+
+            .search-input {
+                flex: 1;
+                border: 2px solid #e9ecef;
+                border-radius: 8px;
+                padding: 0.75rem;
+                font-size: 1rem;
+            }
+
+            .search-input:focus {
+                border-color: #667eea;
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            }
+
+            .search-buttons {
+                display: flex;
+                gap: 0.5rem;
+            }
+
+            .btn-search {
+                background: #6f42c1;
+                border: none;
                 color: white;
                 padding: 0.75rem 1.5rem;
                 border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-                z-index: 1001;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+
+            .btn-search:hover {
+                background: #5a32a3;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(111, 66, 193, 0.3);
+            }
+
+            .btn-refresh {
+                background: #28a745;
+                border: none;
+                color: white;
+                padding: 0.75rem 1.5rem;
+                border-radius: 8px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+
+            .btn-refresh:hover {
+                background: #218838;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+            }
+
+            /* Product List Styles */
+            .product-list {
+                flex: 1;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .product-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem;
+                background: #f8f9fa;
+                border: 1px solid #e9ecef;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .product-item:hover {
+                background: #e9ecef;
+                border-color: #667eea;
+                transform: translateX(5px);
+            }
+
+            .product-info {
+                flex: 1;
+            }
+
+            .product-details {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 0.5rem;
+                font-size: 0.9rem;
+                color: #495057;
+            }
+
+            .product-title {
+                font-weight: 600;
+                color: #2c3e50;
+            }
+
+            .product-category {
+                color: #6c757d;
+            }
+
+            .product-price {
+                color: #28a745;
+                font-weight: 600;
+            }
+
+            .product-stock {
+                font-size: 0.85rem;
+                color: #6c757d;
+            }
+
+            .btn-add {
+                background: #28a745;
+                border: none;
+                color: white;
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+
+            .btn-add:hover {
+                background: #218838;
+                transform: scale(1.05);
+            }
+
+            .no-products {
+                text-align: center;
+                color: #6c757d;
+                padding: 2rem;
+            }
+
+            /* Cart Styles */
+            .cart-description {
+                color: #6c757d;
+                margin-bottom: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .cart-content {
+                flex: 1;
+                overflow-y: auto;
+                margin-bottom: 1rem;
+                background: white;
+                border: 1px solid #e9ecef;
+                border-radius: 8px;
+                min-height: 200px;
+            }
+
+            .empty-cart {
+                text-align: center;
+                color: #6c757d;
+                padding: 2rem;
+            }
+
+            .cart-summary {
+                border-top: 2px solid #e9ecef;
+                padding-top: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .summary-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.5rem 0;
+                font-size: 1rem;
+            }
+
+            .summary-row.total {
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #007bff;
+                border-top: 1px solid #e9ecef;
+                padding-top: 0.75rem;
+            }
+
+            .cart-actions {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .btn-checkout {
+                width: 100%;
+                background: linear-gradient(135deg, #6f42c1 0%, #8e44ad 100%);
+                color: white;
+                border: none;
+                padding: 1rem;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .btn-checkout:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(111, 66, 193, 0.3);
+            }
+
+            .btn-checkout:disabled {
+                background: #6c757d;
+                cursor: not-allowed;
+                transform: none;
+                box-shadow: none;
+            }
+
+            .btn-debug {
+                background: #6c757d;
+                border: none;
+                color: white;
+                padding: 0.75rem;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .btn-debug:hover {
+                background: #5a6268;
+                transform: translateY(-2px);
+            }
+
+            /* Cart Item Styles */
+            .cart-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.75rem;
+                border-bottom: 1px solid #e9ecef;
+                background: #f8f9fa;
+                margin: 0.5rem;
+                border-radius: 6px;
+            }
+
+            .cart-item:last-child {
+                border-bottom: none;
+            }
+
+            .cart-item-info {
+                flex: 1;
+            }
+
+            .cart-item-title {
+                font-weight: 600;
+                color: #333;
+                font-size: 0.9rem;
+                margin-bottom: 0.25rem;
+            }
+
+            .cart-item-details {
+                font-size: 0.8rem;
+                color: #6c757d;
+            }
+
+            .cart-item-price {
+                color: #28a745;
+                font-weight: 600;
+                font-size: 0.9rem;
+                text-align: right;
+                min-width: 60px;
+            }
+
+            .cart-item-quantity {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                background: white;
+                padding: 0.25rem 0.5rem;
+                border-radius: 4px;
+                border: 1px solid #e9ecef;
+            }
+
+            .quantity-btn {
+                background: #667eea;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                font-size: 0.8rem;
+                font-weight: bold;
+            }
+
+            .quantity-btn:hover {
+                background: #5a6fd8;
+            }
+
+            /* Modal Styles */
+            .modal-content {
+                border-radius: 12px;
+                border: none;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            }
+
+            .modal-header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border-radius: 12px 12px 0 0;
+                border: none;
+            }
+
+            .modal-body {
+                padding: 2rem;
+            }
+
+            /* Checkout Modal Enhancements */
+            #checkoutModal .summary-card {
+                background: #f9fafb;
+                border: 1px solid #e9ecef;
+                border-radius: 12px;
+                padding: 1rem;
+            }
+            #checkoutModal .selected-chip{
+                display:inline-flex;
+                align-items:center;
+                gap:.5rem;
+                background:#eef2ff;
+                color:#4338ca;
+                border:1px solid #e0e7ff;
+                padding:.4rem .7rem;
+                border-radius:999px;
+                font-weight:600;
+                margin-bottom:.75rem;
+            }
+            #checkoutModal .summary-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 0.5rem 0;
+                border-bottom: 1px dashed #e5e7eb;
+            }
+            #checkoutModal .summary-row:last-child { border-bottom: none; }
+            #checkoutModal .summary-total { font-weight: 700; color: #6f42c1; font-size: 1.1rem; }
+            #checkoutModal .btn-confirm {
+                background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+                color: #fff;
+                border: none;
+                padding: 0.8rem 1.2rem;
+                border-radius: 10px;
+                font-weight: 600;
+            }
+            #checkoutModal .btn-confirm:disabled { background: #9ca3af; }
+
+            /* Receipt improvements */
+            #billModal .brand-title { font-weight: 800; letter-spacing: .3px; }
+            #billModal .bill-meta { color: #6b7280; font-size: .9rem; }
+            #billModal .bill-items .bill-item span:last-child { font-weight: 600; }
+            #billModal .bill-head{display:flex;justify-content:space-between;font-weight:700;border-bottom:1px dashed #e5e7eb;padding:.4rem 0;margin-bottom:.25rem;color:#374151}
+
+            /* Add to Cart Modal Enhancements */
+            #quantityModal .product-meta .badge {
                 font-weight: 500;
-            `;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            // Remove notification after 2 seconds
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
+                padding: 0.45rem 0.6rem;
+                border-radius: 999px;
+            }
+            #quantityModal .price-display {
+                display: inline-flex;
+                align-items: baseline;
+                gap: 6px;
+                background: #f6f7ff;
+                border: 1px solid #e5e7ff;
+                padding: 0.6rem 0.9rem;
+                border-radius: 10px;
+                color: #4b4ed1;
+                font-weight: 700;
+                font-size: 1.1rem;
+            }
+            #quantityModal .quantity-stepper {
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                background: #fff;
+                border: 1.5px solid #e9ecef;
+                padding: 0.5rem 0.75rem;
+                border-radius: 10px;
+            }
+            #quantityModal .qty-btn {
+                width: 36px;
+                height: 36px;
+                border: none;
+                border-radius: 8px;
+                background: #667eea;
+                color: #fff;
+                font-weight: 700;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+            #quantityModal .qty-btn:hover { background: #5a6fd8; }
+            #quantityModal .total-row { font-size: 1rem; }
+            #quantityModal .btn-atc {
+                background: linear-gradient(135deg, #6f42c1 0%, #8e44ad 100%);
+                color: #fff;
+                border: none;
+                padding: 0.6rem 1.2rem;
+                border-radius: 10px;
+                font-weight: 600;
+                box-shadow: 0 4px 12px rgba(111, 66, 193, 0.25);
+            }
+            #quantityModal .btn-atc:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 8px 18px rgba(111, 66, 193, 0.35);
+            }
+
+            .quantity-input {
+                width: 100%;
+                padding: 0.75rem;
+                border: 2px solid #e9ecef;
+                border-radius: 8px;
+                font-size: 1.1rem;
+                text-align: center;
+            }
+
+            .quantity-input:focus {
+                border-color: #667eea;
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            }
+
+            /* Customer Selection Styles */
+            .customer-search {
+                margin-bottom: 1rem;
+            }
+
+            .customer-list {
+                max-height: 300px;
+                overflow-y: auto;
+            }
+
+            .customer-item {
+                padding: 0.75rem;
+                border: 1px solid #e9ecef;
+                border-radius: 8px;
+                margin-bottom: 0.5rem;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .customer-item:hover {
+                background: #f8f9fa;
+                border-color: #667eea;
+            }
+
+            .customer-item.selected {
+                background: #667eea;
+                color: white;
+                border-color: #667eea;
+            }
+
+            /* Bill Styles */
+            .bill-container {
+                background: white;
+                padding: 2rem;
+                border-radius: 12px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            .bill-header {
+                text-align: center;
+                border-bottom: 2px solid #e9ecef;
+                padding-bottom: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .bill-items {
+                margin-bottom: 1rem;
+            }
+
+            .bill-item {
+                display: flex;
+                justify-content: space-between;
+                padding: 0.5rem 0;
+                border-bottom: 1px solid #f8f9fa;
+            }
+
+            .bill-total {
+                border-top: 2px solid #e9ecef;
+                padding-top: 1rem;
+                font-weight: 700;
+                font-size: 1.2rem;
+            }
+
+            /* Responsive Design */
+            @media (max-width: 1200px) {
+                .pos-container {
+                    grid-template-columns: 1.5fr 1fr;
                 }
-            }, 2000);
-        }
+            }
 
-        function searchProducts() {
-            const searchTerm = document.getElementById('productSearch').value.toLowerCase().trim();
-            const productItems = document.querySelectorAll('.product-item');
-            let visibleCount = 0;
+            @media (max-width: 768px) {
+
+                .pos-main-section {
+                    padding: 1rem;
+                }
+
+                .pos-header {
+                    flex-direction: column;
+                    gap: 1rem;
+                    text-align: center;
+                }
+
+                .pos-section-title {
+                    font-size: 1.5rem;
+                    margin-bottom: 0;
+                }
+
+                .pos-navbar {
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    gap: 0.5rem;
+                }
+
+                .pos-nav-link {
+                    font-size: 0.8rem;
+                    padding: 0.4rem 0.8rem;
+                }
+
+                .pos-container {
+                    grid-template-columns: 1fr;
+                    grid-template-rows: auto 1fr;
+                }
+
+                .search-input-group {
+                    flex-direction: column;
+                    gap: 0.5rem;
+                }
+
+                .search-buttons {
+                    justify-content: center;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <%
+            // Check if user is logged in
+            String username = (String) session.getAttribute("username");
+            String role = (String) session.getAttribute("role");
             
-            if (searchTerm === '') {
-                // If search is empty, show all products
-                productItems.forEach(item => {
-                    item.style.display = 'flex';
-                    visibleCount++;
-                });
-                document.getElementById('searchResultsCount').textContent = 'Showing ' + visibleCount + ' books';
-            } else {
-                // Search through products
-                productItems.forEach(item => {
-                    const productName = item.querySelector('.product-name').textContent.toLowerCase();
-                    const productAuthor = item.dataset.author || '';
-                    const productTitle = item.dataset.title || '';
-                    const productCategory = item.dataset.category || '';
+            if (username == null || role == null) {
+                response.sendRedirect("login.jsp?error=Please login first.");
+                return;
+            }
+            
+            // Check role-based access
+            boolean canAccess = "ADMIN".equals(role) || "MANAGER".equals(role) || "STAFF".equals(role);
+            if (!canAccess) {
+                response.sendRedirect("dashboard.jsp?error=Access denied.");
+                return;
+            }
+            
+            // Load all books
+            try {
+                BookServlet bookServlet = new BookServlet();
+                List<Book> allBooks = bookServlet.getAllBooks();
+                request.setAttribute("allBooks", allBooks);
+                System.out.println("Loaded " + (allBooks != null ? allBooks.size() : 0) + " books for POS");
+            } catch (Exception e) {
+                System.err.println("Error loading books for POS: " + e.getMessage());
+                e.printStackTrace();
+                request.setAttribute("allBooks", new ArrayList<>());
+            }
+            
+            // Load customers for checkout
+            try {
+                CustomerServlet customerServlet = new CustomerServlet();
+                List<Customer> customers = customerServlet.getAllCustomers();
+                request.setAttribute("customers", customers);
+                System.out.println("Loaded " + (customers != null ? customers.size() : 0) + " customers for POS");
+            } catch (Exception e) {
+                System.err.println("Error loading customers for POS: " + e.getMessage());
+                e.printStackTrace();
+                request.setAttribute("customers", new ArrayList<>());
+            }
+            
+            // Set current page for sidebar highlighting
+            request.setAttribute("currentPage", "pos");
+        %>
 
-                    if (productName.includes(searchTerm) || 
-                        productAuthor.includes(searchTerm) || 
-                        productTitle.includes(searchTerm) || 
-                        productCategory.includes(searchTerm)) {
-                        item.style.display = 'flex';
+        <div class="main-container">
+
+
+            <!-- Main Content -->
+            <div class="main-content">
+
+                <!-- Point of Sale Section -->
+                <div class="pos-main-section">
+                    <div class="pos-header">
+                        <div class="pos-title-section">
+                            <h2 class="pos-section-title">
+                                <i class="bi bi-cash-register me-2"></i>Point of Sale
+                            </h2>
+                            <div class="welcome-text">Welcome, <%= username %> (<%= role %>)</div>
+                    </div>
+                        <div class="pos-navbar">
+                            <a href="dashboard.jsp" class="pos-nav-link">
+                                <i class="bi bi-house me-2"></i>Dashboard
+                            </a>
+                            <a href="TransactionServlet?action=list" class="pos-nav-link">
+                                <i class="bi bi-cart me-2"></i>Transaction
+                            </a>
+                            <a href="profile.jsp" class="pos-nav-link">
+                                <i class="bi bi-person me-2"></i>Profile
+                            </a>
+                            <a href="LogoutServlet" class="pos-nav-link logout-link">
+                                <i class="bi bi-box-arrow-right me-2"></i>Logout
+                            </a>
+                    </div>
+                </div>
+
+                <!-- POS Container -->
+                <div class="pos-container">
+                        <!-- Product Search Section -->
+                        <div class="product-search-section">
+                            <div class="search-header">
+                        <h3 class="section-title">
+                                    <i class="bi bi-search me-2"></i>Product Search
+                        </h3>
+                                <p class="search-description">Search for books by title or category.</p>
+                                <div class="search-status" id="searchStatus">Showing books</div>
+                            </div>
+                        
+                        <div class="search-controls">
+                            <div class="search-input-group">
+                                <input type="text" class="form-control search-input" id="bookSearch" placeholder="Search for books..." onkeyup="searchBooks()">
+                                <div class="search-buttons">
+                                    <button class="btn btn-search" onclick="searchBooks()">
+                                        <i class="bi bi-search me-2"></i>Search
+                                    </button>
+                                    <button class="btn btn-refresh" onclick="refreshBooks()">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Refresh Books
+                                    </button>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="product-list" id="productList">
+                                    <% 
+                                    List<Book> booksList = (List<Book>) request.getAttribute("allBooks");
+                                    if (booksList != null && !booksList.isEmpty()) {
+                                        for (Book book : booksList) {
+                                    if (book.getBookId() > 0 && book.getTitle() != null && book.getPricePerUnit() != null && 
+                                        book.getPricePerUnit().compareTo(java.math.BigDecimal.ZERO) > 0 && book.getStockQuantity() >= 0) {
+                            %>
+                            <div class="product-item" onclick="openQuantityFromItem(this, <%= book.getBookId() %>)">
+                                <div class="product-info">
+                                    <div class="product-details">
+                                        <span class="product-title"><%= book.getTitle() %></span>
+                                        <span class="product-category"><%= book.getCategory() != null ? book.getCategory().getCategoryName() : "N/A" %></span>
+                                        <span class="product-price">Rs. <%= book.getPricePerUnit() %></span>
+                                    </div>
+                                    <div class="product-stock">
+                                        Stock: <%= book.getStockQuantity() %>
+                                    </div>
+                                </div>
+                                <button class="btn btn-add">
+                                    <i class="bi bi-plus me-1"></i>Add
+                                                </button>
+                            </div>
+                            <%
+                                    }
+                                        }
+                                    } else {
+                                    %>
+                            <div class="no-products">
+                                            <i class="bi bi-book" style="font-size: 2rem;"></i>
+                                            <p>No books found</p>
+                            </div>
+                                    <%
+                                    }
+                                    %>
+                        </div>
+                    </div>
+
+                    <!-- Shopping Cart Section -->
+                    <div class="cart-section">
+                        <h3 class="section-title">
+                            <i class="bi bi-cart me-2"></i>Shopping Cart
+                        </h3>
+                        <p class="cart-description">Review items and complete purchase.</p>
+                        
+                        <div class="cart-content" id="cartItems">
+                            <div class="empty-cart">
+                                <i class="bi bi-cart" style="font-size: 2rem;"></i>
+                                <p>Cart is empty</p>
+                            </div>
+                        </div>
+                        
+                        <div class="cart-summary">
+                            <div class="summary-row">
+                                <span>Subtotal:</span>
+                                <span>Rs. <span id="cartSubtotal">0.00</span></span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total:</span>
+                                <span>Rs. <span id="cartTotal">0.00</span></span>
+                            </div>
+                        </div>
+                        
+                        <div class="cart-actions">
+                            <button class="btn btn-checkout" id="checkoutBtn" disabled onclick="showCheckoutModal()">
+                                <i class="bi bi-credit-card me-2"></i>Process Payment & Complete Sale
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quantity Modal -->
+        <div class="modal fade" id="quantityModal" tabindex="-1" aria-labelledby="quantityModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="quantityModalLabel">
+                            <i class="bi bi-plus-circle me-2"></i>Add to Cart
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-2">
+                            <h6 id="bookTitle" class="mb-2"></h6>
+                            <div class="product-meta mb-3">
+                                <span class="badge bg-light text-dark me-2" id="bookCategoryBadge"></span>
+                                <span class="badge bg-success-subtle text-success">In stock: <span id="bookStock"></span></span>
+                            </div>
+                            <div class="price-display mb-3">
+                                <span class="currency">Rs.</span><span id="bookPrice"></span>
+                            </div>
+                            <div class="quantity-stepper mb-3">
+                                <button type="button" class="qty-btn" onclick="stepQuantity(-1)">-</button>
+                                <input type="number" class="quantity-input" id="quantityInput" min="1" value="1" oninput="handleQuantityInput()">
+                                <button type="button" class="qty-btn" onclick="stepQuantity(1)">+</button>
+                            </div>
+                            <div class="total-row d-flex justify-content-between align-items-center mb-3">
+                                <span>Line total</span>
+                                <strong>Rs. <span id="modalLineTotal">0.00</span></strong>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-atc" onclick="confirmAddToCart()"><i class="bi bi-cart-plus me-2"></i>Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checkout Modal -->
+        <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="checkoutModalLabel">
+                            <i class="bi bi-credit-card me-2"></i>Checkout
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="mb-3">Select Customer</h6>
+                                <div class="customer-search">
+                                    <input type="text" class="form-control" id="customerSearch" placeholder="Search customers...">
+                                </div>
+                                <div id="selectedCustomerChip" class="selected-chip d-none">
+                                    <i class="bi bi-person-check"></i>
+                                    <span id="selectedCustomerName">Customer selected</span>
+                                </div>
+                                <div class="customer-list" id="customerList">
+                                    <% 
+                                    List<Customer> customers = (List<Customer>) request.getAttribute("customers");
+                                    if (customers != null && !customers.isEmpty()) {
+                                        for (Customer customer : customers) { 
+                                    %>
+                                        <div class="customer-item" onclick="selectCustomerFromItem(this, <%= customer.getCustomerId() %>)">
+                                            <strong><%= customer.getName() %></strong><br>
+                                            <small class="text-muted">Account: <%= customer.getAccountNumber() %></small>
+                                        </div>
+                                    <% 
+                                        }
+                                    } else {
+                                    %>
+                                        <div class="text-muted text-center py-3">
+                                            <i class="bi bi-info-circle me-2"></i>No customers found
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="mb-3">Order Summary</h6>
+                                <div class="summary-card">
+                                    <div id="orderSummary"><!-- populated dynamically --></div>
+                                    <div class="summary-row">
+                                        <span>Subtotal</span>
+                                        <strong>Rs. <span id="modalSubtotal">0.00</span></strong>
+                                    </div>
+                                    <div class="summary-row summary-total">
+                                        <span>Total</span>
+                                        <strong>Rs. <span id="modalTotal">0.00</span></strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 d-flex justify-content-between">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-confirm" id="confirmCheckoutBtn" disabled onclick="processTransaction()">
+                                <i class="bi bi-check-circle me-2"></i>Confirm Transaction
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bill Modal -->
+        <div class="modal fade" id="billModal" tabindex="-1" aria-labelledby="billModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="billModalLabel">
+                            <i class="bi bi-receipt me-2"></i>Transaction Receipt
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="bill-container" id="billContent">
+                            <!-- Bill content will be populated here -->
+                        </div>
+                        <div class="text-center mt-3">
+                            <button type="button" class="btn btn-primary me-2" onclick="printBill()">
+                                <i class="bi bi-printer me-2"></i>Print Bill
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script>
+            // Global variables
+            let cart = [];
+            let selectedCustomer = null;
+            let currentBook = null;
+            let transactionId = null;
+            let allBooks = [];
+
+
+
+            // Search books functionality
+            function searchBooks() {
+                const searchTerm = document.getElementById('bookSearch').value.toLowerCase().trim();
+                const productItems = document.querySelectorAll('#productList .product-item');
+                let visibleCount = 0;
+                
+                productItems.forEach(item => {
+                    const title = item.querySelector('.product-title')?.textContent?.toLowerCase() || '';
+                    const category = item.querySelector('.product-category')?.textContent?.toLowerCase() || '';
+                    
+                    if (searchTerm === '' || title.includes(searchTerm) || category.includes(searchTerm)) {
+                        item.style.display = '';
                         visibleCount++;
                     } else {
                         item.style.display = 'none';
                     }
                 });
                 
-                const bookText = visibleCount === 1 ? 'book' : 'books';
-                document.getElementById('searchResultsCount').textContent = 'Found ' + visibleCount + ' ' + bookText + ' matching "' + searchTerm + '"';
-            }
-            
-            // Show message if no products match search
-            const noResultsMessage = document.getElementById('noResultsMessage');
-            if (visibleCount === 0 && searchTerm !== '') {
-                if (!noResultsMessage) {
-                    const message = document.createElement('div');
-                    message.id = 'noResultsMessage';
-                    message.style.cssText = 'text-align: center; padding: 2rem; color: #64748b;';
-                    message.innerHTML = '<i class="fas fa-search" style="font-size: 2rem; margin-bottom: 1rem;"></i>' +
-                        '<p>No books found matching "' + searchTerm + '"</p>' +
-                        '<button class="search-btn" onclick="clearSearch()" style="margin-top: 1rem;">' +
-                            '<i class="fas fa-times"></i> Clear Search' +
-                        '</button>';
-                    document.getElementById('productList').appendChild(message);
+                // Update search status
+                if (searchTerm === '') {
+                    document.getElementById('searchStatus').textContent = 'Showing books';
+                } else {
+                    document.getElementById('searchStatus').textContent = `Found ${visibleCount} book(s) matching "${searchTerm}"`;
                 }
-            } else if (noResultsMessage) {
-                noResultsMessage.remove();
             }
-        }
 
-        function clearSearch() {
-            document.getElementById('productSearch').value = '';
-            searchProducts();
-            document.getElementById('searchResultsCount').textContent = 'Showing all books';
-        }
-
-        function refreshProductsFromDatabase() {
-            // Show loading message
-            document.getElementById('productList').innerHTML = '<div id="loadingMessage" style="text-align: center; padding: 2rem; color: #64748b;">' +
-                '<i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 1rem;"></i>' +
-                '<p>Loading books from database...</p>' +
-                '</div>';
-            
-            // Clear any existing search
-            document.getElementById('productSearch').value = '';
-            
-            // Redirect to BookServlet to get real book data
-            window.location.href = 'BookServlet?action=list&redirect=pos';
-        }
-
-        // Handle database errors or connection issues
-        function showDatabaseError() {
-            const productList = document.getElementById('productList');
-            productList.innerHTML = '<div style="text-align: center; padding: 2rem; color: #ef4444;">' +
-                '<i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>' +
-                '<p>Unable to connect to database</p>' +
-                '<p style="font-size: 0.9rem; margin-top: 0.5rem; color: #64748b;">Please check your database connection and try again.</p>' +
-                '<button class="search-btn" onclick="refreshProductsFromDatabase()" style="margin-top: 1rem; background: linear-gradient(135deg, #ef4444, #dc2626);">' +
-                    '<i class="fas fa-sync-alt"></i> Retry Connection' +
-                '</button>' +
-                '</div>';
-            document.getElementById('searchResultsCount').textContent = 'Database connection error';
-        }
-
-        // Auto-load products from database when page loads if no books are present
-        function autoLoadProducts() {
-            const productItems = document.querySelectorAll('.product-item');
-            const loadingMessage = document.getElementById('loadingMessage');
-            const noBooksMessage = document.getElementById('noBooksMessage');
-            
-            if (productItems.length === 0) {
-                if (loadingMessage) {
-                    // Show loading message and then load from database
-                    setTimeout(() => {
-                        refreshProductsFromDatabase();
-                    }, 1000); // Wait 1 second then load
-                } else if (noBooksMessage) {
-                    // Show no books message
-                    noBooksMessage.style.display = 'block';
-                    document.getElementById('searchResultsCount').textContent = 'No books available';
-                }
-            } else {
-                // Update the count display
-                document.getElementById('searchResultsCount').textContent = 'Showing ' + productItems.length + ' books';
-            }
-        }
-
-        // Debounce function for real-time search
-        let searchTimeout;
-        function debounceSearch() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                searchProducts();
-            }, 300); // Wait 300ms after user stops typing
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            setupAddToCartListeners();
-            updateTotals();
-            autoLoadProducts();
-            
-            // Set up search input event listeners
-            const searchInput = document.getElementById('productSearch');
-            if (searchInput) {
-                searchInput.addEventListener('input', debounceSearch);
-                searchInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        searchProducts();
-                    }
+            // Refresh books functionality
+            function refreshBooks() {
+                document.getElementById('bookSearch').value = '';
+                document.getElementById('searchStatus').textContent = 'Showing books';
+                
+                        // Show all books
+                const productItems = document.querySelectorAll('#productList .product-item');
+                productItems.forEach(item => {
+                    item.style.display = '';
                 });
             }
-            
-                    // Initialize discount system
-        window.currentDiscount = null;
-        
-        // Ensure discount button is visible
-        setTimeout(() => {
-            const discountBtn = document.querySelector('.discount-btn');
-            if (discountBtn) {
-                discountBtn.style.display = 'inline-block';
-                discountBtn.style.visibility = 'visible';
-                discountBtn.style.opacity = '1';
-                console.log('Discount button made visible');
-            } else {
-                console.log('Discount button not found');
+
+
+
+            // Show quantity modal
+            function showQuantityModal(id, title, price, stock, category) {
+                console.log('showQuantityModal called with:', { id, title, price, stock, category });
+                
+                // Comprehensive validation
+                if (!id || id <= 0) {
+                    console.error('Invalid book ID:', id);
+                    alert('Error: Invalid book ID. Please try again.');
+                    return;
+                }
+                
+                if (!title || title.trim() === '') {
+                    console.error('Invalid book title:', title);
+                    alert('Error: Invalid book title. Please try again.');
+                    return;
+                }
+                
+                if (price === null || price === undefined || price <= 0) {
+                    console.error('Invalid book price:', price);
+                    alert('Error: Invalid book price. Please try again.');
+                    return;
+                }
+                
+                if (stock === null || stock === undefined || stock <= 0) {
+                    console.error('Invalid book stock:', stock);
+                    alert('Error: This book is out of stock or has invalid stock data.');
+                    return;
+                }
+                
+                // All validation passed
+                currentBook = { id, title, price: Number(price), stock: Number(stock), category };
+                document.getElementById('bookTitle').textContent = title;
+                document.getElementById('bookCategoryBadge').textContent = category || 'N/A';
+                document.getElementById('bookPrice').textContent = Number(price).toFixed(2);
+                document.getElementById('bookStock').textContent = stock;
+                document.getElementById('quantityInput').value = 1;
+                document.getElementById('quantityInput').max = stock;
+                document.getElementById('modalLineTotal').textContent = Number(price).toFixed(2);
+                
+                const modal = new bootstrap.Modal(document.getElementById('quantityModal'));
+                modal.show();
             }
-        }, 100);
-        
-        // Load available discounts from database
-        loadAvailableDiscounts();
-            
-            // Initialize scroll improvements
-            initializeScrollImprovements();
-        });
 
-        // Scroll improvements and enhancements
-        function initializeScrollImprovements() {
-            // Add scroll indicators to scrollable containers
-            addScrollIndicators();
-            
-            // Smooth scroll to top when needed
-            addScrollToTop();
-            
-            // Keyboard navigation for scrollable areas
-            addKeyboardScrollNavigation();
-        }
+            // Safer DOM-driven open for product card
+            function openQuantityFromItem(node, id) {
+                const container = node.closest('.product-item');
+                const title = container.querySelector('.product-title')?.textContent?.trim() || '';
+                const priceText = container.querySelector('.product-price')?.textContent?.replace(/[^0-9.]/g, '') || '0';
+                const stockText = container.querySelector('.product-stock')?.textContent?.replace(/[^0-9]/g, '') || '0';
+                const category = container.querySelector('.product-category')?.textContent?.trim() || '';
+                const price = parseFloat(priceText || '0');
+                const stock = parseInt(stockText || '0', 10);
+                showQuantityModal(id, title, price, stock, category);
+            }
 
-        function addScrollIndicators() {
-            const scrollableElements = document.querySelectorAll('.product-list, .cart-items');
-            
-            scrollableElements.forEach(element => {
-                if (element.scrollHeight > element.clientHeight) {
-                    // Add subtle scroll indicator
-                    element.style.position = 'relative';
-                    
-                    // Add scroll shadow effect
-                    element.addEventListener('scroll', function() {
-                        if (this.scrollTop > 0) {
-                            this.style.boxShadow = 'inset 0 2px 4px rgba(0,0,0,0.1)';
-                        } else {
-                            this.style.boxShadow = 'none';
-                        }
-                    });
+            // Confirm add to cart
+            function confirmAddToCart() {
+                // Validate currentBook
+                if (!currentBook || !currentBook.stock) {
+                    console.error('Invalid currentBook:', currentBook);
+                    alert('Error: Invalid book data. Please try again.');
+                    return;
                 }
-            });
-        }
-
-        function addScrollToTop() {
-            // Add scroll to top functionality for long lists
-            const longLists = document.querySelectorAll('.product-list, .cart-items');
-            
-            longLists.forEach(list => {
-                if (list.scrollHeight > list.clientHeight * 2) {
-                    // Add scroll to top button when scrolled down
-                    list.addEventListener('scroll', function() {
-                        if (this.scrollTop > 100) {
-                            if (!this.querySelector('.scroll-to-top-btn')) {
-                                const scrollBtn = document.createElement('button');
-                                scrollBtn.className = 'scroll-to-top-btn';
-                                scrollBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
-                                scrollBtn.style.cssText = `
-                                    position: absolute;
-                                    bottom: 10px;
-                                    right: 10px;
-                                    background: #6366f1;
-                                    color: white;
-                                    border: none;
-                                    border-radius: 50%;
-                                    width: 40px;
-                                    height: 40px;
-                                    cursor: pointer;
-                                    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
-                                    z-index: 10;
-                                    transition: all 0.3s ease;
-                                `;
-                                
-                                scrollBtn.addEventListener('click', () => {
-                                    this.scrollTo({ top: 0, behavior: 'smooth' });
-                                });
-                                
-                                scrollBtn.addEventListener('mouseenter', function() {
-                                    this.style.transform = 'scale(1.1)';
-                                    this.style.boxShadow = '0 4px 16px rgba(99, 102, 241, 0.4)';
-                                });
-                                
-                                scrollBtn.addEventListener('mouseleave', function() {
-                                    this.style.transform = 'scale(1)';
-                                    this.style.boxShadow = '0 2px 8px rgba(99, 102, 241, 0.3)';
-                                });
-                                
-                                this.appendChild(scrollBtn);
-                            }
-                        } else {
-                            const scrollBtn = this.querySelector('.scroll-to-top-btn');
-                            if (scrollBtn) {
-                                scrollBtn.remove();
-                            }
-                        }
-                    });
+                
+                const quantity = parseInt(document.getElementById('quantityInput').value);
+                const stock = currentBook.stock;
+                
+                if (quantity < 1) {
+                    alert('Quantity must be at least 1');
+                    return;
                 }
-            });
-        }
-
-        function addKeyboardScrollNavigation() {
-            // Add keyboard navigation for scrollable areas
-            const scrollableElements = document.querySelectorAll('.product-list, .cart-items');
-            
-            scrollableElements.forEach(element => {
-                element.addEventListener('keydown', function(e) {
-                    const scrollAmount = 100;
-                    
-                    switch(e.key) {
-                        case 'ArrowUp':
-                            e.preventDefault();
-                            this.scrollBy({ top: -scrollAmount, behavior: 'smooth' });
-                            break;
-                        case 'ArrowDown':
-                            e.preventDefault();
-                            this.scrollBy({ top: scrollAmount, behavior: 'smooth' });
-                            break;
-                        case 'Home':
-                            e.preventDefault();
-                            this.scrollTo({ top: 0, behavior: 'smooth' });
-                            break;
-                        case 'End':
-                            e.preventDefault();
-                            this.scrollTo({ top: this.scrollHeight, behavior: 'smooth' });
-                            break;
+                
+                if (quantity > stock) {
+                    alert('Quantity cannot exceed available stock');
+                    return;
+                }
+                
+                const existingItem = cart.find(item => item.id === currentBook.id);
+                
+                if (existingItem) {
+                    const newTotal = existingItem.quantity + quantity;
+                    if (newTotal > stock) {
+                        alert('Total quantity cannot exceed available stock');
+                        return;
                     }
+                    existingItem.quantity += quantity;
+                } else {
+                    cart.push({
+                        id: currentBook.id,
+                        title: currentBook.title,
+                        price: currentBook.price,
+                        quantity: quantity,
+                        stock: currentBook.stock
+                    });
+                }
+                
+                updateCartDisplay();
+                
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('quantityModal'));
+                modal.hide();
+                
+                // Show success message
+                showToast('Item added to cart successfully!', 'success');
+            }
+
+            // Stepper handlers for Add to Cart modal
+            function stepQuantity(delta) {
+                const input = document.getElementById('quantityInput');
+                let value = parseInt(input.value || '1', 10) + delta;
+                const max = parseInt(input.max || String(currentBook?.stock || 1), 10);
+                if (value < 1) value = 1;
+                if (value > max) value = max;
+                input.value = value;
+                updateLineTotal();
+            }
+
+            function handleQuantityInput() {
+                const input = document.getElementById('quantityInput');
+                let value = parseInt(input.value || '1', 10);
+                if (isNaN(value) || value < 1) value = 1;
+                const max = parseInt(input.max || String(currentBook?.stock || 1), 10);
+                if (value > max) value = max;
+                input.value = value;
+                updateLineTotal();
+            }
+
+            function updateLineTotal() {
+                const qty = parseInt(document.getElementById('quantityInput').value || '1', 10);
+                const price = Number(currentBook?.price || 0);
+                const line = qty * price;
+                document.getElementById('modalLineTotal').textContent = line.toFixed(2);
+            }
+
+            // Update cart display
+            function updateCartDisplay() {
+                const cartItems = document.getElementById('cartItems');
+                const cartSubtotal = document.getElementById('cartSubtotal');
+                const cartTotal = document.getElementById('cartTotal');
+                const checkoutBtn = document.getElementById('checkoutBtn');
+                
+                if (cart.length === 0) {
+                    cartItems.innerHTML = `
+                        <div class="empty-cart">
+                            <i class="bi bi-cart" style="font-size: 2rem;"></i>
+                            <p>Cart is empty</p>
+                        </div>
+                    `;
+                    checkoutBtn.disabled = true;
+                } else {
+                    cartItems.innerHTML = '';
+                    let total = 0;
+                    
+                    cart.forEach(item => {
+                        const itemTotal = item.price * item.quantity;
+                        total += itemTotal;
+                        
+                        const cartItem = document.createElement('div');
+                        cartItem.className = 'cart-item';
+                        cartItem.innerHTML = '<div class="cart-item-info">' +
+                            '<div class="cart-item-title"><strong>' + item.title + '</strong></div>' +
+                            '<div class="cart-item-details">' +
+                            '<small class="text-muted">ID: ' + item.id + '</small><br>' +
+                            '<small class="text-muted">Price: ' + item.price.toFixed(2) + ' x ' + item.quantity + '</small>' +
+                            '</div>' +
+                            '<div class="cart-item-price"><strong>' + itemTotal.toFixed(2) + '</strong></div>' +
+                            '</div>' +
+                            '<div class="cart-item-quantity">' +
+                            '<button class="quantity-btn" onclick="updateQuantity(' + item.id + ', -1)">-</button>' +
+                            '<span>' + item.quantity + '</span>' +
+                            '<button class="quantity-btn" onclick="updateQuantity(' + item.id + ', 1)">+</button>' +
+                            '</div>';
+                        
+                        cartItems.appendChild(cartItem);
+                    });
+                    
+                    cartSubtotal.textContent = total.toFixed(2);
+                    cartTotal.textContent = total.toFixed(2);
+                    checkoutBtn.disabled = false;
+                }
+            }
+
+            // Update quantity
+            function updateQuantity(productId, change) {
+                const item = cart.find(item => item.id === productId);
+                
+                if (item) {
+                    const newQuantity = item.quantity + change;
+                    
+                    if (newQuantity <= 0) {
+                        cart = cart.filter(item => item.id !== productId);
+                    } else if (newQuantity > item.stock) {
+                        alert('Quantity cannot exceed available stock');
+                        return;
+                    } else {
+                        item.quantity = newQuantity;
+                    }
+                    
+                    updateCartDisplay();
+                }
+            }
+
+            // Reset checkout modal state
+            function resetCheckoutModal() {
+                selectedCustomer = null;
+                document.getElementById('confirmCheckoutBtn').disabled = true;
+                document.getElementById('modalTotal').textContent = '0.00';
+                document.getElementById('orderSummary').innerHTML = '';
+                document.querySelectorAll('.customer-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+            }
+
+            // Show checkout modal
+            function showCheckoutModal() {
+                if (cart.length === 0) {
+                    alert('Cart is empty!');
+                    return;
+                }
+                
+                // Reset checkout modal state
+                resetCheckoutModal();
+                
+                // Update order summary
+                updateOrderSummary();
+                
+                const modal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+                modal.show();
+            }
+
+            // Select customer
+            function selectCustomer(customerId, customerName) {
+                selectedCustomer = { id: customerId, name: customerName };
+                
+                // Update UI
+                document.querySelectorAll('.customer-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                event.target.closest('.customer-item').classList.add('selected');
+                
+                document.getElementById('confirmCheckoutBtn').disabled = false;
+                // show chip
+                const chip = document.getElementById('selectedCustomerChip');
+                const chipName = document.getElementById('selectedCustomerName');
+                if (chip && chipName) { chip.classList.remove('d-none'); chipName.textContent = customerName; }
+            }
+
+            // Safer DOM-driven select for customer
+            function selectCustomerFromItem(node, id) {
+                const name = node.querySelector('strong')?.textContent?.trim() || '';
+                selectCustomer(id, name);
+            }
+
+            // Update order summary
+            function updateOrderSummary() {
+                const orderSummary = document.getElementById('orderSummary');
+                const modalTotal = document.getElementById('modalTotal');
+                let subtotal = 0;
+                
+                let summaryHTML = '';
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    subtotal += itemTotal;
+                    
+                    summaryHTML += '<div class="d-flex justify-content-between mb-2">' +
+                        '<div class="text-start">' +
+                        '<div><strong>' + item.title + '</strong></div>' +
+                        '<small class="text-muted">ID: ' + item.id + ' | Price: ' + item.price.toFixed(2) + ' x ' + item.quantity + '</small>' +
+                        '</div>' +
+                        '<div class="text-end">' +
+                        '<strong>' + itemTotal.toFixed(2) + '</strong>' +
+                        '</div>' +
+                        '</div>';
                 });
                 
-                // Make elements focusable for keyboard navigation
-                element.setAttribute('tabindex', '0');
-            });
-        }
-        
+                orderSummary.innerHTML = summaryHTML;
+                document.getElementById('modalSubtotal').textContent = subtotal.toFixed(2);
+                modalTotal.textContent = subtotal.toFixed(2);
+            }
 
-
-        // Customer discount verification and management
-        function verifyCustomerPhone(phoneNumber) {
-            // This function would typically check against your customer database
-            // For now, we'll just return true to allow any phone number
-            // In a real system, you'd implement proper customer verification
-            
-            // Example implementation:
-            // return fetch('CustomerServlet?action=verify&phone=' + phoneNumber)
-            //     .then(response => response.json())
-            //     .then(data => data.exists);
-            
-            return true; // Placeholder - always allow for now
-        }
-
-        function saveDiscountUsage(discountData) {
-            // This function would save discount usage to the database
-            // For now, we'll just log it to console
-            // In a real system, you'd implement database storage
-            
-            console.log('Discount Usage:', {
-                customerPhone: discountData.customerPhone,
-                discountAmount: discountData.amount,
-                discountType: discountData.type,
-                timestamp: new Date().toISOString(),
-                billTotal: document.getElementById('total').textContent
-            });
-            
-            // Example database save implementation:
-            // fetch('DiscountServlet', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify(discountData)
-            // });
-        }
-
-        function loadAvailableDiscounts() {
-            // Load available discounts from database
-            fetch('DiscountServlet?action=list')
-                .then(response => response.text())
-                .then(html => {
-                    // Parse the HTML response to extract discount data
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-                    
-                    // Extract discount data from the response
-                    const discountRows = doc.querySelectorAll('tr[data-discount-id]');
-                    const availableDiscounts = [];
-                    
-                    discountRows.forEach(row => {
-                        const discountId = row.getAttribute('data-discount-id');
-                        const discountType = row.querySelector('.discount-type')?.textContent?.trim();
-                        const discountValue = row.querySelector('.discount-value')?.textContent?.trim();
+            // Process transaction
+            function processTransaction() {
+                if (!selectedCustomer) {
+                    alert('Please select a customer');
+                    return;
+                }
+                
+                if (cart.length === 0) {
+                    alert('Cart is empty');
+                    return;
+                }
+                
+                // Calculate total amount from cart
+                let totalAmount = 0;
+                cart.forEach(item => {
+                    totalAmount += item.price * item.quantity;
+                });
+                
+                // Prepare transaction data
+                const transactionData = {
+                    customerId: selectedCustomer.id,
+                    items: cart.map(item => ({
+                        bookId: item.id,
+                        quantity: item.quantity,
+                        price: item.price
+                    })),
+                    totalAmount: totalAmount
+                };
+                
+                // Debug: Log the transaction data
+                console.log('Transaction data:', transactionData);
+                console.log('JSON string:', JSON.stringify(transactionData));
+                
+                // Send transaction to server
+                fetch('TransactionServlet?action=create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(transactionData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Server response:', data);
+                    if (data.success) {
+                        transactionId = data.transactionId;
+                        showBill(data.transaction);
                         
-                        if (discountId && discountType && discountValue) {
-                            availableDiscounts.push({ 
-                                id: discountId, 
-                                type: discountType, 
-                                value: discountValue 
-                            });
-                        }
-                    });
-                    
-                    // Update quick discount buttons if discounts are available
-                    if (availableDiscounts.length > 0) {
-                        updateQuickDiscountButtons(availableDiscounts);
+                        // Clear cart
+                        cart = [];
+                        updateCartDisplay();
+                        
+                        // Reset modal total and clear order summary
+                        document.getElementById('modalTotal').textContent = '0.00';
+                        document.getElementById('orderSummary').innerHTML = '';
+                        
+                        // Close checkout modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
+                        modal.hide();
+                        
+                        // Reset checkout modal state
+                        resetCheckoutModal();
+                        
+                        showToast('Transaction completed successfully!', 'success');
+                    } else {
+                        alert('Error: ' + data.message);
                     }
                 })
                 .catch(error => {
-                    console.error('Error loading discounts:', error);
-                    // Use default discounts if loading fails
-                    const defaultDiscounts = [
-                        { type: 'Percentage', value: '10.00' },
-                        { type: 'Fixed Amount', value: '500.00' },
-                        { type: 'Percentage', value: '15.00' }
-                    ];
-                    updateQuickDiscountButtons(defaultDiscounts);
+                    console.error('Error:', error);
+                    console.error('Error details:', error.message);
+                    alert('An error occurred while processing the transaction');
                 });
-        }
+            }
 
-        function updateQuickDiscountButtons(discounts) {
-            const quickDiscountContainer = document.querySelector('.quick-discount-btn').parentNode;
-            if (quickDiscountContainer) {
-                // Clear existing buttons
-                quickDiscountContainer.innerHTML = '';
+            // Show bill
+            function showBill(transaction) {
+                console.log('showBill called with transaction:', transaction);
+                const billContent = document.getElementById('billContent');
+                const billModal = document.getElementById('billModal');
                 
-                // Add new buttons based on available discounts
-                discounts.forEach(discount => {
-                    const button = document.createElement('button');
-                    button.type = 'button';
-                    button.className = 'quick-discount-btn';
+                console.log('billContent element:', billContent);
+                console.log('billModal element:', billModal);
+                
+                const currentDate = new Date().toLocaleDateString();
+                const currentTime = new Date().toLocaleTimeString();
+                
+                let itemsHTML = '';
+                let total = 0;
+                
+                // Check if transaction and items exist
+                if (!transaction) {
+                    console.error('Transaction is null or undefined');
+                    return;
+                }
+                
+                if (!transaction.items || !Array.isArray(transaction.items)) {
+                    console.error('Transaction items is null, undefined, or not an array:', transaction.items);
+                    return;
+                }
+                
+                console.log('Transaction items:', transaction.items);
+                
+                transaction.items.forEach(item => {
+                    console.log('Processing item:', item);
+                    if (!item || !item.title || !item.quantity || !item.price) {
+                        console.error('Invalid item data:', item);
+                        return;
+                    }
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
                     
-                    const isPercentage = discount.type.toLowerCase().includes('percentage') || 
-                                       discount.type.toLowerCase().includes('seasonal');
-                    const type = isPercentage ? 'percentage' : 'amount';
-                    const value = parseFloat(discount.value);
+                    itemsHTML += '<div class="bill-item">' +
+                                            '<span>' + item.title + ' x' + item.quantity + '</span>' +
+                    '<span>' + itemTotal.toFixed(2) + '</span>' +
+                        '</div>';
+                });
+                
+                const billHTML = '<div class="bill-header">' +
+                    '<h4 class="brand-title">BookShop</h4>' +
+                    '<div class="bill-meta">Transaction Receipt</div>' +
+                    '<div class="bill-meta">Date: ' + currentDate + ' &nbsp; | &nbsp; Time: ' + currentTime + '</div>' +
+                    '<div class="bill-meta">Transaction ID: ' + (transaction.transactionId || 'N/A') + '</div>' +
+                    '<div class="bill-meta">Customer: ' + (transaction.customerName || 'N/A') + '</div>' +
+                    '</div>' +
+                    '<div class="bill-items">' +
+                    (itemsHTML || '<div class="text-center text-muted">No items to display</div>') +
+                    '</div>' +
+                    '<div class="bill-total d-flex justify-content-between">' +
+                    '<span>Total:</span>' +
+                    '<span>Rs. ' + total.toFixed(2) + '</span>' +
+                    '</div>' +
+                    '<div class="text-center mt-3">' +
+                    '<p class="text-muted">Thank you for your purchase!</p>' +
+                    '</div>';
+                
+                console.log('Generated bill HTML:', billHTML);
+                billContent.innerHTML = billHTML;
+                
+                const modal = new bootstrap.Modal(document.getElementById('billModal'));
+                console.log('Showing bill modal');
+                modal.show();
+                console.log('Bill modal should be visible now');
+            }
+
+            // Print bill
+            function printBill() {
+                const billContent = document.getElementById('billContent').innerHTML;
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(
+                    '<html>' +
+                    '<head>' +
+                    '<title>Transaction Receipt</title>' +
+                    '<style>' +
+                    'body { font-family: Arial, sans-serif; margin: 20px; }' +
+                    '.bill-container { max-width: 400px; margin: 0 auto; }' +
+                    '.bill-header { text-align: center; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 10px; }' +
+                    '.bill-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #eee; }' +
+                    '.bill-total { border-top: 2px solid #ccc; padding-top: 10px; font-weight: bold; font-size: 1.2em; }' +
+                    '@media print { body { margin: 0; } }' +
+                    '</style>' +
+                    '</head>' +
+                    '<body>' +
+                    '<div class="bill-container">' +
+                    billContent +
+                    '</div>' +
+                    '</body>' +
+                    '</html>'
+                );
+                printWindow.document.close();
+                printWindow.print();
+            }
+
+            // Show toast notification
+            function showToast(message, type = 'info') {
+                // Create toast element
+                const toast = document.createElement('div');
+                toast.className = 'alert alert-' + type + ' alert-dismissible fade show position-fixed';
+                toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+                toast.innerHTML = message +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>';
+                
+                document.body.appendChild(toast);
+                
+                // Auto remove after 3 seconds
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 3000);
+            }
+
+            // Customer search functionality
+            document.getElementById('customerSearch').addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const customerItems = document.querySelectorAll('.customer-item');
+                
+                customerItems.forEach(item => {
+                    const customerName = item.querySelector('strong').textContent.toLowerCase();
+                    const accountNumber = item.querySelector('small').textContent.toLowerCase();
                     
-                    button.onclick = () => applyQuickDiscount(type, value);
-                    button.textContent = discount.type === 'Fixed Amount' ? 
-                        `Rs. ${value} Off` : `${value}% Off`;
-                    
-                    quickDiscountContainer.appendChild(button);
+                    if (customerName.includes(searchTerm) || accountNumber.includes(searchTerm)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+
+            // Logout functionality
+            function logout() {
+                // Clear cart and session data
+                cart = [];
+                selectedCustomer = null;
+                currentBook = null;
+                transactionId = null;
+                
+                // Method 1: Try to call logout servlet via fetch
+                fetch('LogoutServlet', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    }
+                })
+                .then(response => {
+                    // Redirect to login page after successful logout
+                    window.location.href = 'login.jsp';
+                })
+                .catch(error => {
+                    console.error('Logout error:', error);
+                    // Method 2: Fallback - redirect directly to logout servlet
+                    window.location.href = 'LogoutServlet';
                 });
             }
-        }
 
-        // Customer search functionality removed - discount is now applied via modal
-
-        function processCheckout() {
-            if (cart.length === 0) {
-                alert('Please add items to cart before checkout.');
-                return;
-            }
-            
-            // Validate bill form
-            const customerName = document.getElementById('customerName').value.trim();
-            const customerPhone = document.getElementById('customerPhone').value.trim();
-            const customerEmail = document.getElementById('customerEmail').value.trim();
-            const paymentMethod = document.getElementById('paymentMethod').value;
-            
-            if (!customerName) {
-                alert('Please enter customer name.');
-                document.getElementById('customerName').focus();
-                return;
-            }
-            
-            if (!customerPhone) {
-                alert('Please enter customer phone number.');
-                document.getElementById('customerPhone').focus();
-                return;
-            }
-            
-            // Customer ID not available in simplified system
-            const customerId = null;
-            
-            // Collect bill data
-            const billData = {
-                customerId: customerId || null,
-                customerName: customerName,
-                customerPhone: customerPhone,
-                customerEmail: customerEmail,
-                customerAddress: document.getElementById('customerAddress').value.trim(),
-                paymentMethod: paymentMethod,
-                notes: document.getElementById('billNotes').value.trim(),
-                cart: cart,
-                subtotal: parseFloat(document.getElementById('subtotal').textContent.replace('Rs. ', '')),
-                tax: parseFloat(document.getElementById('tax').textContent.replace('Rs. ', '')),
-                discount: window.currentDiscount ? window.currentDiscount.amount : 0,
-                discountType: window.currentDiscount ? window.currentDiscount.type : 'amount',
-                discountCustomerPhone: window.currentDiscount ? window.currentDiscount.customerPhone : null,
-                total: parseFloat(document.getElementById('total').textContent.replace('Rs. ', ''))
-            };
-            
-            // Show processing message
-            const checkoutBtn = document.querySelector('.checkout-btn');
-            const originalText = checkoutBtn.innerHTML;
-            checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-            checkoutBtn.disabled = true;
-            
-            // Send bill data to servlet
-            fetch('BillServlet', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(billData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Show success message with bill number
-                    alert('Payment processed successfully!\nBill Number: ' + data.billNumber + '\nTotal: Rs. ' + data.total.toFixed(2));
-                    
-                                        // Clear cart and form
-                    cart = [];
-                    updateCartDisplay();
-                    updateTotals();
-                    clearBillForm();
-                    
-                    // Reset discount
-                    window.currentDiscount = null;
-                    
-                    // Optionally open bill in new window
-                    if (data.billUrl) {
-                        window.open(data.billUrl, '_blank');
-                    }
-                } else {
-                    alert('Error processing payment: ' + (data.message || 'Unknown error'));
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error processing payment. Please try again.');
-            })
-            .finally(() => {
-                // Restore button
-                checkoutBtn.innerHTML = originalText;
-                checkoutBtn.disabled = false;
+            // Initialize POS
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('POS initialized with enhanced functionality');
+                
+                // Debug: Check loaded data
+                const bookRows = document.querySelectorAll('#bookTableBody tr');
+                console.log('Total book rows found:', bookRows.length);
+                
+                // Store all books for search functionality
+                allBooks = Array.from(bookRows).map(row => ({
+                    title: row.querySelector('td:nth-child(2)')?.textContent || '',
+                    price: row.querySelector('td:nth-child(3)')?.textContent || '',
+                    stock: row.querySelector('td:nth-child(4)')?.textContent || '',
+                    category: row.querySelector('td:nth-child(5)')?.textContent || ''
+                }));
+                
+                console.log('Books loaded for search:', allBooks.length);
             });
-        }
-        
-        function clearBillForm() {
-            document.getElementById('customerName').value = '';
-            document.getElementById('customerPhone').value = '';
-            document.getElementById('customerEmail').value = '';
-            document.getElementById('customerAddress').value = '';
-            document.getElementById('paymentMethod').value = 'Cash';
-            document.getElementById('billNotes').value = '';
-            
-            // Clear discount
-            window.currentDiscount = null;
-        }
-    </script>
-</body>
-</html>
+        </script>
+    </body>
+</html> 

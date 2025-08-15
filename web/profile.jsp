@@ -1,842 +1,861 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="com.booking.UserServlet.User,com.booking.CustomerServlet.Customer"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html lang="en">
-<head>
+    <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile - Pahana BookShop</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - BookShop</title>
+    
+        <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/sidebar.css">
-    <style>
+    
+        <style>
         :root {
             --primary-color: #6366f1;
-            --secondary-color: #8b5cf6;
-            --accent-color: #a855f7;
-            --text-color: #1e293b;
-            --light-color: #f8fafc;
-            --hover-color: #4f46e5;
+            --primary-hover: #4f46e5;
+            --secondary-color: #64748b;
             --success-color: #10b981;
             --warning-color: #f59e0b;
             --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --background-color: #f8fafc;
+            --card-background: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --sidebar-bg: #1e293b;
+            --sidebar-hover: #334155;
+            --accent-color: #f97316;
         }
-        
+
         * {
-            margin: 0;
-            padding: 0;
+                margin: 0;
+                padding: 0;
             box-sizing: border-box;
         }
 
         body {
-            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
-            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: var(--background-color);
+            color: var(--text-primary);
+            }
+
+            /* Sidebar Styles */
+            .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+                width: 280px;
+            background: var(--sidebar-bg);
+                color: white;
+                overflow-y: auto;
+                z-index: 1000;
+            transition: all 0.3s ease;
+            }
+
+            .sidebar-header {
+                padding: 2rem 1.5rem;
+            border-bottom: 1px solid var(--sidebar-hover);
+                text-align: center;
+            }
+
+        .sidebar-title {
+                font-size: 1.4rem;
+                font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
         }
 
-        .main-content {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
+        .sidebar-subtitle {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            font-weight: 400;
         }
+
+        .sidebar-nav {
+            padding: 1.5rem 0;
+            }
+
+            .nav-item {
+            margin-bottom: 0.5rem;
+            }
+
+            .nav-link {
+                display: flex;
+                align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: #cbd5e1;
+                text-decoration: none;
+                transition: all 0.3s ease;
+            border-radius: 0;
+                font-weight: 500;
+            }
+
+            .nav-link:hover {
+            background: var(--sidebar-hover);
+                color: white;
+                text-decoration: none;
+            }
+
+            .nav-link.active {
+            background: var(--accent-color);
+                color: white;
+            border-left: 4px solid var(--primary-color);
+            }
+
+            .nav-link i {
+                margin-right: 0.75rem;
+                font-size: 1.1rem;
+                width: 20px;
+            }
+
+            .sidebar-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--sidebar-hover);
+                margin-top: auto;
+            }
+
+            .logout-btn {
+                width: 100%;
+            background: var(--danger-color);
+            border: none;
+                color: white;
+                padding: 0.75rem 1rem;
+                border-radius: 8px;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+            font-weight: 500;
+            }
+
+            .logout-btn:hover {
+            background: #dc2626;
+                color: white;
+                text-decoration: none;
+            transform: translateY(-2px);
+            }
+
+            /* Main Content Styles */
+            .main-content {
+                margin-left: 280px;
+                padding: 2rem;
+            min-height: 100vh;
+            }
 
         .page-header {
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
-            margin-bottom: 2rem;
-            text-align: center;
-            border: 1px solid rgba(99, 102, 241, 0.1);
+                margin-bottom: 2rem;
         }
 
-        .page-header h1 {
-            color: #6366f1;
-            margin-bottom: 0.5rem;
+        .page-title {
+            font-size: 2.5rem;
             font-weight: 700;
-        }
-
-        .page-header p {
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        .profile-grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .profile-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.1);
-        }
-
-        .profile-header {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #f1f5f9;
-        }
-
-        .profile-header h3 {
-            color: #6366f1;
-            font-size: 1.3rem;
+            color: var(--text-primary);
             margin-bottom: 0.5rem;
+                display: flex;
+                align-items: center;
+            }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 0;
+        }
+
+            .content-card {
+            background: var(--card-background);
+            border-radius: 16px;
+                padding: 2rem;
+                margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            }
+
+            .card-title {
+                font-size: 1.5rem;
+                font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+                display: flex;
+                align-items: center;
+        }
+
+        .card-title i {
+            margin-right: 0.75rem;
+            color: var(--primary-color);
+        }
+
+        .profile-section {
+                margin-bottom: 2rem;
+        }
+
+        .profile-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+            }
+
+            .btn-primary {
+            background: var(--primary-color);
+                border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }
+
+            .btn-primary:hover {
+            background: var(--primary-hover);
+                transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            }
+
+        .btn-warning {
+            background: var(--warning-color);
+            border: none;
+                border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+                border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Alert Styles */
+        .alert {
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+                margin-bottom: 1.5rem;
+            border: none;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
+            }
+
+            .alert-success {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+            color: white;
+            }
+
+            .alert-danger {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            color: white;
         }
 
-        .profile-header p {
-            color: #64748b;
-            font-size: 0.9rem;
+        .alert-info {
+            background: linear-gradient(135deg, var(--info-color), #2563eb);
+            color: white;
+        }
+
+        .btn-close {
+            filter: invert(1);
+            opacity: 0.8;
+        }
+
+        .btn-close:hover {
+            opacity: 1;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: var(--primary-color);
+            border: none;
+                color: white;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+                .sidebar {
+                    transform: translateX(-100%);
+                }
+
+            .sidebar.open {
+                    transform: translateX(0);
+                }
+
+                .main-content {
+                    margin-left: 0;
+                }
+            }
+
+        /* Overlay for mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .sidebar-overlay.open {
+            display: block;
+        }
+
+        /* Profile Info Styles */
+        .profile-info {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--info-color) 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
         }
 
         .profile-avatar {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .avatar {
             width: 120px;
             height: 120px;
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 1rem;
             font-size: 3rem;
-            color: white;
-            font-weight: 700;
-        }
-
-        .profile-info {
-            text-align: center;
+            border: 4px solid rgba(255, 255, 255, 0.3);
         }
 
         .profile-name {
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: 700;
-            color: #1e293b;
             margin-bottom: 0.5rem;
         }
 
         .profile-role {
-            color: #6366f1;
-            font-weight: 600;
+            font-size: 1.1rem;
+            opacity: 0.9;
             margin-bottom: 1rem;
         }
 
         .profile-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
             margin-top: 1.5rem;
         }
 
         .stat-item {
             text-align: center;
-            padding: 1rem;
-            background: #f8fafc;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
         }
 
         .stat-number {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #6366f1;
-            margin-bottom: 0.25rem;
+            display: block;
         }
 
         .stat-label {
-            color: #64748b;
             font-size: 0.9rem;
-        }
+            opacity: 0.8;
+            }
+        </style>
+    </head>
+    <body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #1e293b;
-        }
-
-        .form-group input[type="text"],
-        .form-group input[type="email"],
-        .form-group input[type="password"],
-        .form-group input[type="tel"],
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-            background: #f8fafc;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #6366f1;
-            background: white;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-right: 1rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
-        }
-
-        .profile-actions {
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .role-specific-section {
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #f1f5f9;
-        }
-
-        .role-specific-section h4 {
-            color: #6366f1;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .customer-layout {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
-            min-height: 100vh;
-        }
-
-        .customer-navbar {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 1rem 0;
-            margin-bottom: 2rem;
-        }
-
-        .customer-nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-
-        .customer-logo-text {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #6366f1;
-            text-decoration: none;
-        }
-
-        .customer-nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .customer-nav-menu a {
-            color: #64748b;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .customer-nav-menu a:hover,
-        .customer-nav-menu a.active {
-            color: #6366f1;
-        }
-
-        .customer-user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .welcome-text {
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        .customer-logout-btn {
-            background: #ef4444;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .customer-logout-btn:hover {
-            background: #dc2626;
-        }
-
-        .customer-main-content {
-            padding: 0 2rem;
-        }
-
-        .alert {
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            display: none;
-        }
-
-        .alert-success {
-            background: #d1fae5;
-            color: #065f46;
-            border: 1px solid #a7f3d0;
-        }
-
-        .alert-error {
-            background: #fee2e2;
-            color: #991b1b;
-            border: 1px solid #fecaca;
-        }
-
-        @media (max-width: 768px) {
-            .admin-main-content { margin-left: 0; }
-            .main-content { padding: 1rem; }
-            .profile-grid { grid-template-columns: 1fr; }
-            .form-row { grid-template-columns: 1fr; }
-            .customer-nav-container { flex-direction: column; gap: 1rem; }
-            .customer-nav-menu { flex-wrap: wrap; justify-content: center; }
-        }
-    </style>
-</head>
-<body>
-    <%
-    // Determine user type and role for navigation
-    String userType = null;
-    String role = null;
-    String username = null;
-    boolean isLoggedIn = false;
-    
-    if (session != null && session.getAttribute("loggedIn") != null) {
-        isLoggedIn = (Boolean) session.getAttribute("loggedIn");
-        if (isLoggedIn) {
-            userType = (String) session.getAttribute("userType");
-            role = (String) session.getAttribute("role");
-            username = (String) session.getAttribute("username");
-        }
-    }
-    
-    // Determine navigation type
-    String navType = "public"; // default
-    if (isLoggedIn) {
-        if ("admin".equals(userType) || "Admin".equals(role)) {
-            navType = "admin";
-        } else if ("Manager".equals(role)) {
-            navType = "manager";
-        } else if ("Staff".equals(role)) {
-            navType = "staff";
-        } else {
-            navType = "customer";
-        }
-    }
-    %>
-
-    <% if (isLoggedIn) { %>
-        <% if ("admin".equals(navType) || "manager".equals(navType) || "staff".equals(navType)) { %>
-            <!-- MANAGER/ADMIN/STAFF LAYOUT (Sidebar) -->
-            <div class="admin-layout">
-                <!-- Sidebar -->
-                <aside class="admin-sidebar">
-                    <div class="admin-sidebar-header">
-                        <h2><%= "admin".equals(navType) ? "Admin" : ("manager".equals(navType) ? "Manager" : "Staff") %> Panel</h2>
-                        <p>Welcome, <%= username %></p>
-                    </div>
-                    
-                    <%
-                    // Different sidebar menus for each role
-                    if ("admin".equals(navType)) {
-                    %>
-                    <!-- ADMIN SIDEBAR MENU -->
-                    <ul class="admin-sidebar-menu">
-                        <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard (Admin)</a></li>
-                        <li><a href="pos.jsp"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
-                        <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
-                        <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
-                        <li><a href="user-management.jsp"><i class="fas fa-users"></i> Manage Users</a></li>
-                        <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Manage Customer</a></li>
-                        <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
-                        <li><a href="reports.jsp"><i class="fas fa-chart-bar"></i> Analytics & Reports</a></li>
-                        <li><a href="settings.jsp"><i class="fas fa-cogs"></i> System Settings</a></li>
-                        <li><a href="profile.jsp" class="active"><i class="fas fa-user"></i> My Profile</a></li>
-                        <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help (Admin)</a></li>
-                        <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                    </ul>
-                    <%
-                    } else if ("manager".equals(navType)) {
-                    %>
-                    <!-- MANAGER SIDEBAR MENU -->
-                    <ul class="admin-sidebar-menu">
-                        <li><a href="welcome.jsp"><i class="fas fa-home"></i> Dashboard (Manager)</a></li>
-                        <li><a href="pos.jsp"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
-                        <li><a href="CategoryServlet?action=list"><i class="fas fa-cog"></i> Manage Categories</a></li>
-                        <li><a href="BookServlet?action=list"><i class="fas fa-book"></i> Manage Books</a></li>
-                        <li><a href="CustomerServlet?action=list"><i class="fas fa-user-friends"></i> Manage Customer</a></li>
-                        <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
-                        <li><a href="reports.jsp"><i class="fas fa-chart-bar"></i> Analytics & Reports</a></li>
-                        <li><a href="profile.jsp" class="active"><i class="fas fa-user"></i> My Profile</a></li>
-                        <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help (Manager)</a></li>
-                        <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                    </ul>
-                    <%
-                    } else if ("staff".equals(navType)) {
-                    %>
-                    <!-- STAFF SIDEBAR MENU -->
-                    <ul class="admin-sidebar-menu">
-                        <li><a href="pos.jsp"><i class="fas fa-cash-register"></i> Point of Sale</a></li>
-                        <li><a href="orders.jsp"><i class="fas fa-shopping-cart"></i> All Orders</a></li>
-                        <li><a href="profile.jsp" class="active"><i class="fas fa-user"></i> My Profile</a></li>
-                        <li><a href="help.jsp"><i class="fas fa-question-circle"></i> Help (Staff)</a></li>
-                        <li><a href="LogoutServlet"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                    </ul>
-                    <%
+    <!-- Sidebar Navigation -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title">
+                <% 
+                String userRole = (String) session.getAttribute("role");
+                if (userRole != null) {
+                    if (userRole.equals("ADMIN")) {
+                        out.print("ADMIN Panel");
+                    } else if (userRole.equals("MANAGER")) {
+                        out.print("MANAGER Panel");
+                    } else if (userRole.equals("STAFF")) {
+                        out.print("STAFF Panel");
+                    } else if (userRole.equals("CUSTOMER")) {
+                        out.print("CUSTOMER Panel");
+                    } else {
+                        out.print("UserRole Panel");
                     }
-                    %>
-                </aside>
-
-                <!-- Main Content -->
-                <main class="admin-main-content">
-                    <div class="main-content">
-                        <div class="page-header">
-                            <h1>My Profile</h1>
-                            <p>View and manage your profile information</p>
-                        </div>
-                        
-                        <div class="profile-grid">
-                            <!-- Profile Summary -->
-                            <div class="profile-card">
-                                <div class="profile-header">
-                                    <h3><i class="fas fa-user"></i> Profile Summary</h3>
-                                    <p>Your account overview</p>
-                                </div>
-                                
-                                <div class="profile-avatar">
-                                    <div class="avatar">
-                                        <%= username != null ? username.charAt(0).toUpperCase() : "U" %>
-                                    </div>
-                                    <div class="profile-info">
-                                        <div class="profile-name"><%= username != null ? username : "User" %></div>
-                                        <div class="profile-role"><%= role != null ? role : "User" %></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="profile-stats">
-                                    <div class="stat-item">
-                                        <div class="stat-number"><%= role != null ? role : "User" %></div>
-                                        <div class="stat-label">Role</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <div class="stat-number">Active</div>
-                                        <div class="stat-label">Status</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Profile Details -->
-                            <div class="profile-card">
-                                <div class="profile-header">
-                                    <h3><i class="fas fa-edit"></i> Profile Details</h3>
-                                    <p>Update your personal information</p>
-                                </div>
-                                
-                                <div id="alertContainer"></div>
-                                
-                                <form id="profileForm">
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label for="firstName">First Name</label>
-                                            <input type="text" id="firstName" name="firstName" value="<%= role != null ? role : "User" %>" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="lastName">Last Name</label>
-                                            <input type="text" id="lastName" name="lastName" value="User" required>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="email">Email Address</label>
-                                        <input type="email" id="email" name="email" value="<%= username != null ? username.toLowerCase() + "@pahanabookshop.com" : "user@pahanabookshop.com" %>" required>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="phone">Phone Number</label>
-                                        <input type="tel" id="phone" name="phone" value="+1 (555) 123-4567">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="department">Department</label>
-                                        <select id="department" name="department">
-                                            <% if ("admin".equals(navType)) { %>
-                                                <option value="administration" selected>Administration</option>
-                                                <option value="management">Management</option>
-                                                <option value="operations">Operations</option>
-                                                <option value="it">IT & Systems</option>
-                                            <% } else if ("manager".equals(navType)) { %>
-                                                <option value="management" selected>Management</option>
-                                                <option value="operations">Operations</option>
-                                                <option value="sales">Sales</option>
-                                                <option value="marketing">Marketing</option>
-                                            <% } else if ("staff".equals(navType)) { %>
-                                                <option value="operations" selected>Operations</option>
-                                                <option value="sales">Sales</option>
-                                                <option value="customer-service">Customer Service</option>
-                                                <option value="inventory">Inventory</option>
-                                            <% } %>
-                                        </select>
-                                    </div>
-                                    
-                                    <% if ("admin".equals(navType) || "manager".equals(navType)) { %>
-                                    <div class="form-group">
-                                        <label for="employeeId">Employee ID</label>
-                                        <input type="text" id="employeeId" name="employeeId" value="EMP-<%= username != null ? username.toUpperCase() : "USER" %>-001" readonly>
-                                    </div>
-                                    <% } %>
-                                    
-                                    <div class="profile-actions">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-save"></i> Save Changes
-                                        </button>
-                                        <button type="button" class="btn btn-secondary" onclick="resetForm()">
-                                            <i class="fas fa-undo"></i> Reset
-                                        </button>
-                                        <button type="button" class="btn btn-danger" onclick="changePassword()">
-                                            <i class="fas fa-key"></i> Change Password
-                                        </button>
-                                    </div>
-                                </form>
-                                
-                                <!-- Role-specific sections -->
-                                <% if ("admin".equals(navType)) { %>
-                                <div class="role-specific-section">
-                                    <h4><i class="fas fa-shield-alt"></i> Administrative Settings</h4>
-                                    <p>As an administrator, you have access to system-wide settings and user management.</p>
-                                </div>
-                                <% } else if ("manager".equals(navType)) { %>
-                                <div class="role-specific-section">
-                                    <h4><i class="fas fa-chart-line"></i> Management Overview</h4>
-                                    <p>As a manager, you can view team performance and generate reports.</p>
-                                </div>
-                                <% } else if ("staff".equals(navType)) { %>
-                                <div class="role-specific-section">
-                                    <h4><i class="fas fa-tasks"></i> Staff Information</h4>
-                                    <p>As staff, you can update your availability and contact information.</p>
-                                </div>
-                                <% } %>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
-        <% } else { %>
-            <!-- CUSTOMER LAYOUT (Top Navigation) -->
-            <div class="customer-layout">
-                <nav class="customer-navbar">
-                    <div class="customer-nav-container">
-                        <a href="welcome.jsp" class="customer-logo">
-                            <span class="customer-logo-text">Pahana BookShop</span>
-                        </a>
-                        <ul class="customer-nav-menu">
-                            <li><a href="welcome.jsp">Home</a></li>
-                            <li><a href="about.jsp">About</a></li>
-                            <li><a href="books.jsp">Books</a></li>
-                            <li><a href="categories.jsp">Categories</a></li>
-                            <li><a href="orders.jsp">My Orders</a></li>
-                            <li><a href="contact.jsp">Contact</a></li>
-                            <li><a href="profile.jsp" class="active">My Profile</a></li>
-                            <li><a href="help.jsp">Help</a></li>
-                        </ul>
-                        <div class="customer-user-info">
-                            <span class="welcome-text">Welcome, <%= username %></span>
-                            <a href="LogoutServlet" class="customer-logout-btn">
-                                <i class="fas fa-sign-out-alt"></i> Logout
-                            </a>
-                        </div>
-                    </div>
-                </nav>
-
-                <main class="customer-main-content">
-                    <div class="main-content">
-                        <div class="page-header">
-                            <h1>My Profile</h1>
-                            <p>View and manage your profile information</p>
-                        </div>
-                        
-                        <div class="profile-grid">
-                            <!-- Profile Summary -->
-                            <div class="profile-card">
-                                <div class="profile-header">
-                                    <h3><i class="fas fa-user"></i> Profile Summary</h3>
-                                    <p>Your account overview</p>
-                                </div>
-                                
-                                <div class="profile-avatar">
-                                    <div class="avatar">
-                                        <%= username != null ? username.charAt(0).toUpperCase() : "U" %>
-                                    </div>
-                                    <div class="profile-info">
-                                        <div class="profile-name"><%= username != null ? username : "User" %></div>
-                                        <div class="profile-role">Customer</div>
-                                    </div>
-                                </div>
-                                
-                                <div class="profile-stats">
-                                    <div class="stat-item">
-                                        <div class="stat-number">Customer</div>
-                                        <div class="stat-label">Role</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <div class="stat-number">Active</div>
-                                        <div class="stat-label">Status</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Profile Details -->
-                            <div class="profile-card">
-                                <div class="profile-header">
-                                    <h3><i class="fas fa-edit"></i> Profile Details</h3>
-                                    <p>Update your personal information</p>
-                                </div>
-                                
-                                <div id="alertContainer"></div>
-                                
-                                <form id="profileForm">
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label for="firstName">First Name</label>
-                                            <input type="text" id="firstName" name="firstName" value="Customer" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="lastName">Last Name</label>
-                                            <input type="text" id="lastName" name="lastName" value="User" required>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="email">Email Address</label>
-                                        <input type="email" id="email" name="email" value="<%= username != null ? username.toLowerCase() + "@email.com" : "customer@email.com" %>" required>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="phone">Phone Number</label>
-                                        <input type="tel" id="phone" name="phone" value="+1 (555) 123-4567">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="address">Shipping Address</label>
-                                        <textarea id="address" name="address" rows="3" placeholder="Enter your shipping address"></textarea>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="preferences">Reading Preferences</label>
-                                        <select id="preferences" name="preferences">
-                                            <option value="fiction">Fiction</option>
-                                            <option value="non-fiction">Non-Fiction</option>
-                                            <option value="mystery">Mystery & Thriller</option>
-                                            <option value="romance">Romance</option>
-                                            <option value="sci-fi">Science Fiction</option>
-                                            <option value="biography">Biography</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="profile-actions">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-save"></i> Save Changes
-                                        </button>
-                                        <button type="button" class="btn btn-secondary" onclick="resetForm()">
-                                            <i class="fas fa-undo"></i> Reset
-                                        </button>
-                                        <button type="button" class="btn btn-danger" onclick="changePassword()">
-                                            <i class="fas fa-key"></i> Change Password
-                                        </button>
-                                    </div>
-                                </form>
-                                
-                                <!-- Customer-specific section -->
-                                <div class="role-specific-section">
-                                    <h4><i class="fas fa-shopping-bag"></i> Customer Benefits</h4>
-                                    <p>As a customer, you can track orders, manage wishlists, and receive personalized recommendations.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
-        <% } %>
-    <% } else { %>
-        <!-- NOT LOGGED IN -->
-        <div style="text-align: center; padding: 4rem 2rem;">
-            <h1 style="color: #ef4444; margin-bottom: 1rem;">Access Denied</h1>
-            <p style="color: #64748b; margin-bottom: 2rem;">Please login to view your profile.</p>
-            <a href="login.jsp" style="background: #6366f1; color: white; padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 8px; display: inline-block;">Login</a>
-        </div>
-    <% } %>
-
-    <script src="js/sidebar.js"></script>
-    <script>
-        // Profile management functionality
-        let originalFormData = {};
-
-        // Initialize form data tracking
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('profileForm');
-            if (form) {
-                // Store original form data
-                const formData = new FormData(form);
-                for (let [key, value] of formData.entries()) {
-                    originalFormData[key] = value;
+                } else {
+                    out.print("UserRole Panel");
                 }
-            }
+                %>
+            </div>
+            <div class="sidebar-subtitle">Welcome, <%= session.getAttribute("username") != null ? session.getAttribute("username") : "User" %></div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <% 
+            String role = (String) session.getAttribute("role");
+            if ("ADMIN".equals(role) || "MANAGER".equals(role)) { 
+            %>
+                <!-- ADMIN and MANAGER see all menu items -->
+                <div class="nav-item">
+                    <a href="dashboard.jsp" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Dashboard
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="pos.jsp" class="nav-link">
+                        <i class="fas fa-cash-register"></i>
+                        POS
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="TransactionServlet?action=list" class="nav-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        Transaction
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="CustomerServlet?action=list" class="nav-link">
+                        <i class="fas fa-user-friends"></i>
+                        Customer
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="BookCategoryServlet?action=list" class="nav-link">
+                        <i class="fas fa-tags"></i>
+                        Book Categories
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="BookServlet?action=list" class="nav-link">
+                        <i class="fas fa-book"></i>
+                        Book
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="StockServlet?action=list" class="nav-link">
+                        <i class="fas fa-boxes"></i>
+                        Stock
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="UserServlet?action=list" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        User
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="UserRoleServlet?action=list" class="nav-link">
+                        <i class="fas fa-user-shield"></i>
+                        UserRole
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="profile.jsp" class="nav-link active">
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="help.jsp" class="nav-link">
+                        <i class="fas fa-question-circle"></i>
+                        Help
+                    </a>
+                </div>
+                
+            <% } else if ("STAFF".equals(role)) { %>
+                <!-- STAFF see limited menu items -->
+                <div class="nav-item">
+                    <a href="dashboard.jsp" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Dashboard
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="pos.jsp" class="nav-link">
+                        <i class="fas fa-cash-register"></i>
+                        POS
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="TransactionServlet?action=list" class="nav-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        Transaction
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="CustomerServlet?action=list" class="nav-link">
+                        <i class="fas fa-user-friends"></i>
+                        Customer
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="profile.jsp" class="nav-link active">
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="help.jsp" class="nav-link">
+                        <i class="fas fa-question-circle"></i>
+                        Help
+                    </a>
+                </div>
+                
+            <% } else if ("CUSTOMER".equals(role)) { %>
+                <!-- CUSTOMER see minimal menu items -->
+                <div class="nav-item">
+                    <a href="TransactionServlet?action=list" class="nav-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        Transaction
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="profile.jsp" class="nav-link active">
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="help.jsp" class="nav-link">
+                        <i class="fas fa-question-circle"></i>
+                        Help
+                    </a>
+                </div>
+                
+            <% } else { %>
+                <!-- Default fallback for unknown roles -->
+                <div class="nav-item">
+                    <a href="profile.jsp" class="nav-link active">
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="help.jsp" class="nav-link">
+                        <i class="fas fa-question-circle"></i>
+                        Help
+                    </a>
+                    </div>
+            <% } %>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="LogoutServlet" class="logout-btn">
+                <i class="fas fa-sign-out-alt me-2"></i>Logout
+            </a>
+                        </div>
+                    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-user me-3"></i>My Profile
+            </h1>
+            <p class="page-subtitle">Manage your account settings and personal information</p>
+                </div>
+
+                <!-- Messages -->
+                <% if (request.getParameter("message") != null) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i><%= request.getParameter("message") %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% } %>
+                
+                <% if (request.getParameter("error") != null) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i><%= request.getParameter("error") %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% } %>
+
+        <!-- Profile Information Card -->
+        <div class="profile-info">
+            <div class="profile-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <h2 class="profile-name">
+                <% 
+                String username = (String) session.getAttribute("username");
+                out.print(username != null ? username : "User");
+                %>
+            </h2>
+            <p class="profile-role">
+                <% 
+                if (role != null) {
+                    out.print(role);
+                } else {
+                    out.print("Guest");
+                }
+                %>
+            </p>
+        </div>
+
+        <!-- Account Settings Card -->
+                <div class="content-card">
+                    <h3 class="card-title">
+                <i class="fas fa-cog"></i>Account Settings
+                    </h3>
+                    
+            <div class="profile-section">
+                <h4 class="section-title">Change Password</h4>
+                <form action="ProfileServlet" method="post" name="changePassword">
+                    <input type="hidden" name="action" value="changePassword">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="currentPassword" class="form-label">Current Password</label>
+                            <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="newPassword" class="form-label">New Password</label>
+                            <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-key me-2"></i>Change Password
+                    </button>
+                </form>
+            </div>
+
+            <div class="profile-section">
+                <h4 class="section-title">Personal Information</h4>
+                <form action="ProfileServlet" method="post" name="updateProfile">
+                    <input type="hidden" name="action" value="updateProfile">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="loginId" class="form-label">Login ID</label>
+                            <input type="text" class="form-control" id="loginId" name="loginId" 
+                                   value="<%= session.getAttribute("userId") != null ? session.getAttribute("userId") : "N/A" %>" readonly>
+                            </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" 
+                                   value="<%= username != null ? username : "" %>" readonly>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                   value="<%= username != null ? username + "@example.com" : "" %>" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-warning">
+                        <i class="fas fa-save me-2"></i>Update Profile
+                                    </button>
+                            </form>
+                        </div>
+
+            <div class="profile-section">
+                <h4 class="section-title">Account Management</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <button class="btn btn-danger w-100" onclick="deleteAccount()">
+                            <i class="fas fa-trash me-2"></i>Delete Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        </div>
+
+        <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script>
+        // Mobile sidebar functionality
+            function toggleSidebar() {
+                const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
             
-            // Ensure profile menu item is marked as active
-            if (window.SidebarUtils && window.SidebarUtils.setActiveMenuItem) {
-                window.SidebarUtils.setActiveMenuItem('My Profile');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('open');
+            }
+
+        function closeSidebar() {
+                const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebar.classList.remove('open');
+            overlay.classList.remove('open');
+        }
+
+        // Close sidebar when clicking on a link (mobile)
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) {
+                    closeSidebar();
+                }
+            });
+        });
+
+        // Close sidebar on window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024) {
+                closeSidebar();
             }
         });
 
-        function resetForm() {
-            const form = document.getElementById('profileForm');
-            if (form) {
-                form.reset();
-                showAlert('Form reset to original values', 'success');
+        // Profile management functions
+        function deleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                // Handle account deletion
+                alert('Account deletion requested. Please contact administrator.');
             }
         }
 
-        function changePassword() {
-            const newPassword = prompt('Enter new password:');
-            if (newPassword && newPassword.length >= 6) {
-                showAlert('Password changed successfully!', 'success');
-            } else if (newPassword) {
-                showAlert('Password must be at least 6 characters long', 'error');
-            }
-        }
 
-        function showAlert(message, type) {
-            const alertContainer = document.getElementById('alertContainer');
-            if (alertContainer) {
-                const alert = document.createElement('div');
-                alert.className = `alert alert-${type}`;
-                alert.textContent = message;
-                alert.style.display = 'block';
-                
-                alertContainer.appendChild(alert);
-                
-                // Auto-hide after 3 seconds
+
+        // Form validation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Change Password form validation
+            const changePasswordForm = document.querySelector('form[name="changePassword"]');
+            if (changePasswordForm) {
+                changePasswordForm.addEventListener('submit', function(e) {
+                    const newPassword = document.getElementById('newPassword').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+                    
+                    if (newPassword !== confirmPassword) {
+                        e.preventDefault();
+                        alert('New passwords do not match!');
+                        return;
+                    }
+                    
+                    // Show loading state
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Changing Password...';
+                    submitBtn.disabled = true;
+                });
+            }
+
+            // Auto-hide alerts after 5 seconds
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
                 setTimeout(() => {
-                    alert.style.display = 'none';
-                    alert.remove();
-                }, 3000);
-            }
-        }
+                    if (alert && alert.parentNode) {
+                        alert.style.transition = 'opacity 0.5s ease';
+                        alert.style.opacity = '0';
+                        setTimeout(() => {
+                            if (alert && alert.parentNode) {
+                                alert.remove();
+                            }
+                        }, 500);
+                    }
+                }, 5000);
+            });
 
-        // Form submission handling
-        document.getElementById('profileForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const formData = new FormData(this);
-            const data = {};
-            for (let [key, value] of formData.entries()) {
-                data[key] = value;
+            // Handle profile update form submission
+            const profileUpdateForm = document.querySelector('form[action="ProfileServlet"][name="updateProfile"]');
+            if (profileUpdateForm) {
+                profileUpdateForm.addEventListener('submit', function(e) {
+                    // Show loading state
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Updating...';
+                    submitBtn.disabled = true;
+                    
+                    // Form will submit normally and redirect back to profile.jsp
+                });
             }
-            
-            // Validate form
-            if (validateForm(data)) {
-                // Simulate form submission
-                showAlert('Profile updated successfully!', 'success');
-                
-                // Update original form data
-                Object.assign(originalFormData, data);
+
+            // Check if we have a success message and refresh form data
+            if (window.location.search.includes('message=')) {
+                // Refresh the page data after successful update
+                setTimeout(() => {
+                    // Reload the page to show updated information
+                    window.location.reload();
+                }, 2000);
             }
         });
-
-        function validateForm(data) {
-            if (!data.firstName || !data.lastName || !data.email) {
-                showAlert('Please fill in all required fields', 'error');
-                return false;
-            }
-            
-            if (data.email && !isValidEmail(data.email)) {
-                showAlert('Please enter a valid email address', 'error');
-                return false;
-            }
-            
-            if (data.phone && !isValidPhone(data.phone)) {
-                showAlert('Please enter a valid phone number', 'error');
-                return false;
-            }
-            
-            return true;
-        }
-
-        function isValidEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
-
-        function isValidPhone(phone) {
-            const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-            return phoneRegex.test(phone.replace(/[\s\-\(\)]/g, ''));
-        }
-    </script>
-</body>
-</html>
+        </script>
+    </body>
+</html> 
