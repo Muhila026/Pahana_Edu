@@ -593,10 +593,10 @@
                                 <span class="badge bg-success">Active</span>
                             </td>
                             <td>
-                                <button class="btn btn-sm btn-warning" onclick="editUser(<%= user.getUserId() %>)">
+                                <button class="btn btn-sm btn-warning edit-user-btn" data-user-id="<%= user.getUserId() %>">
                                     <i class="fas fa-edit"></i> Edit
                                 </button>
-                                <button class="btn btn-sm btn-danger" onclick="deleteUser(<%= user.getUserId() %>, '<%= user.getUsername() %>')">
+                                <button class="btn btn-sm btn-danger delete-user-btn" data-user-id="<%= user.getUserId() %>" data-username="<%= user.getUsername() %>">
                                     <i class="fas fa-trash"></i> Delete
                                 </button>
                             </td>
@@ -664,12 +664,24 @@
                                         <option value="">Select Role</option>
                                         <%
                                             List<UserRole> userRoles = (List<UserRole>) request.getAttribute("userRoles");
+                                            String currentUserRole = (String) session.getAttribute("role");
                                             if (userRoles != null) {
                                                 for (UserRole role : userRoles) {
-                                            // Only show system user roles (ADMIN, MANAGER, STAFF)
-                                            if (!"CUSTOMER".equals(role.getRoleName())) {
+                                                    String availableRoleName = role.getRoleName();
+                                                    boolean showOption = false;
+                                                    if ("ADMIN".equals(currentUserRole)) {
+                                                        // Admin can create Admin, Manager, Staff (exclude Customer)
+                                                        showOption = !"CUSTOMER".equals(availableRoleName);
+                                                    } else if ("MANAGER".equals(currentUserRole)) {
+                                                        // Manager can create only Staff
+                                                        showOption = "STAFF".equals(availableRoleName);
+                                                    } else {
+                                                        // Others cannot assign system roles
+                                                        showOption = false;
+                                                    }
+                                                    if (showOption) {
                                         %>
-                                        <option value="<%= role.getRoleId() %>"><%= role.getRoleName() %></option>
+                                        <option value="<%= role.getRoleId() %>"><%= availableRoleName %></option>
                                         <%
                                                     }
                                                 }
