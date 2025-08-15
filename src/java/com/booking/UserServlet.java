@@ -883,64 +883,7 @@ public class UserServlet extends HttpServlet {
         }
     }
     
-    public boolean requestPasswordResetCode(String email) {
-        String sql = "SELECT * FROM users WHERE email = ?";
-        try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, email);
-            ResultSet rs = pstmt.executeQuery();
     
-            if (rs.next()) {
-                // Generate a unique code
-                String code = generateUniqueCode();
-                
-                // Store the code in the database
-                sql = "UPDATE users SET reset_code = ? WHERE email = ?";
-                try (PreparedStatement updatePstmt = conn.prepareStatement(sql)) {
-                    updatePstmt.setString(1, code);
-                    updatePstmt.setString(2, email);
-                    updatePstmt.executeUpdate();
-                }
-                
-                // Send email with the code
-                sendPasswordResetEmail(email, code);
-                
-                return true;
-            }
-        } catch (SQLException e) {
-            System.err.println("Error requesting password reset code: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
-    private String generateUniqueCode() {
-        // Generate a random 6-digit code
-        return String.format("%06d", new java.util.Random().nextInt(1000000));
-    }
-    
-    private void sendPasswordResetEmail(String email, String code) {
-        // TODO: Implement email sending
-        System.out.println("Sending password reset email to: " + email + " with code: " + code);
-    }
-    
-    public boolean verifyPasswordResetCode(String email, String code) {
-        String sql = "SELECT * FROM users WHERE email = ? AND reset_code = ?";
-        try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, email);
-            pstmt.setString(2, code);
-            ResultSet rs = pstmt.executeQuery();
-            
-            if (rs.next()) {
-                return true;
-            }
-        } catch (SQLException e) {
-            System.err.println("Error verifying password reset code: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-    }
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

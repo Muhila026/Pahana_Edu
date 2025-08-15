@@ -113,11 +113,7 @@
             font-weight: 600;
         }
         
-        .welcome-user {
-            color: #8b5cf6 !important;
-            font-weight: 600 !important;
-            padding: 18px 16px !important;
-        }
+        
         
         .login-btn {
             background: linear-gradient(90deg, #6366f1, #8b5cf6);
@@ -172,12 +168,7 @@
                 border-radius: 6px;
             }
             
-            .navbar-toggler {
-                position: absolute;
-                right: 20px;
-                top: 20px;
-                border-color: #6366f1;
-            }
+            
         }
 
         /* ===== CUSTOMER NAVIGATION (Top Navbar Only) ===== */
@@ -185,160 +176,7 @@
             min-height: 100vh;
         }
 
-        .customer-navbar {
-            background: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .customer-nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .customer-logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #6366f1;
-            text-decoration: none;
-            letter-spacing: -0.5px;
-            padding: 18px 20px 18px 0;
-            display: flex;
-            align-items: center;
-            border-right: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .customer-logo-text {
-            background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            background-size: 200% auto;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .customer-logo:hover .customer-logo-text {
-            background-position: 100% 0;
-        }
-
-        .customer-nav-menu {
-            list-style: none;
-            display: flex;
-            margin: 0;
-            padding: 0;
-            margin-left: auto;
-            flex-wrap: wrap;
-        }
-
-        .customer-nav-menu li {
-            position: relative;
-        }
-
-        .customer-nav-menu a {
-            display: block;
-            padding: 18px 16px;
-            color: #1e293b;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            border-bottom: 2px solid transparent;
-            white-space: nowrap;
-        }
-
-        .customer-nav-menu a:hover,
-        .customer-nav-menu a.active {
-            color: #6366f1;
-            border-bottom-color: #6366f1;
-        }
-
-        .customer-nav-menu a.active {
-            font-weight: 600;
-        }
-
-        .customer-user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            color: #1e293b;
-        }
-
-        .customer-user-info .welcome-text {
-            font-weight: 600;
-            color: #8b5cf6;
-            background: rgba(139, 92, 246, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            border: 1px solid rgba(139, 92, 246, 0.2);
-        }
-
-        .customer-logout-btn {
-            background: linear-gradient(90deg, #ef4444, #dc2626);
-            color: white !important;
-            font-weight: 600 !important;
-            border-radius: 6px;
-            margin: 7px 0;
-            padding: 8px 16px !important;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: none;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .customer-logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-        }
         
-        @media (max-width: 991px) {
-            .customer-nav-container {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .customer-logo {
-                border-right: none;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-                margin-right: 0;
-                justify-content: space-between;
-            }
-            
-            .customer-nav-menu {
-                display: none;
-                flex-direction: column;
-                margin: 0;
-            }
-            
-            .customer-nav-menu.show {
-                display: flex;
-            }
-            
-            .customer-nav-menu a {
-                padding: 14px 20px;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            }
-            
-            .customer-user-info {
-                margin-left: 0;
-                justify-content: center;
-            }
-            
-            .customer-logout-btn {
-                margin: 10px 20px;
-                border-radius: 6px;
-            }
-        }
 
         .customer-main-content {
             margin-top: 100px;
@@ -646,44 +484,12 @@
         
         /* Responsive Design */
         @media (max-width: 768px) {
-            .customer-navbar {
-                padding: 1rem 0;
-            }
-            
-            .customer-nav-container {
-                flex-direction: column;
-                gap: 1rem;
-                padding: 1rem;
-            }
-            
-            .customer-nav-menu {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 0.3rem;
-            }
-            
-            .customer-nav-menu a {
-                padding: 0.5rem 0.8rem;
-                font-size: 0.85rem;
-            }
-            
-            .customer-user-info {
-                flex-direction: column;
-                gap: 0.5rem;
-                text-align: center;
-            }
-            
             .customer-main-content {
                 margin-top: 120px;
                 padding: 0 1rem;
             }
             
             /* Sidebar responsive styles are now in css/sidebar.css */
-            
-            .customer-main-content {
-                margin-top: 120px;
-                padding: 0 1rem;
-            }
             
             .staff-tabs {
                 padding: 0 1rem;
@@ -799,17 +605,7 @@
             </div>
         </nav>
 
-        <!-- Hero Section -->
-        <section id="home" class="hero">
-            <div class="hero-content">
-                <h1>Welcome to Pahana BookShop</h1>
-                <p>Discover thousands of books from classic literature to modern bestsellers. Your journey into the world of knowledge starts here.</p>
-                <div class="cta-buttons">
-                    <a href="register.jsp" class="cta-btn cta-primary">Get Started</a>
-                    <a href="books.jsp" class="cta-btn cta-secondary">Browse Books</a>
-                </div>
-            </div>
-        </section>
+        
 
     <% } else if ("customer".equals(navType)) { %>
         <!-- CUSTOMER NAVIGATION (Top Navbar Only) - Using Public Style -->
@@ -1013,22 +809,22 @@
     <% if ("public".equals(navType)) { %>
         <section class="features">
             <div class="container">
-                <h2 class="section-title">Why Choose BookShop?</h2>
+                <h2 class="section-title">Why Choose Pahana Edu Online?</h2>
                 <div class="features-grid">
                     <div class="feature-card">
-                        <div class="feature-icon">📚</div>
-                        <h3>Vast Collection</h3>
-                        <p>Access thousands of books across all genres, from classic literature to modern bestsellers.</p>
+                        <div class="feature-icon">📝</div>
+                        <h3>Easy Account Registration</h3>
+                        <p>New customers can register online with a unique account number, name, address, telephone, and units consumed.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">🚚</div>
-                        <h3>Fast Delivery</h3>
-                        <p>Quick and reliable delivery to your doorstep with secure packaging.</p>
+                        <div class="feature-icon">📊</div>
+                        <h3>Smart Billing Management</h3>
+                        <p>Manage billing details efficiently with clearly calculated charges based on your units consumed.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">💰</div>
-                        <h3>Best Prices</h3>
-                        <p>Competitive prices and regular discounts to make reading affordable for everyone.</p>
+                        <div class="feature-icon">💳</div>
+                        <h3>Secure Payments & History</h3>
+                        <p>View bills, check usage history, and make secure payments anytime from your online account.</p>
                     </div>
                 </div>
             </div>
@@ -1037,7 +833,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2024 BookShop. All rights reserved. | Your trusted source for quality books and knowledge.</p>
+        <p>&copy; 2024 Pahana Edu, Colombo. All rights reserved. | Leading bookshop with a modern online billing system.</p>
     </footer>
 
     <script src="js/sidebar.js"></script>
@@ -1064,12 +860,7 @@
             }
         }
 
-        // Customer nav menu active state
-        document.querySelectorAll('.customer-nav-menu a').forEach(link => {
-            if (link.href === window.location.href) {
-                link.classList.add('active');
-            }
-        });
+        
 
         // Staff tab activation
         document.querySelectorAll('.staff-tab').forEach(tab => {
