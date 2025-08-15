@@ -991,12 +991,12 @@
                                         for (Book book : booksList) {
                                     if (book.getBookId() > 0 && book.getTitle() != null && book.getPricePerUnit() != null && 
                                         book.getPricePerUnit().compareTo(java.math.BigDecimal.ZERO) > 0 && book.getStockQuantity() >= 0) {
-                            %>
-                            <div class="product-item" onclick="openQuantityFromItem(this, <%= book.getBookId() %>)">
-                                <div class="product-info">
-                                    <div class="product-details">
-                                        <span class="product-title"><%= book.getTitle() %></span>
-                                        <span class="product-category"><%= book.getCategory() != null ? book.getCategory().getCategoryName() : "N/A" %></span>
+                                    %>
+                                    <div class="product-item" data-id="<%= book.getBookId() %>" onclick="openQuantityFromItem(this)">
+                                        <div class="product-info">
+                                            <div class="product-details">
+                                                <span class="product-title"><%= book.getTitle() %></span>
+                                                <span class="product-category"><%= (book.getCategory() != null && book.getCategory().getCategoryName() != null) ? book.getCategory().getCategoryName() : "N/A" %></span>
                                         <span class="product-price">Rs. <%= book.getPricePerUnit() %></span>
                                     </div>
                                     <div class="product-stock">
@@ -1123,7 +1123,7 @@
                                     if (customers != null && !customers.isEmpty()) {
                                         for (Customer customer : customers) { 
                                     %>
-                                        <div class="customer-item" onclick="selectCustomerFromItem(this, <%= customer.getCustomerId() %>)">
+                                        <div class="customer-item" data-id="<%= customer.getCustomerId() %>" onclick="selectCustomerFromItem(this)">
                                             <strong><%= customer.getName() %></strong><br>
                                             <small class="text-muted">Account: <%= customer.getAccountNumber() %></small>
                                         </div>
@@ -1200,6 +1200,27 @@
             let allBooks = [];
 
 
+
+            // Helper: robustly parse currency text like "Rs. 3,000.00" or "Rs 3000" or "3.000,50"
+            function parsePriceText(text) {
+                if (!text) return 0;
+                const raw = String(text);
+                // Grab the last numeric-looking token (handles cases with currency prefixes)
+                const tokens = raw.match(/[0-9]+(?:[.,][0-9]+)*/g);
+                if (!tokens || tokens.length === 0) return 0;
+                let token = tokens[tokens.length - 1];
+                // If both comma and dot exist, treat commas as thousands separators
+                const hasComma = token.includes(',');
+                const hasDot = token.includes('.');
+                if (hasComma && hasDot) {
+                    token = token.replace(/,/g, '');
+                } else if (hasComma && !hasDot) {
+                    // Only comma present: treat as decimal separator
+                    token = token.replace(/,/g, '.');
+                }
+                const value = parseFloat(token);
+                return isNaN(value) ? 0 : value;
+            }
 
             // Search books functionality
             function searchBooks() {
@@ -1285,13 +1306,15 @@
             }
 
             // Safer DOM-driven open for product card
-            function openQuantityFromItem(node, id) {
+            function openQuantityFromItem(node) {
                 const container = node.closest('.product-item');
+                const idText = container?.dataset?.id || container?.getAttribute('data-id') || '0';
+                const id = parseInt(idText, 10) || 0;
                 const title = container.querySelector('.product-title')?.textContent?.trim() || '';
-                const priceText = container.querySelector('.product-price')?.textContent?.replace(/[^0-9.]/g, '') || '0';
+                const rawPriceText = container.querySelector('.product-price')?.textContent || '';
                 const stockText = container.querySelector('.product-stock')?.textContent?.replace(/[^0-9]/g, '') || '0';
                 const category = container.querySelector('.product-category')?.textContent?.trim() || '';
-                const price = parseFloat(priceText || '0');
+                const price = parsePriceText(rawPriceText);
                 const stock = parseInt(stockText || '0', 10);
                 showQuantityModal(id, title, price, stock, category);
             }
@@ -1472,14 +1495,17 @@
             }
 
             // Select customer
-            function selectCustomer(customerId, customerName) {
+            function selectCustomer(customerId, customerName, node) {
                 selectedCustomer = { id: customerId, name: customerName };
                 
                 // Update UI
                 document.querySelectorAll('.customer-item').forEach(item => {
                     item.classList.remove('selected');
                 });
-                event.target.closest('.customer-item').classList.add('selected');
+                const sourceItem = node || (typeof event !== 'undefined' && event.target ? event.target.closest('.customer-item') : null);
+                if (sourceItem) {
+                    sourceItem.classList.add('selected');
+                }
                 
                 document.getElementById('confirmCheckoutBtn').disabled = false;
                 // show chip
@@ -1489,9 +1515,11 @@
             }
 
             // Safer DOM-driven select for customer
-            function selectCustomerFromItem(node, id) {
+            function selectCustomerFromItem(node) {
                 const name = node.querySelector('strong')?.textContent?.trim() || '';
-                selectCustomer(id, name);
+                const idText = node?.dataset?.id || node?.getAttribute('data-id') || '0';
+                const id = parseInt(idText, 10) || 0;
+                selectCustomer(id, name, node);
             }
 
             // Update order summary
@@ -1521,7 +1549,22 @@
                 modalTotal.textContent = subtotal.toFixed(2);
             }
 
-            // Process transaction
+            // After a successful sale, decrement the visible stock counts in the product list
+            function updateProductStocksAfterSale(soldItems) {
+                if (!Array.isArray(soldItems)) return;
+                soldItems.forEach(function(item) {
+                    const bookId = item.bookId ?? item.id;
+                    const qty = parseInt(item.quantity, 10) || 0;
+                    if (!bookId || qty <= 0) return;
+                    const stockEl = document.querySelector('.product-item[data-id="' + bookId + '"] .product-stock');
+                    if (!stockEl) return;
+                    const current = parseInt((stockEl.textContent || '').replace(/[^0-9]/g, ''), 10) || 0;
+                    const next = Math.max(0, current - qty);
+                    stockEl.textContent = 'Stock: ' + next;
+                });
+            }
+
+            // Process transaction 
             function processTransaction() {
                 if (!selectedCustomer) {
                     alert('Please select a customer');
@@ -1568,6 +1611,8 @@
                     if (data.success) {
                         transactionId = data.transactionId;
                         showBill(data.transaction);
+                        // Decrement visible stock counts in the product list
+                        updateProductStocksAfterSale(transactionData.items);
                         
                         // Clear cart
                         cart = [];
