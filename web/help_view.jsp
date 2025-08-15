@@ -602,12 +602,12 @@
                     <i class="fas fa-list"></i>All Help Sections
                 </a>
                 
-                <% if ("ADMIN".equals(role) || "MANAGER".equals(role)) { %>
+                <% if ("ADMIN".equals(role) ) { %>
                     <a href="HelpServlet?action=edit&help_id=<%= helpSection.getHelpId() %>" class="btn btn-warning">
                         <i class="fas fa-edit"></i>Edit Help Section
                     </a>
                     
-                    <button class="btn btn-danger" onclick="deleteHelpSection(<%= helpSection.getHelpId() %>, '<%= helpSection.getTitle() != null ? helpSection.getTitle().replace("'", "\\'") : "Untitled" %>')">
+                    <button class="btn btn-danger" data-help-id="<%= helpSection.getHelpId() %>" onclick="deleteHelpSection(this.dataset.helpId)">
                         <i class="fas fa-trash"></i>Delete Help Section
                     </button>
                 <% } %>
@@ -633,8 +633,8 @@
         });
 
         // Delete help section confirmation
-        function deleteHelpSection(helpId, title) {
-            if (confirm('Are you sure you want to delete the help section "' + title + '"?\n\nThis action cannot be undone.')) {
+        function deleteHelpSection(helpId) {
+            if (confirm('Are you sure you want to delete this help section?\n\nThis action cannot be undone.')) {
                 window.location.href = 'HelpServlet?action=delete&help_id=' + helpId;
             }
         }
