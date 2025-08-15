@@ -569,6 +569,23 @@
                     </div>
                     
                     <div class="form-group">
+                        <label for="role_name" class="form-label">Role (optional)</label>
+                        <select class="form-control" id="role_name" name="role_name">
+                            <option value="">Visible to all roles</option>
+                            <% List<com.booking.HelpServlet.RoleOption> roles = (List<com.booking.HelpServlet.RoleOption>) request.getAttribute("roles");
+                               Integer selectedRoleId = helpSection.getRoleId();
+                               if (roles != null) {
+                                   for (com.booking.HelpServlet.RoleOption r : roles) { 
+                                       boolean selected = selectedRoleId != null && selectedRoleId == r.getRoleId(); %>
+                            <option value="<%= r.getRoleName() %>" <%= selected ? "selected" : "" %>><%= r.getRoleName() %></option>
+                            <%       }
+                               }
+                            %>
+                        </select>
+                        <small class="text-muted">Choose a role to restrict visibility or leave blank for all roles.</small>
+                    </div>
+
+                    <div class="form-group">
                         <label for="content" class="form-label">Content *</label>
                         <textarea class="form-control" id="content" name="content" rows="12" 
                                   placeholder="Enter help section content (HTML supported)" required><%= helpSection.getContent() != null ? helpSection.getContent() : "" %></textarea>

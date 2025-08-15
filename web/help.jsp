@@ -641,7 +641,7 @@
                 <div class="content-card">
                     <h3 class="card-title">
                         <i class="fas fa-info-circle"></i><%= helpSection.getTitle() %>
-                        <% if ("ADMIN".equals(role) || "MANAGER".equals(role)) { %>
+                        <% if ("ADMIN".equals(role)) { %>
                             <div class="btn-group">
                                 <a href="HelpServlet?action=view&help_id=<%= helpSection.getHelpId() %>" class="btn btn-sm btn-info">
                                     <i class="fas fa-eye"></i>View
@@ -649,7 +649,7 @@
                                 <a href="HelpServlet?action=edit&help_id=<%= helpSection.getHelpId() %>" class="btn btn-edit btn-sm">
                                     <i class="fas fa-edit"></i>Edit
                                 </a>
-                                <button class="btn btn-delete btn-sm" onclick="deleteHelpSection(<%= helpSection.getHelpId() %>, '<%= helpSection.getTitle() %>')">
+                                <button class="btn btn-delete btn-sm" data-help-id="<%= helpSection.getHelpId() %>" data-help-title="<%= helpSection.getTitle().replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;").replace("'", "&#39;") %>">
                                     <i class="fas fa-trash"></i>Delete
                                 </button>
                             </div>
@@ -681,7 +681,7 @@
                             <% } %>
 
         <!-- Add New Help Section Button (Admin/Manager only) -->
-                        <% if ("ADMIN".equals(role) || "MANAGER".equals(role)) { %>
+                        <% if ("ADMIN".equals(role)) { %>
             <div class="content-card">
                 <h3 class="card-title">
                     <i class="fas fa-plus-circle"></i>Manage Help Content
@@ -750,12 +750,16 @@
             }
         });
 
-        // Help section management functions
-        function deleteHelpSection(helpId, title) {
+        // Delete Help Section (delegated handler)
+        document.addEventListener('click', function(e) {
+            var btn = e.target.closest('.btn-delete');
+            if (!btn) return;
+            var helpId = btn.getAttribute('data-help-id');
+            var title = btn.getAttribute('data-help-title') || 'this help section';
             if (confirm('Are you sure you want to delete the help section "' + title + '"?')) {
-                window.location.href = 'HelpServlet?action=delete&help_id=' + helpId;
+                window.location.href = 'HelpServlet?action=delete&help_id=' + encodeURIComponent(helpId);
             }
-        }
+        });
         </script>
     </body>
 </html> 
