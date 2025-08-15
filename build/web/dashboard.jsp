@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.*"%>
 <%@page import="com.booking.*"%>
+<%@page import="com.booking.BookServlet.Book"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -16,22 +17,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
         <style>
-        :root {
-            --primary-color: #6366f1;
-            --primary-hover: #4f46e5;
-            --secondary-color: #64748b;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-            --info-color: #3b82f6;
-            --background-color: #f8fafc;
-            --card-background: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border-color: #e2e8f0;
-            --sidebar-bg: #1e293b;
-            --sidebar-hover: #334155;
-            --accent-color: #f97316;
+          :root {
+            /* Brand Colors - Modern Bookstore Theme */
+            --primary-color: #916fc6;       /* Rich amethyst purple - sophisticated & literary */
+            --primary-hover: #5b21b6;       /* Deeper purple for hover states */
+            --secondary-color: #ec4899;     /* Vibrant magenta - energetic & inviting */
+            --tertiary-color: #8b5cf6;      /* Soft lavender - complements primary */
+
+            /* Status Colors */
+            --success-color: #10B981;       /* Emerald green for positive feedback */
+            --warning-color: #F59E0B;       /* Amber for gentle alerts */
+            --danger-color: #EF4444;        /* Bright red for errors */
+            --info-color: #3B82F6;          /* True blue for info highlights */
+
+            /* Backgrounds */
+            --background-color: #F9F5FF;    /* Soft lavender-tinted white */
+            --card-background: #FFFFFF;     /* Pure white for cards */
+            --gradient-bg: linear-gradient(135deg, #F9F5FF 0%, #F3E8FF 100%);
+
+            /* Text Colors */
+            --text-primary: #1E1B4B;        /* Deep indigo for main text */
+            --text-secondary: #4C1D95;      /* Rich purple-gray for secondary text */
+            --text-light: #cdc5d6;          /* Light text on dark backgrounds */
+            /* Borders & Accents */
+            --border-color: #EDE9FE;        /* Soft purple border */
+            --sidebar-bg: #401782;          /* Matches primary brand color */
+            --sidebar-hover: #4a238a;       /* Darker hover for contrast */
+            --accent-color: #928c9e;        /* Subtle accent for highlights */
+            --gold-accent: #FBBF24;         /* Warm gold for special highlights */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -362,6 +376,27 @@
         .sidebar-overlay.open {
             display: block;
         }
+        
+        /* Chart sizing */
+        .chart-wrapper {
+            height: 260px;
+        }
+
+        /* Stats grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+        .stat-box {
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+        }
+        .stat-label { color: var(--text-secondary); font-weight: 600; font-size: .95rem; }
+        .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--text-primary); }
+        .stat-sub { color: var(--text-secondary); font-size: .85rem; }
     </style>
 </head>
 <body>
@@ -591,6 +626,73 @@
                 <% } %>
             </p>
         </div>
+        <% if ("ADMIN".equals(session.getAttribute("role")) || "MANAGER".equals(session.getAttribute("role"))) { %>
+            <div class="management-card" style="margin-bottom: 2rem;">
+                <h3 class="card-title">Stock Overview</h3>
+                <p class="card-description">Key inventory indicators at a glance.</p>
+                <div class="stats-grid">
+                    <%
+                        List<Book> dashBooks;
+                        try {
+                            dashBooks = new com.booking.BookServlet().getAllBooks();
+                        } catch (Exception ex) {
+                            dashBooks = new ArrayList<>();
+                        }
+                        long totalStock = 0L;
+                        long lowStock = 0L;
+                        long outStock = 0L;
+                        java.util.Set<String> categorySet = new java.util.HashSet<>();
+                        if (dashBooks != null) {
+                            for (Book b : dashBooks) {
+                                int q = b != null ? b.getStockQuantity() : 0;
+                                totalStock += q;
+                                if (q == 0) {
+                                    outStock++;
+                                } else if (q <= 10) {
+                                    lowStock++;
+                                }
+                                try {
+                                    String cn = (b != null && b.getCategory() != null) ? b.getCategory().getCategoryName() : null;
+                                    if (cn != null) categorySet.add(cn);
+                                } catch (Exception ignore) {}
+                            }
+                        }
+                        int categoryCount = categorySet.size();
+                    %>
+                    <div class="stat-box">
+                        <div class="stat-label">Total Units</div>
+                        <div class="stat-value" style="color: var(--tertiary-color);"><%= totalStock %></div>
+                        <div class="stat-sub">All books in stock</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Low Stock</div>
+                        <div class="stat-value" style="color: var(--warning-color);"><%= lowStock %></div>
+                        <div class="stat-sub">≤ 10 units remaining</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Out of Stock</div>
+                        <div class="stat-value" style="color: var(--danger-color);"><%= outStock %></div>
+                        <div class="stat-sub">Need reorder</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Categories</div>
+                        <div class="stat-value" style="color: var(--info-color);"><%= categoryCount %></div>
+                        <div class="stat-sub">Active categories</div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        <% if ("ADMIN".equals(session.getAttribute("role"))) { %>
+        <div class="management-card" style="margin-bottom: 2rem;">
+            <h3 class="card-title">Last 7 Days Sales</h3>
+            <p class="card-description">Daily total amounts for the past week.</p>
+            <div class="chart-wrapper">
+                <canvas id="lastTransactionsChart"></canvas>
+            </div>
+        </div>
+        <% } %>
+
+       
 
         <!-- Management Cards Grid -->
         <div class="management-grid">
@@ -650,6 +752,7 @@
 
         <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
         <script>
         // Mobile sidebar functionality
@@ -699,6 +802,59 @@
                 }, 100 + (index * 100));
             });
             });
+
+        // Admin chart: last transactions
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('lastTransactionsChart');
+            if (!canvas || typeof Chart === 'undefined') return;
+
+            function hexToRgba(hex, alpha) {
+                const clean = hex.replace('#', '').trim();
+                const bigint = parseInt(clean.length === 3 ? clean.split('').map(c=>c+c).join('') : clean, 16);
+                const r = (bigint >> 16) & 255;
+                const g = (bigint >> 8) & 255;
+                const b = bigint & 255;
+                return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+            }
+
+            const root = getComputedStyle(document.documentElement);
+            const lineColor = (root.getPropertyValue('--primary-color') || '#916fc6').trim();
+            const gridColor = (root.getPropertyValue('--border-color') || '#EDE9FE').trim();
+            const tickColor = (root.getPropertyValue('--text-primary') || '#1E1B4B').trim();
+            const fillColor = hexToRgba(lineColor, 0.12);
+
+            fetch('ChartServlet?action=weeklySales', { cache: 'no-store' })
+                .then(res => res.json())
+                .then(json => {
+                    if (!json || json.success !== true) return;
+                    const ctx = canvas.getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: json.labels || [],
+                            datasets: [{
+                                label: 'Amount (Rs)',
+                                data: json.data || [],
+                                borderColor: lineColor,
+                                backgroundColor: fillColor,
+                                tension: 0.3,
+                                fill: true,
+                                pointRadius: 2,
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                x: { ticks: { color: tickColor }, grid: { color: gridColor } },
+                                y: { ticks: { color: tickColor }, grid: { color: gridColor } }
+                            }
+                        }
+                    });
+                })
+                .catch(err => console.error('Chart load error', err));
+        });
         </script>
     </body>
 </html> 
