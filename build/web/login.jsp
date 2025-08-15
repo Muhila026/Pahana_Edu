@@ -372,7 +372,7 @@
 
                 <!-- Forgot Password Link -->
                 <div class="forgot-password">
-                    <a href="#" onclick="showForgotPassword()" class="forgot-link">
+                    <a href="forgotpassword.jsp" onclick="showForgotPassword()" class="forgot-link">
                         <i class="fas fa-key me-1"></i>Forgot Password?
                     </a>
                 </div>
