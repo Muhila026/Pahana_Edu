@@ -18,21 +18,32 @@
     
         <style>
         :root {
-            --primary-color: #6366f1;
-            --primary-hover: #4f46e5;
-            --secondary-color: #64748b;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-            --info-color: #3b82f6;
-            --background-color: #f8fafc;
-            --card-background: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border-color: #e2e8f0;
-            --sidebar-bg: #1e293b;
-            --sidebar-hover: #334155;
-            --accent-color: #f97316;
+            /* Brand Colors */
+            --primary-color: #2C3E91;       /* Deep royal blue - main brand color */
+            --primary-hover: #1F2D6D;       /* Darker navy blue for hover */
+            --secondary-color: #4A90E2;     /* Bright sky blue for highlights */
+
+            /* Status Colors (blue-friendly) */
+            --success-color: #3BB273;       /* Teal green - balanced with blue */
+            --warning-color: #F4B400;       /* Golden yellow for alerts */
+            --danger-color: #E63946;        /* Strong coral red */
+            --info-color: #5DADEC;          /* Soft info blue */
+
+            /* Backgrounds */
+            --background-color: #F4F8FC;    /* Very light blue-gray background */
+            --card-background: #FFFFFF;     /* Clean white cards */
+
+            /* Text Colors */
+            --text-primary: #1E293B;        /* Dark navy-gray for readability */
+            --text-secondary: #475569;      /* Muted cool gray for secondary text */
+
+            /* Borders & Accents */
+            --border-color: #D0D9E6;        /* Soft bluish-gray border */
+            --sidebar-bg: #2C3E91;          /* Deep blue sidebar */
+            --sidebar-hover: #1F2D6D;       /* Darker hover state */
+            --sidebar-active-bg: #4A90E2;   /* Bright blue for active item */
+            --sidebar-active-text: #ffffff; /* White text on active item */
+            --accent-color: #3FA9F5;        /* Fresh accent blue */
         }
 
         * {
@@ -55,7 +66,7 @@
             height: 100vh;
                 width: 280px;
             background: var(--sidebar-bg);
-                color: white;
+                color: var(--sidebar-active-text);
                 overflow-y: auto;
                 z-index: 1000;
             transition: all 0.3s ease;
@@ -63,20 +74,20 @@
 
             .sidebar-header {
                 padding: 2rem 1.5rem;
-            border-bottom: 1px solid var(--sidebar-hover);
+            border-bottom: 1px solid var(--border-color);
                 text-align: center;
             }
 
         .sidebar-title {
             font-size: 1.4rem;
                 font-weight: 700;
-            color: var(--accent-color);
+            color: var(--sidebar-active-text);
             margin-bottom: 0.5rem;
         }
 
         .sidebar-subtitle {
             font-size: 0.9rem;
-            color: #94a3b8;
+            color: var(--sidebar-active-text);
             font-weight: 400;
         }
 
@@ -92,17 +103,14 @@
                 display: flex;
                 align-items: center;
             padding: 0.875rem 1.5rem;
-            color: #cbd5e1;
+            color: var(--sidebar-active-text);
                 text-decoration: none;
                 transition: all 0.3s ease;
             border-radius: 0;
             font-weight: 500;
             }
 
-            .nav-link.active {
-            background: var(--accent-color);
-                color: white;
-            }
+            .nav-link.active { background: var(--sidebar-active-bg); color: var(--sidebar-active-text); }
 
             .nav-link i {
                 width: 20px;
@@ -110,11 +118,7 @@
             font-size: 1.1rem;
             }
 
-            .sidebar-footer {
-            padding: 1.5rem;
-            border-top: 1px solid var(--sidebar-hover);
-                margin-top: auto;
-            }
+            .sidebar-footer { padding: 1.5rem; border-top: 1px solid var(--border-color); margin-top: auto; }
 
             .logout-btn {
                 width: 100%;
@@ -146,8 +150,8 @@
             }
 
         .page-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
-            color: white;
+            background: var(--primary-color);
+            color: var(--sidebar-active-text);
             padding: 2.5rem;
             border-radius: 20px;
                 margin-bottom: 2rem;
@@ -155,21 +159,9 @@
             overflow: hidden;
         }
 
-        .page-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: float 6s ease-in-out infinite;
-        }
+        .page-header::before { content: none; }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-        }
+        @keyframes float { 0% { } }
 
         .page-title {
             font-size: 2.5rem;
@@ -212,7 +204,7 @@
 
             /* Transaction Details */
             .transaction-details {
-            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            background: var(--card-background);
             border-radius: 12px;
                 padding: 2rem;
                 margin-bottom: 2rem;
@@ -280,10 +272,7 @@
             background-color: #f8fafc;
         }
 
-        .table tfoot {
-            background: linear-gradient(135deg, var(--success-color), #059669);
-            color: white;
-        }
+        .table tfoot { background: var(--success-color); color: var(--sidebar-active-text); }
 
         .table tfoot td {
             padding: 1.5rem 1rem;
@@ -330,20 +319,11 @@
             gap: 0.75rem;
             }
 
-            .alert-success {
-            background: linear-gradient(135deg, var(--success-color), #059669);
-            color: white;
-            }
+            .alert-success { background: var(--success-color); color: var(--sidebar-active-text); }
 
-            .alert-danger {
-            background: linear-gradient(135deg, var(--danger-color), #dc2626);
-            color: white;
-        }
+            .alert-danger { background: var(--danger-color); color: var(--sidebar-active-text); }
 
-        .alert-info {
-            background: linear-gradient(135deg, var(--info-color), #2563eb);
-            color: white;
-            }
+        .alert-info { background: var(--info-color); color: var(--sidebar-active-text); }
 
             /* Responsive Design */
         @media (max-width: 1024px) {
@@ -654,7 +634,7 @@
                             
                             <div class="info-item">
                                 <div class="info-label">Total Amount</div>
-                        <div class="info-value"><%= String.format("%.2f", transaction.getTotalAmount()) %></div>
+                        <div class="info-value">Rs.<%= String.format("%.2f", transaction.getTotalAmount()) %></div>
                             </div>
                             
                             <div class="info-item">
@@ -723,9 +703,9 @@
                             <td>
                                 <span class="badge bg-primary"><%= item.getQuantity() %></span>
                             </td>
-                            <td><%= String.format("%.2f", item.getPrice()) %></td>
+                            <td>Rs.<%= String.format("%.2f", item.getPrice()) %></td>
                             <td>
-                                <strong><%= String.format("%.2f", item.getPrice().multiply(new java.math.BigDecimal(item.getQuantity()))) %></strong>
+                                <strong>Rs.<%= String.format("%.2f", item.getPrice().multiply(new java.math.BigDecimal(item.getQuantity()))) %></strong>
                             </td>
                                 </tr>
                                 <% } %>
@@ -733,7 +713,7 @@
                             <tfoot>
                         <tr>
                             <td colspan="5" class="text-end"><strong>Transaction Total:</strong></td>
-                            <td><strong><%= String.format("%.2f", transaction.getTotalAmount()) %></strong></td>
+                            <td><strong>Rs.<%= String.format("%.2f", transaction.getTotalAmount()) %></strong></td>
                                 </tr>
                             </tfoot>
                         </table>

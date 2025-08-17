@@ -18,21 +18,32 @@
     
         <style>
         :root {
-            --primary-color: #6366f1;
-            --primary-hover: #4f46e5;
-            --secondary-color: #64748b;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-            --info-color: #3b82f6;
-            --background-color: #f8fafc;
-            --card-background: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border-color: #e2e8f0;
-            --sidebar-bg: #1e293b;
-            --sidebar-hover: #334155;
-            --accent-color: #f97316;
+            /* Brand Colors */
+            --primary-color: #2C3E91;
+            --primary-hover: #1F2D6D;
+            --secondary-color: #4A90E2;
+
+            /* Status Colors (blue-friendly) */
+            --success-color: #3BB273;
+            --warning-color: #F4B400;
+            --danger-color: #E63946;
+            --info-color: #5DADEC;
+
+            /* Backgrounds */
+            --background-color: #F4F8FC;
+            --card-background: #FFFFFF;
+
+            /* Text Colors */
+            --text-primary: #1E293B;
+            --text-secondary: #475569;
+
+            /* Borders & Accents */
+            --border-color: #D0D9E6;
+            --sidebar-bg: #2C3E91;
+            --sidebar-hover: #1F2D6D;
+            --sidebar-active-bg: #4A90E2;
+            --sidebar-active-text: #ffffff;
+            --accent-color: #3FA9F5;
         }
 
         * {
@@ -55,7 +66,7 @@
             height: 100vh;
                 width: 280px;
             background: var(--sidebar-bg);
-                color: white;
+                color: var(--sidebar-active-text);
                 overflow-y: auto;
                 z-index: 1000;
             transition: all 0.3s ease;
@@ -63,7 +74,7 @@
 
             .sidebar-header {
                 padding: 2rem 1.5rem;
-            border-bottom: 1px solid var(--sidebar-hover);
+            border-bottom: 1px solid var(--border-color);
                 text-align: center;
             }
 
@@ -76,7 +87,7 @@
 
         .sidebar-subtitle {
             font-size: 0.9rem;
-            color: #94a3b8;
+            color: var(--sidebar-active-text);
             font-weight: 400;
         }
 
@@ -92,17 +103,14 @@
                 display: flex;
                 align-items: center;
             padding: 0.875rem 1.5rem;
-            color: #cbd5e1;
+            color: var(--sidebar-active-text);
                 text-decoration: none;
                 transition: all 0.3s ease;
             border-radius: 0;
             font-weight: 500;
             }
 
-            .nav-link.active {
-            background: var(--accent-color);
-                color: white;
-            }
+            .nav-link.active { background: var(--sidebar-active-bg); color: var(--sidebar-active-text); }
 
             .nav-link i {
                 width: 20px;
@@ -110,11 +118,7 @@
             font-size: 1.1rem;
             }
 
-            .sidebar-footer {
-            padding: 1.5rem;
-            border-top: 1px solid var(--sidebar-hover);
-                margin-top: auto;
-            }
+            .sidebar-footer { padding: 1.5rem; border-top: 1px solid var(--border-color); margin-top: auto; }
 
             .logout-btn {
                 width: 100%;
@@ -455,7 +459,9 @@
                             customer.setEmail(email != null ? email.trim() : "");
                             
                             if (customerServlet.updateCustomer(customer)) {
-                                successMessage = "Customer updated successfully!";
+                                // Redirect back to list to auto-refresh the page with success message
+                                response.sendRedirect("CustomerServlet?action=list&message=Customer updated successfully.");
+                                return;
                             } else {
                                 errorMessage = "Failed to update customer";
                             }
@@ -722,7 +728,7 @@
             <h3 class="card-title">
                 <i class="fas fa-user-edit"></i>Edit Customer Details
                 <div>
-                    <a href="customer.jsp" class="btn btn-secondary">
+                    <a href="CustomerServlet?action=list" class="btn btn-secondary">
                         <i class="fas fa-arrow-left"></i>Back to List
                     </a>
                 </div>
@@ -797,9 +803,9 @@
                     <a href="customer_view.jsp?customer_id=<%= customer.getCustomerId() %>" class="btn btn-secondary">
                         <i class="fas fa-eye"></i>View Customer
                     </a>
-                    <a href="customer.jsp" class="btn btn-danger">
+                    <a href="CustomerServlet?action=list" class="btn btn-danger">
                         <i class="fas fa-times"></i>Cancel
-                                        </a>
+                    </a>
                                     </div>
             </form>
                             </div>

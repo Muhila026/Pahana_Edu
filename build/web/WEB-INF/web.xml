@@ -127,6 +127,16 @@
         <url-pattern>/ChartServlet</url-pattern>
     </servlet-mapping>
     
+    <!-- Contact Servlet -->
+    <servlet>
+        <servlet-name>ContactServlet</servlet-name>
+        <servlet-class>com.booking.ContactServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ContactServlet</servlet-name>
+        <url-pattern>/ContactServlet</url-pattern>
+    </servlet-mapping>
+    
     <!-- Logout Servlet -->
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>

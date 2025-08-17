@@ -18,31 +18,41 @@
         /* ===== CSS VARIABLES ===== */
         :root {
             /* Brand Colors */
-            --primary-color: #b1081b;
-            --primary-hover: #8a0615;
-            --secondary-color: #57b8bf;
+            --primary-color: #2C3E91;       /* Deep royal blue - main brand color */
+            --primary-hover: #1F2D6D;       /* Darker navy blue for hover */
+            --secondary-color: #4A90E2;     /* Bright sky blue for highlights */
 
-            /* Status Colors */
-            --success-color: #4CAF50;
-            --warning-color: #F4A261;
-            --danger-color: #E76F51;
-            --info-color: #60A5FA;
+            /* Status Colors (blue-friendly) */
+            --success-color: #3BB273;       /* Teal green - balanced with blue */
+            --warning-color: #F4B400;       /* Golden yellow for alerts */
+            --danger-color: #E63946;        /* Strong coral red */
+            --info-color: #5DADEC;          /* Soft info blue */
 
             /* Backgrounds */
-            --background-color: #ffffff;
-            --card-background: #eefdff;
+            --background-color: #F4F8FC;    /* Very light blue-gray background */
+            --card-background: #FFFFFF;     /* Clean white cards */
 
             /* Text Colors */
-            --text-primary: #1e293b;
-            --text-secondary: #d0898d;
+            --text-primary: #1E293B;        /* Dark navy-gray for readability */
+            --text-secondary: #475569;      /* Muted cool gray for secondary text */
 
             /* Borders & Accents */
-            --border-color: #d0898d;
-            --Navbar-bg: #ffffff;
-            --Navbar-hover: #ecdbeb;
-            --Navbar-active-bg: #57b8bf;
+            --border-color: #D0D9E6;        /* Soft bluish-gray border */
+            --accent-color: #3FA9F5;        /* Fresh accent blue */
+
+            /* Sidebar (optional) */
+            --sidebar-bg: #2C3E91;          /* Deep blue sidebar */
+            --sidebar-hover: #1F2D6D;       /* Darker hover state */
+            --sidebar-active-bg: #4A90E2;   /* Bright blue for active item */
+            --sidebar-active-text: #ffffff; /* White text on active item */
+
+            /* Navbar (compatibility) */
+            --Navbar-bg: var(--card-background);
+            --Navbar-hover: rgba(76, 117, 186, 0.12);
+            --Navbar-active-bg: var(--secondary-color);
             --Navbar-active-text: #ffffff;
-            --accent-color: #57b8bf;
+
+            /* Motion */
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
@@ -657,6 +667,19 @@
             padding: 2rem;
         }
         
+        /* Alerts */
+        .alert {
+            margin: 0 auto 1.5rem;
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            max-width: 1200px;
+        }
+        .alert-success { background: var(--card-background); color: var(--success-color); border-color: var(--success-color); }
+        .alert-error { background: var(--Navbar-hover); color: var(--danger-color); border-color: var(--danger-color); }
+        .alert-warning { background: var(--Navbar-hover); color: var(--warning-color); border-color: var(--warning-color); }
+        .alert p { margin: 0; }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .customer-navbar {
@@ -725,6 +748,42 @@
                 flex-wrap: wrap;
                 justify-content: center;
             }
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: var(--Navbar-bg);
+            z-index: 2000;
+        }
+        body.is-loading .loading-overlay { display: flex; }
+        .loading-card {
+            background: var(--Navbar-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem 2.5rem;
+            box-shadow: 0 10px 30px var(--border-color);
+            text-align: center;
+        }
+        .spinner {
+            width: 56px;
+            height: 56px;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -890,6 +949,18 @@
     <!-- Contact Section -->
     <section class="contact">
         <div class="container">
+            <% 
+                String statusParam = request.getParameter("status");
+                String reasonParam = request.getParameter("reason");
+                String detailParam = request.getParameter("detail");
+                if ("success".equals(statusParam)) { 
+            %>
+                <div class="alert alert-success"><p>Thank you! Your message has been sent successfully. We will get back to you soon.</p></div>
+            <% } else if ("partial".equals(statusParam)) { %>
+                <div class="alert alert-warning"><p>Your message was received, but there was an issue sending one of the emails (<%= detailParam != null ? detailParam : "details unavailable" %>).</p></div>
+            <% } else if ("error".equals(statusParam)) { %>
+                <div class="alert alert-error"><p>We couldn't send your message (<%= reasonParam != null ? reasonParam : "unknown error" %>). Please try again later.</p></div>
+            <% } %>
             <div class="contact-content">
                 <div class="contact-info">
                     <h3>Get in Touch</h3>
@@ -938,18 +1009,18 @@
                 </div>
                 <div class="contact-form">
                     <h3>Send us a Message</h3>
-                    <form id="contactForm">
+                    <form action="ContactServlet" method="post" accept-charset="UTF-8" onsubmit="document.body.classList.add('is-loading')">
                         <div class="form-group">
                             <label for="name">Full Name *</label>
-                            <input type="text" id="name" name="name" required>
+                            <input type="text" id="name" name="name" required autocomplete="name">
                         </div>
                         <div class="form-group">
                             <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" required>
+                            <input type="email" id="email" name="email" required autocomplete="email">
                         </div>
                         <div class="form-group">
                             <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone">
+                            <input type="tel" id="phone" name="phone" autocomplete="tel">
                         </div>
                         <div class="form-group">
                             <label for="subject">Subject *</label>
@@ -1051,91 +1122,12 @@
         <p>&copy; 2024 BookShop. All rights reserved. | Your trusted source for quality books and knowledge.</p>
     </footer>
 
-    <script src="js/sidebar.js"></script>
-    <script>
-        // Navbar background change on scroll (for public, customer, and staff)
-        window.addEventListener('scroll', function() {
-            const navbar = document.querySelector('.public-navbar, .customer-navbar, .staff-navbar');
-            if (navbar) {
-                if (window.scrollY > 50) {
-                    navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-                    navbar.style.backdropFilter = 'blur(10px)';
-                    navbar.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
-                } else {
-                    navbar.style.background = 'white';
-                    navbar.style.backdropFilter = 'none';
-                    navbar.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
-                }
-            }
-        });
-
-        // Mobile sidebar toggle (for admin layouts only)
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.admin-sidebar');
-            if (sidebar) {
-                sidebar.classList.toggle('open');
-            }
-        }
-
-        // Customer nav menu active state
-        document.querySelectorAll('.customer-nav-menu a').forEach(link => {
-            if (link.href === window.location.href) {
-                link.classList.add('active');
-            }
-        });
-
-        // Staff tab activation
-        document.querySelectorAll('.staff-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.staff-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-
-        // Contact form submission
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const formData = new FormData(this);
-            const name = formData.get('name');
-            const email = formData.get('email');
-            const subject = formData.get('subject');
-            const message = formData.get('message');
-            
-            // Simple validation
-            if (!name || !email || !subject || !message) {
-                alert('Please fill in all required fields.');
-                return;
-            }
-            
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                alert('Please enter a valid email address.');
-                return;
-            }
-            
-            // Simulate form submission
-            alert('Thank you for your message! We will get back to you soon.\n\nName: ' + name + '\nEmail: ' + email + '\nSubject: ' + subject);
-            
-            // Reset form
-            this.reset();
-        });
-
-        // Form field focus effects
-        document.querySelectorAll('.form-group input, .form-group textarea, .form-group select').forEach(field => {
-            field.addEventListener('focus', function() {
-                this.parentElement.style.transform = 'scale(1.02)';
-            });
-            
-            field.addEventListener('blur', function() {
-                this.parentElement.style.transform = 'scale(1)';
-            });
-        });
-    </script>
+    <div class="loading-overlay" aria-hidden="true">
+        <div class="loading-card" role="status" aria-live="polite">
+            <div class="spinner"></div>
+            <div style="color: var(--text-primary); font-weight: 600;">Sending your message...</div>
+        </div>
+    </div>
     
-    <!-- Contact.js - Modern Navbar and Contact Form Functionality -->
-    <script src="js/contact.js"></script>
 </body>
 </html> 

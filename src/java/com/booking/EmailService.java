@@ -96,6 +96,109 @@ public class EmailService {
     }
 
     /**
+     * Send an auto-reply to the customer who submitted the contact form.
+     */
+    public boolean sendContactAutoReply(String toEmail, String customerName) {
+        String safeName = customerName == null || customerName.isBlank() ? "Customer" : customerName.trim();
+        String subject = "We received your message - Pahana BookShop";
+        String html = "<!DOCTYPE html>" +
+                "<html><head><meta charset='UTF-8'><title>Thanks</title>" +
+                "<style>body{font-family:Arial,sans-serif;color:#1e293b} .wrap{max-width:640px;margin:0 auto;padding:24px;background:#ffffff} .card{border:1px solid #d0898d;border-radius:8px;overflow:hidden} .hdr{background:#b1081b;color:#ffffff;padding:16px} .content{padding:20px;background:#eefdff} .muted{color:#6b7280;font-size:14px}</style>" +
+                "</head><body><div class='wrap'><div class='card'>" +
+                "<div class='hdr'><h2 style='margin:0'>Pahana BookShop</h2></div>" +
+                "<div class='content'>" +
+                "<p>Hi " + escapeHtml(safeName) + ",</p>" +
+                "<p>Thanks for reaching out. We received your message and our team will get back to you soon. " +
+                "Typical response time is within one business day.</p>" +
+                "<p>In the meantime, you can browse our latest collections on our website.</p>" +
+                "<p>Best regards,<br/>Pahana BookShop Support</p>" +
+                "<p class='muted'>This is an automated confirmation. Please do not reply to this email.</p>" +
+                "</div></div></div></body></html>";
+
+        return sendGenericEmail(toEmail, subject, html);
+    }
+
+    /**
+     * Send a notification email to the business/admin with the contact form details.
+     */
+    public boolean sendContactNotificationToAdmin(String name, String email, String phone, String subject, String message) {
+        String adminSubject = "New contact form message: " + (subject == null ? "(no subject)" : subject);
+        String html = "<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Contact</title>" +
+                "<style>body{font-family:Arial,sans-serif;color:#1e293b} .wrap{max-width:680px;margin:0 auto;padding:24px;background:#ffffff} .card{border:1px solid #d0898d;border-radius:8px} .hdr{background:#57b8bf;color:#111827;padding:16px;border-bottom:1px solid #d0898d} .content{padding:20px;background:#ffffff} .row{margin:6px 0} .label{font-weight:bold;color:#b1081b}</style>" +
+                "</head><body><div class='wrap'><div class='card'>" +
+                "<div class='hdr'><h3 style='margin:0'>New Contact Form Submission</h3></div>" +
+                "<div class='content'>" +
+                row("Name", name) +
+                row("Email", email) +
+                row("Phone", phone) +
+                row("Subject", subject) +
+                "<div class='row'><span class='label'>Message</span><div style='white-space:pre-wrap;border:1px solid #d0898d;border-radius:6px;padding:10px;margin-top:6px;'>" + escapeHtml(nullable(message)) + "</div></div>" +
+                "</div></div></div></body></html>";
+
+        // Send to business inbox; set Reply-To to customer email so staff can reply directly
+        return sendGenericEmailWithReplyTo(FROM_EMAIL, adminSubject, html, email);
+    }
+
+    private String row(String label, String value) {
+        return "<div class='row'><span class='label'>" + escapeHtml(nullable(label)) + ":</span> " + escapeHtml(nullable(value)) + "</div>";
+    }
+
+    private String nullable(String v) { return v == null ? "" : v; }
+
+    private String escapeHtml(String s) {
+        return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&#39;");
+    }
+
+    /**
+     * Low-level helper to send a generic HTML email via the configured SMTP session, with mock fallback.
+     */
+    private boolean sendGenericEmail(String toEmail, String subject, String htmlContent) {
+        if (session == null) {
+            System.out.println("⚠ Real email session not available. Using mock service.");
+            System.out.println("=== MOCK EMAIL ===\nTo: " + toEmail + "\nSubject: " + subject + "\nHTML length: " + (htmlContent == null ? 0 : htmlContent.length()) + "\n=================");
+            return true;
+        }
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(FROM_EMAIL));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+            message.setSubject(subject);
+            message.setContent(htmlContent, "text/html; charset=UTF-8");
+            Transport.send(message);
+            return true;
+        } catch (MessagingException e) {
+            System.err.println("✗ SMTP send failed: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean sendGenericEmailWithReplyTo(String toEmail, String subject, String htmlContent, String replyTo) {
+        if (session == null) {
+            System.out.println("⚠ Real email session not available. Using mock service.");
+            System.out.println("=== MOCK EMAIL ===\nTo: " + toEmail + "\nSubject: " + subject + "\nReply-To: " + replyTo + "\nHTML length: " + (htmlContent == null ? 0 : htmlContent.length()) + "\n=================");
+            return true;
+        }
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(FROM_EMAIL));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+            if (replyTo != null && !replyTo.isBlank()) {
+                message.setReplyTo(new InternetAddress[]{ new InternetAddress(replyTo) });
+            }
+            message.setSubject(subject);
+            message.setContent(htmlContent, "text/html; charset=UTF-8");
+            Transport.send(message);
+            return true;
+        } catch (MessagingException e) {
+            System.err.println("✗ SMTP send failed: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+    /**
      * Send mock email (prints to console)
      */
     private boolean sendMockEmail(String toEmail, String verificationCode) {

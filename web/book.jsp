@@ -19,29 +19,31 @@
         <style>
         :root {
             /* Brand Colors */
-            --primary-color: #b1081b;
-            --primary-hover: #8a0615;
-            --secondary-color: #57b8bf;
+            --primary-color: #2C3E91;       /* Deep royal blue - main brand color */
+            --primary-hover: #1F2D6D;       /* Darker navy blue for hover */
+            --secondary-color: #4A90E2;     /* Bright sky blue for highlights */
             
-            /* Status Colors */
-            --success-color: #4CAF50;
-            --warning-color: #F4A261;
-            --danger-color: #E76F51;
-            --info-color: #60A5FA;
+            /* Status Colors (blue-friendly) */
+            --success-color: #3BB273;       /* Teal green - balanced with blue */
+            --warning-color: #F4B400;       /* Golden yellow for alerts */
+            --danger-color: #E63946;        /* Strong coral red */
+            --info-color: #5DADEC;          /* Soft info blue */
             
             /* Backgrounds */
-            --background-color: #ffffff;
-            --card-background: #eefdff;
+            --background-color: #F4F8FC;    /* Very light blue-gray background */
+            --card-background: #FFFFFF;     /* Clean white cards */
             
             /* Text Colors */
-            --text-primary: #1e293b;
-            --text-secondary: #d0898d;
+            --text-primary: #1E293B;        /* Dark navy-gray for readability */
+            --text-secondary: #475569;      /* Muted cool gray for secondary text */
             
             /* Borders & Accents */
-            --border-color: #d0898d;
-            --sidebar-bg: #ffffff;
-            --sidebar-hover: #ecdbeb;
-            --accent-color: #57b8bf;
+            --border-color: #D0D9E6;        /* Soft bluish-gray border */
+            --sidebar-bg: #2C3E91;          /* Deep blue sidebar */
+            --sidebar-hover: #1F2D6D;       /* Darker hover state */
+            --sidebar-active-bg: #4A90E2;   /* Bright blue for active item */
+            --sidebar-active-text: #ffffff; /* White text on active item */
+            --accent-color: #3FA9F5;        /* Fresh accent blue */
         }
 
         * {
@@ -64,7 +66,7 @@
             height: 100vh;
                 width: 280px;
             background: var(--sidebar-bg);
-                color: var(--primary-color);
+                color: var(--sidebar-active-text);
                 overflow-y: auto;
                 z-index: 1000;
             transition: all 0.3s ease;
@@ -72,20 +74,20 @@
 
             .sidebar-header {
                 padding: 2rem 1.5rem;
-            border-bottom: 1px solid var(--sidebar-hover);
+            border-bottom: 1px solid var(--border-color);
                 text-align: center;
             }
 
                 .sidebar-title {
             font-size: 1.4rem;
                 font-weight: 700;
-            color: var(--primary-color);
+            color: var(--sidebar-active-text);
             margin-bottom: 0.5rem;
         }
 
         .sidebar-subtitle {
             font-size: 0.9rem;
-            color: var(--primary-color);
+            color: var(--sidebar-active-text);
             font-weight: 400;
         }
 
@@ -101,7 +103,7 @@
                 display: flex;
                 align-items: center;
             padding: 0.875rem 1.5rem;
-            color: var(--primary-color);
+            color: var(--sidebar-active-text);
                 text-decoration: none;
                 transition: all 0.3s ease;
             border-radius: 0;
@@ -110,10 +112,7 @@
 
 
 
-            .nav-link.active {
-            background: var(--accent-color);
-                color: white;
-            }
+            .nav-link.active { background: var(--sidebar-active-bg); color: var(--sidebar-active-text); }
 
             .nav-link i {
             width: 20px;
@@ -121,11 +120,7 @@
                 font-size: 1.1rem;
             }
 
-            .sidebar-footer {
-            padding: 1.5rem;
-            border-top: 1px solid var(--sidebar-hover);
-                margin-top: auto;
-            }
+            .sidebar-footer { padding: 1.5rem; border-top: 1px solid var(--border-color); margin-top: auto; }
 
             .logout-btn {
                 width: 100%;
@@ -292,7 +287,7 @@
         }
 
         .table thead th {
-            background: var(--primary-color);
+            background: var(--primary-hover);
             color: white;
             border: none;
             padding: 1rem;
@@ -554,19 +549,19 @@
                             <td><strong><%= book.getTitle() %></strong></td>
                             <td><%= book.getDescription() != null ? book.getDescription() : "N/A" %></td>
                             <td><%= book.getCategory() != null ? book.getCategory().getCategoryName() : "N/A" %></td>
-                            <td>$<%= String.format("%.2f", book.getPricePerUnit()) %></td>
+                            <td>Rs.<%= String.format("%.2f", book.getPricePerUnit()) %></td>
                                     <td>
                                         <span class="badge <%= book.getStockQuantity() > 10 ? "bg-success" : book.getStockQuantity() > 0 ? "bg-warning" : "bg-danger" %>">
                                             <%= book.getStockQuantity() %>
                                         </span>
                                     </td>
                                     <td>
-                                <button class="btn btn-sm btn-warning" onclick="editBook(<%= book.getBookId() %>)">
+                                <a href="BookServlet?action=edit&id=<%= book.getBookId() %>" class="btn btn-sm btn-warning">
                                     <i class="fas fa-edit"></i> Edit
-                                        </button>
-                                <button class="btn btn-sm btn-danger" onclick="deleteBook(<%= book.getBookId() %>, '<%= book.getTitle() %>')">
+                                        </a>
+                                <a href="BookServlet?action=delete&id=<%= book.getBookId() %>" class="btn btn-sm btn-danger">
                                     <i class="fas fa-trash"></i> Delete
-                                        </button>
+                                        </a>
                                     </td>
                                 </tr>
                                 <%
