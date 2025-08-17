@@ -17,22 +17,33 @@
     
         <style>
         :root {
-            --primary-color: #6366f1;
-            --primary-hover: #4f46e5;
-            --secondary-color: #64748b;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-            --info-color: #3b82f6;
-            --background-color: #f8fafc;
-            --card-background: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border-color: #e2e8f0;
-            --sidebar-bg: #1e293b;
-            --sidebar-hover: #334155;
-            --accent-color: #f97316;
-        }
+                /* Brand Colors */
+                --primary-color: #b1081b;       /* Strong maroon/red - brand & emphasis */
+                --primary-hover: #8a0615;       /* Darker maroon for hover */
+                --secondary-color: #57b8bf;     /* Fresh teal accent */
+
+                /* Status Colors */
+                --success-color: #4CAF50;       /* Soft green for success */
+                --warning-color: #F4A261;       /* Gentle orange for warnings */
+                --danger-color: #E76F51;        /* Coral red for errors */
+                --info-color: #60A5FA;          /* Light modern blue */
+
+                /* Backgrounds */
+                --background-color: #ffffff;    /* Soft lavender background */
+                --card-background: #eefdff;     /* Light blue-gray card background */
+
+                /* Text Colors */
+                --text-primary: #1e293b;        /* Dark navy for readability */
+                --text-secondary: #d0898d;      /* Muted pinkish tone for subtext */
+
+                /* Borders & Accents */
+                --border-color: #d0898d;        /* Soft pink border */
+                --sidebar-bg: #ffffff;          /* Clean white sidebar */
+                --sidebar-hover: #ecdbeb;       /* Light lavender hover */
+                --sidebar-active-bg: #57b8bf;   /* Teal active background */
+                --sidebar-active-text: #ffffff; /* White text on active sidebar item */
+                --accent-color: #57b8bf;        /* Teal highlights */
+            }
 
         * {
                 margin: 0;
@@ -54,7 +65,7 @@
                 height: 100vh;
             width: 280px;
             background: var(--sidebar-bg);
-            color: white;
+            color: var(--primary-color);
                 overflow-y: auto;
                 z-index: 1000;
             transition: all 0.3s ease;
@@ -69,13 +80,13 @@
                 .sidebar-title {
             font-size: 1.4rem;
                 font-weight: 700;
-            color: var(--accent-color);
+            color: var(--primary-color);
             margin-bottom: 0.5rem;
         }
 
         .sidebar-subtitle {
             font-size: 0.9rem;
-            color: #94a3b8;
+            color: var(--primary-color);
             font-weight: 400;
         }
 
@@ -91,7 +102,7 @@
                 display: flex;
                 align-items: center;
             padding: 0.875rem 1.5rem;
-            color: #cbd5e1;
+            color: var(--primary-color);
                 text-decoration: none;
                 transition: all 0.3s ease;
             border-radius: 0;
@@ -695,10 +706,10 @@
                                            class="btn btn-view btn-sm">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <button class="btn btn-edit btn-sm" onclick="editCustomer(<%= customer.getCustomerId() %>)">
+                                        <a href="customer_edit.jsp?customer_id=<%= customer.getCustomerId() %>" class="btn btn-edit btn-sm">
                                             <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-delete btn-sm" onclick="deleteCustomer(<%= customer.getCustomerId() %>)" 
+                                        </a>
+                                        <button class="btn btn-delete btn-sm" data-customer-id="<%= customer.getCustomerId() %>" onclick="deleteCustomer(this.dataset.customerId)" 
                                                 title="Delete customer">
                                             <i class="fas fa-trash"></i>
                                         </button>
