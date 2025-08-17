@@ -968,12 +968,8 @@
                                     console.log('Add Customer button enabled: ' + !addCustomerBtn.disabled);
                                     // Show verification status
                                     showVerificationStatus('Email verified successfully!', 'success');
-                                    // Set hidden email field value before disabling
-                                    const emailValue = document.getElementById('email').value;
-                                    document.getElementById('hiddenEmail').value = emailValue;
-                                    console.log('Hidden email field set to: ' + emailValue);
-                                    // Disable email field and verification controls
-                                    document.getElementById('email').disabled = true;
+                                    // Make email read-only and disable verification controls
+                                    document.getElementById('email').readOnly = true;
                                     document.getElementById('sendVerificationBtn').disabled = true;
                                     document.getElementById('verificationPin').disabled = true;
                                     document.getElementById('verifyEmailBtn').disabled = true;
@@ -988,12 +984,8 @@
                                 addCustomerBtn.disabled = false;
                                 console.log('Add Customer button enabled (fallback): ' + !addCustomerBtn.disabled);
                                 showVerificationStatus('Email verified successfully!', 'success');
-                                // Set hidden email field value before disabling
-                                const emailValue = document.getElementById('email').value;
-                                document.getElementById('hiddenEmail').value = emailValue;
-                                console.log('Hidden email field set to (fallback): ' + emailValue);
-                                // Disable email field and verification controls
-                                document.getElementById('email').disabled = true;
+                                // Make email read-only and disable verification controls
+                                document.getElementById('email').readOnly = true;
                                 document.getElementById('sendVerificationBtn').disabled = true;
                                 document.getElementById('verificationPin').disabled = true;
                                 document.getElementById('verifyEmailBtn').disabled = true;
@@ -1043,20 +1035,28 @@
                 return true;
             }
             
-            // Reset form when email changes
-            document.getElementById('email').addEventListener('input', function() {
-                // Reset verification state
-                document.getElementById('verificationRow').style.display = 'none';
-                document.getElementById('verificationStatus').style.display = 'none';
-                document.getElementById('verificationPin').value = '';
-                document.getElementById('addCustomerBtn').disabled = true;
-                
-                // Re-enable email field and verification controls
-                document.getElementById('email').disabled = false;
-                document.getElementById('sendVerificationBtn').disabled = false;
-                document.getElementById('verificationPin').disabled = false;
-                document.getElementById('verifyEmailBtn').disabled = false;
-            });
+            // Reset form when email changes (guard if element exists)
+            (function() {
+                var emailInput = document.getElementById('email');
+                if (!emailInput) return;
+                emailInput.addEventListener('input', function() {
+                    // Reset verification state
+                    var verificationRow = document.getElementById('verificationRow');
+                    var verificationStatus = document.getElementById('verificationStatus');
+                    var verificationPin = document.getElementById('verificationPin');
+                    if (verificationRow) verificationRow.style.display = 'none';
+                    if (verificationStatus) verificationStatus.style.display = 'none';
+                    if (verificationPin) verificationPin.value = '';
+                    
+                    // Re-enable email field and verification controls
+                    emailInput.readOnly = false;
+                    var sendBtn = document.getElementById('sendVerificationBtn');
+                    var verifyBtn = document.getElementById('verifyEmailBtn');
+                    if (sendBtn) sendBtn.disabled = false;
+                    if (verificationPin) verificationPin.disabled = false;
+                    if (verifyBtn) verifyBtn.disabled = false;
+                });
+            })();
         </script>
 
         <!-- Add Customer Modal -->
@@ -1071,7 +1071,6 @@
                     </div>
                     <form action="CustomerServlet" method="post">
                         <input type="hidden" name="action" value="create">
-                        <input type="hidden" name="email" id="hiddenEmail">
                         
                         <div class="modal-body">
                             <div class="row">
@@ -1154,7 +1153,7 @@
                         
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary" id="addCustomerBtn" disabled>
+                            <button type="submit" class="btn btn-primary" id="addCustomerBtn">
                                 <i class="fas fa-plus-circle me-2"></i>Add Customer
                             </button>
                         </div>

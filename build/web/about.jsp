@@ -61,7 +61,7 @@
         /* ===== PUBLIC NAVIGATION (Top Navbar Only) ===== */
         .public-navbar {
             background: var(--Navbar-bg);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 6px -1px var(--border-color), 0 2px 4px -1px var(--border-color);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -141,7 +141,7 @@
         
         .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(13, 30, 76, 0.3);
+            box-shadow: 0 4px 12px var(--danger-color);
         }
         
         @media (max-width: 991px) {
@@ -152,7 +152,7 @@
             
             .logo {
                 border-right: none;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                border-bottom: 1px solid var(--border-color);
                 margin-right: 0;
                 justify-content: space-between;
             }
@@ -169,7 +169,7 @@
             
             .nav-menu a {
                 padding: 14px 20px;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+                border-bottom: 1px solid var(--border-color);
             }
             
             .login-btn {
@@ -185,7 +185,7 @@
 
         .customer-navbar {
             background: var(--Navbar-bg);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 6px -1px var(--border-color), 0 2px 4px -1px var(--border-color);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -211,7 +211,7 @@
             padding: 18px 20px 18px 0;
             display: flex;
             align-items: center;
-            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            border-right: 1px solid var(--border-color);
         }
 
         .customer-logo-text { color: var(--primary-color); }
@@ -236,7 +236,7 @@
         .customer-nav-menu a {
             display: block;
             padding: 18px 16px;
-            color: var(--text-color);
+            color: var(--text-primary);
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
@@ -260,16 +260,16 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            color: #1e293b;
+            color: var(--text-primary);
         }
 
         .customer-user-info .welcome-text {
             font-weight: 600;
-            color: #8b5cf6;
-            background: rgba(139, 92, 246, 0.1);
+            color: var(--secondary-color);
+            background: var(--card-background);
             padding: 0.5rem 1rem;
             border-radius: 8px;
-            border: 1px solid rgba(139, 92, 246, 0.2);
+            border: 1px solid var(--secondary-color);
         }
 
         .customer-logout-btn {
@@ -289,7 +289,7 @@
 
         .customer-logout-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            box-shadow: 0 4px 12px var(--danger-color);
         }
 
         .customer-main-content {
@@ -305,7 +305,7 @@
             
             .customer-logo {
                 border-right: none;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                border-bottom: 1px solid var(--border-color);
                 margin-right: 0;
                 justify-content: space-between;
             }
@@ -322,7 +322,7 @@
             
             .customer-nav-menu a {
                 padding: 14px 20px;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+                border-bottom: 1px solid var(--border-color);
             }
             
             .customer-user-info {
@@ -341,7 +341,7 @@
                 position: absolute;
                 right: 20px;
                 top: 20px;
-                border-color: #6366f1;
+                border-color: var(--primary-color);
             }
         }
 
@@ -353,45 +353,35 @@
 
         .admin-sidebar {
             width: 320px;
-            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
-            color: white;
+            background: linear-gradient(180deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+            color: var(--Navbar-active-text);
             padding: 1rem 0;
             position: fixed;
             height: 100vh;
             overflow-y: auto;
             z-index: 999;
             scrollbar-width: thin;
-            scrollbar-color: #3498db #2c3e50;
+            scrollbar-color: var(--secondary-color) var(--primary-hover);
         }
 
         .admin-sidebar::-webkit-scrollbar {
             width: 6px;
         }
 
-        .admin-sidebar::-webkit-scrollbar-track {
-            background: #2c3e50;
-        }
+        .admin-sidebar::-webkit-scrollbar-track { background: var(--primary-hover); }
 
-        .admin-sidebar::-webkit-scrollbar-thumb {
-            background: #3498db;
-            border-radius: 3px;
-        }
+        .admin-sidebar::-webkit-scrollbar-thumb { background: var(--secondary-color); border-radius: 3px; }
 
-        .admin-sidebar::-webkit-scrollbar-thumb:hover {
-            background: #2980b9;
-        }
+        .admin-sidebar::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
 
         .admin-sidebar-header {
             padding: 0 1.5rem 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid var(--border-color);
             margin-bottom: 1.5rem;
             text-align: center;
         }
 
-        .admin-sidebar-header h2 {
-            color: #3498db;
-            margin-bottom: 0.5rem;
-        }
+        .admin-sidebar-header h2 { color: var(--secondary-color); margin-bottom: 0.5rem; }
 
         .admin-sidebar-menu {
             list-style: none;
@@ -406,7 +396,7 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            color: white;
+            color: var(--Navbar-active-text);
             text-decoration: none;
             padding: 0.8rem 1.2rem;
             border-radius: 8px;
@@ -417,16 +407,16 @@
         }
 
         .admin-sidebar-menu a:hover {
-            background: rgba(255,255,255,0.1);
-            color: #3498db;
+            background: var(--Navbar-hover);
+            color: var(--secondary-color);
             transform: translateX(5px);
-            border-left-color: #3498db;
+            border-left-color: var(--secondary-color);
         }
 
         .admin-sidebar-menu a.active {
-            background: rgba(52, 152, 219, 0.2);
-            color: #3498db;
-            border-left-color: #3498db;
+            background: var(--Navbar-hover);
+            color: var(--secondary-color);
+            border-left-color: var(--secondary-color);
         }
 
         .admin-sidebar-menu i {
@@ -446,13 +436,13 @@
         }
 
         .staff-navbar {
-            background: linear-gradient(135deg, #724784, #ac87cd, #724784);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             padding: 1rem 0;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px var(--border-color);
         }
 
         .staff-tabs {
@@ -466,8 +456,8 @@
         }
 
         .staff-tab {
-            background: rgba(255,255,255,0.1);
-            color: white;
+            background: var(--Navbar-hover);
+            color: var(--Navbar-active-text);
             text-decoration: none;
             padding: 0.8rem 1.5rem;
             border-radius: 25px;
@@ -478,21 +468,34 @@
 
         .staff-tab:hover,
         .staff-tab.active {
-            background: #ff7f42;
-            color: white;
+            background: var(--secondary-color);
+            color: var(--Navbar-active-text);
         }
 
         .staff-main-content {
             margin-top: 80px;
         }
         
-        /* Page Header */
+        /* Hero (About) */
         .page-header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+            position: relative;
+            background: url('IMG/bookstore2.jpg');    
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             padding: 8rem 2rem 4rem;
             text-align: center;
             color: var(--Navbar-active-text);
+            overflow: hidden;
         }
+        .page-header::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            opacity: 0.22;
+        }
+        .page-header > * { position: relative; z-index: 1; }
         
         .page-header h1 {
             font-size: 3rem;
@@ -507,12 +510,12 @@
         /* About Section */
         .about {
             padding: 5rem 2rem;
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--Navbar-bg);
             backdrop-filter: blur(10px);
             margin: 2rem auto;
             max-width: 1200px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px var(--border-color);
         }
         
         .container {
@@ -536,7 +539,7 @@
         .about-text p {
             font-size: 1.1rem;
             margin-bottom: 1rem;
-            color: var(--text-secondary);
+            color: var(--text-primary);
         }
         
         .about-image {
@@ -562,7 +565,7 @@
             max-width: 1200px;
             margin: 0 auto;
         }
-        .highlight-card { background: var(--card-background); padding: 2rem; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid var(--border-color); transition: transform 0.2s ease; }
+        .highlight-card { background: var(--card-background); padding: 2rem; border-radius: 16px; box-shadow: 0 10px 30px var(--border-color); border: 1px solid var(--border-color); transition: transform 0.2s ease; }
         .highlight-card:hover { transform: translateY(-6px); }
         .highlight-card h3 { color: var(--primary-color); margin-bottom: 0.5rem; }
         .highlight-card p { color: var(--text-secondary); }
@@ -577,19 +580,19 @@
             margin: 0 auto;
             text-align: center;
         }
-        .stat-card { background: rgba(255,255,255,0.08); padding: 1.5rem; border-radius: 14px; border: 1px solid rgba(255,255,255,0.15); }
-        .stat-card h3 { margin: 0; font-size: 2rem; }
-        .stat-card p { margin: 0.5rem 0 0; opacity: 0.95; }
+        .stat-card { background: var(--Navbar-bg); padding: 1.5rem; border-radius: 14px; border: 1px solid var(--Navbar-active-text); }
+        .stat-card h3 { margin: 0; font-size: 2rem; color: var(--secondary-color); }
+        .stat-card p { margin: 0.5rem 0 0; color: var(--text-primary); opacity: 1; }
 
         /* Store Info */
         .store-info {
             padding: 4rem 2rem;
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--Navbar-bg);
             backdrop-filter: blur(10px);
             margin: 2rem auto;
             max-width: 1200px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px var(--border-color);
         }
         .store-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
         .store-card { background: var(--Navbar-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; }
@@ -603,12 +606,12 @@
         /* Mission & Vision */
         .mission-vision {
             padding: 5rem 2rem;
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--Navbar-bg);
             backdrop-filter: blur(10px);
             margin: 2rem auto;
             max-width: 1200px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px var(--border-color);
         }
         
         .mission-vision-grid {
@@ -618,39 +621,28 @@
         }
         
         .mission-card {
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--Navbar-bg);
             padding: 2rem;
             border-radius: 15px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px var(--border-color);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
-        .mission-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-        }
+        .mission-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px var(--border-color); }
         
-        .mission-card h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            color: #6366f1;
-        }
+        .mission-card h3 { font-size: 1.8rem; margin-bottom: 1rem; color: var(--primary-color); }
         
-        .mission-card p {
-            color: #666;
-            font-size: 1.1rem;
-        }
+        .mission-card p { color: var(--text-secondary); font-size: 1.1rem; }
         
         /* Team Section */
         .team {
             padding: 5rem 2rem;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: var(--Navbar-bg);
             margin: 2rem auto;
             max-width: 1200px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px var(--border-color);
         }
         
         .team-grid {
@@ -660,18 +652,15 @@
         }
         
         .team-member {
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--Navbar-bg);
             padding: 2rem;
             border-radius: 15px;
             text-align: center;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px var(--border-color);
         }
         
-        .team-member:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-        }
+        .team-member:hover { transform: translateY(-10px); box-shadow: 0 20px 40px var(--border-color); }
         
         .team-member img {
             width: 120px;
@@ -680,8 +669,8 @@
             object-fit: cover;
             display: block;
             margin: 0 auto 1rem;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-            border: 3px solid #fff;
+            box-shadow: 0 6px 18px var(--border-color);
+            border: 3px solid var(--Navbar-active-text);
         }
         
         .team-member h3 {
@@ -689,14 +678,12 @@
             color: var(--primary-color);
         }
         
-        .team-member p {
-            color: #666;
-        }
+        .team-member p { color: var(--text-secondary); }
         
         /* Footer */
         .footer {
-            background: linear-gradient(90deg, #6366f1, #8b5cf6);
-            color: white;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+            color: var(--Navbar-active-text);
             text-align: center;
             padding: 2rem;
         }
@@ -1013,7 +1000,7 @@
     <!-- Team Section -->
     <section class="team">
         <div class="container">
-                         <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 3rem; color: #6366f1;">Our Team</h2>
+            <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 3rem; color: var(--primary-color);">Our Team</h2>
             <div class="team-grid">
                 <div class="team-member">
                     <img src="IMG/admin.jpg" alt="Founder & CEO">
@@ -1044,45 +1031,5 @@
         <p>&copy; 2024 BookShop. All rights reserved. | Your trusted source for quality books and knowledge.</p>
     </footer>
 
-    <script>
-        // Navbar background change on scroll (for public, customer, and staff)
-        window.addEventListener('scroll', function() {
-            const navbar = document.querySelector('.public-navbar, .customer-navbar, .staff-navbar');
-            if (navbar) {
-                if (window.scrollY > 50) {
-                    navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-                    navbar.style.backdropFilter = 'blur(10px)';
-                    navbar.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
-                } else {
-                    navbar.style.background = 'white';
-                    navbar.style.backdropFilter = 'none';
-                    navbar.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
-                }
-            }
-        });
-
-        // Mobile sidebar toggle (for admin layouts only)
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.admin-sidebar');
-            if (sidebar) {
-                sidebar.classList.toggle('open');
-            }
-        }
-
-        // Customer nav menu active state
-        document.querySelectorAll('.customer-nav-menu a').forEach(link => {
-            if (link.href === window.location.href) {
-                link.classList.add('active');
-            }
-        });
-
-        // Staff tab activation
-        document.querySelectorAll('.staff-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.staff-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-    </script>
 </body>
 </html> 

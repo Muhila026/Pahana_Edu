@@ -674,7 +674,7 @@
                                             <% } %>
                                         </td>
                                     <% } %>
-                                    <td><strong>$<%= String.format("%.2f", transaction.getTotalAmount()) %></strong></td>
+                                    <td><strong>Rs.<%= String.format("%.2f", transaction.getTotalAmount()) %></strong></td>
                                     <% if (!"CUSTOMER".equals(userRole)) { %>
                                         <td>
                                             <% if (transaction.getCreatedBy() != null) { %>
