@@ -18,21 +18,32 @@
     
         <style>
         :root {
-            --primary-color: #6366f1;
-            --primary-hover: #4f46e5;
-            --secondary-color: #64748b;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-            --info-color: #3b82f6;
-            --background-color: #f8fafc;
-            --card-background: #ffffff;
+            /* Brand Colors */
+            --primary-color: #b1081b;
+            --primary-hover: #8a0615;
+            --secondary-color: #57b8bf;
+            
+            /* Status Colors */
+            --success-color: #4CAF50;
+            --warning-color: #F4A261;
+            --danger-color: #E76F51;
+            --info-color: #60A5FA;
+            
+            /* Backgrounds */
+            --background-color: #ffffff;
+            --card-background: #eefdff;
+            
+            /* Text Colors */
             --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border-color: #e2e8f0;
-            --sidebar-bg: #1e293b;
-            --sidebar-hover: #334155;
-            --accent-color: #f97316;
+            --text-secondary: #d0898d;
+            
+            /* Borders & Accents */
+            --border-color: #d0898d;
+            --sidebar-bg: #ffffff;
+            --sidebar-hover: #ecdbeb;
+            --sidebar-active-bg: #57b8bf;
+            --sidebar-active-text: #ffffff;
+            --accent-color: #57b8bf;
         }
 
         * {
@@ -55,7 +66,7 @@
             height: 100vh;
                 width: 280px;
             background: var(--sidebar-bg);
-                color: white;
+                color: var(--primary-color);
                 overflow-y: auto;
                 z-index: 1000;
             transition: all 0.3s ease;
@@ -70,13 +81,13 @@
                 .sidebar-title {
             font-size: 1.4rem;
                 font-weight: 700;
-            color: var(--accent-color);
+            color: var(--primary-color);
             margin-bottom: 0.5rem;
         }
 
         .sidebar-subtitle {
             font-size: 0.9rem;
-            color: #94a3b8;
+            color: var(--primary-color);
             font-weight: 400;
         }
 
@@ -92,7 +103,7 @@
                 display: flex;
                 align-items: center;
             padding: 0.875rem 1.5rem;
-            color: #cbd5e1;
+            color: var(--primary-color);
                 text-decoration: none;
                 transition: all 0.3s ease;
             border-radius: 0;

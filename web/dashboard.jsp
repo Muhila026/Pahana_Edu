@@ -17,36 +17,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
         <style>
-          :root {
-            /* Brand Colors - Modern Bookstore Theme */
-            --primary-color: #916fc6;       /* Rich amethyst purple - sophisticated & literary */
-            --primary-hover: #5b21b6;       /* Deeper purple for hover states */
-            --secondary-color: #ec4899;     /* Vibrant magenta - energetic & inviting */
-            --tertiary-color: #8b5cf6;      /* Soft lavender - complements primary */
+       :root {
+                /* Brand Colors */
+                --primary-color: #b1081b;       /* Strong maroon/red - brand & emphasis */
+                --primary-hover: #8a0615;       /* Darker maroon for hover */
+                --secondary-color: #57b8bf;     /* Fresh teal accent */
 
-            /* Status Colors */
-            --success-color: #10B981;       /* Emerald green for positive feedback */
-            --warning-color: #F59E0B;       /* Amber for gentle alerts */
-            --danger-color: #EF4444;        /* Bright red for errors */
-            --info-color: #3B82F6;          /* True blue for info highlights */
+                /* Status Colors */
+                --success-color: #4CAF50;       /* Soft green for success */
+                --warning-color: #F4A261;       /* Gentle orange for warnings */
+                --danger-color: #E76F51;        /* Coral red for errors */
+                --info-color: #60A5FA;          /* Light modern blue */
 
-            /* Backgrounds */
-            --background-color: #F9F5FF;    /* Soft lavender-tinted white */
-            --card-background: #FFFFFF;     /* Pure white for cards */
-            --gradient-bg: linear-gradient(135deg, #F9F5FF 0%, #F3E8FF 100%);
+                /* Backgrounds */
+                --background-color: #ffffff;    /* Soft lavender background */
+                --card-background: #eefdff;     /* Light blue-gray card background */
 
-            /* Text Colors */
-            --text-primary: #1E1B4B;        /* Deep indigo for main text */
-            --text-secondary: #4C1D95;      /* Rich purple-gray for secondary text */
-            --text-light: #cdc5d6;          /* Light text on dark backgrounds */
-            /* Borders & Accents */
-            --border-color: #EDE9FE;        /* Soft purple border */
-            --sidebar-bg: #401782;          /* Matches primary brand color */
-            --sidebar-hover: #4a238a;       /* Darker hover for contrast */
-            --accent-color: #928c9e;        /* Subtle accent for highlights */
-            --gold-accent: #FBBF24;         /* Warm gold for special highlights */
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+                /* Text Colors */
+                --text-primary: #1e293b;        /* Dark navy for readability */
+                --text-secondary: #d0898d;      /* Muted pinkish tone for subtext */
+
+                /* Borders & Accents */
+                --border-color: #d0898d;        /* Soft pink border */
+                --sidebar-bg: #ffffff;          /* Clean white sidebar */
+                --sidebar-hover: #ecdbeb;       /* Light lavender hover */
+                --sidebar-active-bg: #57b8bf;   /* Teal active background */
+                --sidebar-active-text: #ffffff; /* White text on active sidebar item */
+                --accent-color: #57b8bf;        /* Teal highlights */
+            }
+
 
         * {
                 margin: 0;
@@ -68,7 +67,7 @@
             height: 100vh;
                 width: 280px;
             background: var(--sidebar-bg);
-                color: white;
+                color: var(--primary-color);
                 overflow-y: auto;
                 z-index: 1000;
             transition: all 0.3s ease;
@@ -83,13 +82,13 @@
                 .sidebar-title {
             font-size: 1.4rem;
             font-weight: 700;
-            color: var(--accent-color);
+            color: var(--primary-color);
             margin-bottom: 0.5rem;
         }
 
         .sidebar-subtitle {
             font-size: 0.9rem;
-            color: #94a3b8;
+            color: var(--primary-color);
             font-weight: 400;
         }
 
@@ -105,7 +104,7 @@
                 display: flex;
                 align-items: center;
             padding: 0.875rem 1.5rem;
-            color: #cbd5e1;
+            color: var(--primary-color);
                 text-decoration: none;
                 transition: all 0.3s ease;
             border-radius: 0;
@@ -818,9 +817,12 @@
             }
 
             const root = getComputedStyle(document.documentElement);
-            const lineColor = (root.getPropertyValue('--primary-color') || '#916fc6').trim();
+            let lineColor = (root.getPropertyValue('--primary-color') || '#b1081b').trim();
             const gridColor = (root.getPropertyValue('--border-color') || '#EDE9FE').trim();
             const tickColor = (root.getPropertyValue('--text-primary') || '#1E1B4B').trim();
+            if (!lineColor || lineColor.charAt(0) !== '#') {
+                lineColor = '#b1081b';
+            }
             const fillColor = hexToRgba(lineColor, 0.12);
 
             fetch('ChartServlet?action=weeklySales', { cache: 'no-store' })
@@ -840,6 +842,8 @@
                                 tension: 0.3,
                                 fill: true,
                                 pointRadius: 2,
+                                pointBackgroundColor: lineColor,
+                                pointBorderColor: lineColor,
                                 borderWidth: 2
                             }]
                         },

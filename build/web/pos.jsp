@@ -18,37 +18,36 @@
         <!-- Bootstrap Icons -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
         <style>
-            :root {
-                /* Brand Colors - Modern Bookstore Theme */
-                --primary-color: #916fc6;
-                --primary-hover: #5b21b6;
-                --secondary-color: #ec4899;
-                --tertiary-color: #8b5cf6;
+           :root {
+                /* Brand Colors */
+                --primary-color: #b1081b;       /* Strong maroon/red - brand & emphasis */
+                --primary-hover: #8a0615;       /* Darker maroon for hover */
+                --secondary-color: #57b8bf;     /* Fresh teal accent */
+                --tertiary-color: #57b8bf;      /* Harmonized accent/tertiary */
 
                 /* Status Colors */
-                --success-color: #10B981;
-                --warning-color: #F59E0B;
-                --danger-color: #EF4444;
-                --info-color: #3B82F6;
+                --success-color: #4CAF50;       /* Soft green for success */
+                --warning-color: #F4A261;       /* Gentle orange for warnings */
+                --danger-color: #E76F51;        /* Coral red for errors */
+                --info-color: #60A5FA;          /* Light modern blue */
 
                 /* Backgrounds */
-                --background-color: #F9F5FF;
-                --card-background: #FFFFFF;
-                --gradient-bg: linear-gradient(135deg, #F9F5FF 0%, #F3E8FF 100%);
+                --background-color: #ffffff;    /* Soft lavender background */
+                --card-background: #eefdff;     /* Light blue-gray card background */
 
                 /* Text Colors */
-                --text-primary: #1E1B4B;
-                --text-secondary: #4C1D95;
-                --text-light: #cdc5d6;
+                --text-primary: #1e293b;        /* Dark navy for readability */
+                --text-secondary: #d0898d;      /* Muted pinkish tone for subtext */
 
                 /* Borders & Accents */
-                --border-color: #EDE9FE;
-                --sidebar-bg: #401782;
-                --sidebar-hover: #4a238a;
-                --accent-color: #928c9e;
-                --gold-accent: #FBBF24;
-                --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                --border-color: #d0898d;        /* Soft pink border */
+                --sidebar-bg: #ffffff;          /* Clean white sidebar */
+                --sidebar-hover: #ecdbeb;       /* Light lavender hover */
+                --sidebar-active-bg: #57b8bf;   /* Teal active background */
+                --sidebar-active-text: #ffffff; /* White text on active sidebar item */
+                --accent-color: #57b8bf;        /* Teal highlights */
             }
+
 
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -80,7 +79,7 @@
             }
 
             .bill-header h4 {
-                color: #1e3c72;
+                color: var(--primary-color);
                 margin-bottom: 10px;
                 font-weight: bold;
             }
@@ -124,7 +123,7 @@
             }
 
             #billModal .modal-header {
-                background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+                background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
                 color: white;
                 border-bottom: none;
                 border-radius: 12px 12px 0 0;
@@ -185,7 +184,7 @@
             }
 
             .quantity-btn {
-                background: #007bff;
+                background: var(--tertiary-color);
                 color: white;
                 border: none;
                 border-radius: 4px;
@@ -200,7 +199,7 @@
             }
 
             .quantity-btn:hover {
-                background: #0056b3;
+                background: var(--primary-hover);
             }
 
             .quantity-btn:active {
@@ -266,7 +265,7 @@
             }
 
             .pos-section-title {
-                color: #6f42c1;
+                color: var(--primary-color);
                 font-size: 1.8rem;
                 font-weight: 700;
                 margin: 0;
@@ -790,9 +789,9 @@
             }
 
             .quantity-input:focus {
-                border-color: #667eea;
+                border-color: var(--accent-color);
                 outline: none;
-                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 15%, transparent);
             }
 
             /* Customer Selection Styles */
@@ -816,13 +815,13 @@
 
             .customer-item:hover {
                 background: #f8f9fa;
-                border-color: #667eea;
+                border-color: var(--accent-color);
             }
 
             .customer-item.selected {
-                background: #667eea;
+                background: var(--primary-color);
                 color: white;
-                border-color: #667eea;
+                border-color: var(--primary-color);
             }
 
             /* Bill Styles */
