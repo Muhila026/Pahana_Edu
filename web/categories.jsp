@@ -24,23 +24,43 @@
 
         /* ===== CSS VARIABLES ===== */
         :root {
-            --primary-color: #6366f1; /* Modern indigo */
-            --secondary-color: #8b5cf6; /* Modern violet */
-            --accent-color: #a855f7; /* Modern purple */
-            --text-color: #1e293b; /* Dark blue-gray */
-            --light-color: #f8fafc; /* Light gray */
-            --hover-color: #4f46e5;
+            /* Brand Colors */
+            --primary-color: #b1081b;
+            --primary-hover: #8a0615;
+            --secondary-color: #57b8bf;
+
+            /* Status Colors */
+            --success-color: #4CAF50;
+            --warning-color: #F4A261;
+            --danger-color: #E76F51;
+            --info-color: #60A5FA;
+
+            /* Backgrounds */
+            --background-color: #ffffff;
+            --card-background: #eefdff;
+
+            /* Text Colors */
+            --text-primary: #1e293b;
+            --text-secondary: #d0898d;
+
+            /* Borders & Accents */
+            --border-color: #d0898d;
+            --Navbar-bg: #ffffff;
+            --Navbar-hover: #ecdbeb;
+            --Navbar-active-bg: #57b8bf;
+            --Navbar-active-text: #ffffff;
+            --accent-color: #57b8bf;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* ===== PUBLIC NAVIGATION (Top Navbar Only) ===== */
         .public-navbar {
-            background: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background: var(--Navbar-bg);
+            box-shadow: 0 4px 6px -1px var(--border-color), 0 2px 4px -1px var(--border-color);
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid var(--border-color);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
@@ -56,27 +76,17 @@
         .logo {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #6366f1;
+            color: var(--primary-color);
             text-decoration: none;
             letter-spacing: -0.5px;
             padding: 18px 20px 18px 0;
             display: flex;
             align-items: center;
-            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            border-right: 1px solid var(--border-color);
         }
         
-        .logo-text {
-            background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            background-size: 200% auto;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .logo:hover .logo-text {
-            background-position: 100% 0;
-        }
+        .logo-text { color: var(--primary-color); transition: var(--transition); }
+        .logo:hover .logo-text { color: var(--secondary-color); }
         
         .nav-menu {
             list-style: none;
@@ -93,19 +103,19 @@
         .nav-menu a {
             display: block;
             padding: 18px 16px;
-            color: #1e293b;
+            color: var(--text-primary);
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition);
             position: relative;
             border-bottom: 2px solid transparent;
         }
         
         .nav-menu a:hover,
         .nav-menu a.active {
-            color: #6366f1;
-            border-bottom-color: #6366f1;
+            color: var(--Navbar-active-bg);
+            border-bottom-color: var(--Navbar-active-bg);
         }
         
         .nav-menu a.active {
@@ -113,25 +123,25 @@
         }
         
         .welcome-user {
-            color: #8b5cf6 !important;
+            color: var(--secondary-color) !important;
             font-weight: 600 !important;
             padding: 18px 16px !important;
         }
         
         .login-btn {
-            background: linear-gradient(90deg, #6366f1, #8b5cf6);
-            color: white !important;
+            background: var(--primary-color);
+            color: var(--Navbar-active-text) !important;
             font-weight: 600 !important;
             border-radius: 6px;
             margin: 7px 0;
             padding: 8px 16px !important;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition);
             border: none;
         }
         
         .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 12px var(--border-color);
         }
         
         @media (max-width: 991px) {
@@ -185,12 +195,12 @@
         }
 
         .customer-navbar {
-            background: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background: var(--Navbar-bg);
+            box-shadow: 0 4px 6px -1px var(--border-color), 0 2px 4px -1px var(--border-color);
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid var(--border-color);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -206,27 +216,17 @@
         .customer-logo {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #6366f1;
+            color: var(--primary-color);
             text-decoration: none;
             letter-spacing: -0.5px;
             padding: 18px 20px 18px 0;
             display: flex;
             align-items: center;
-            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            border-right: 1px solid var(--border-color);
         }
 
-        .customer-logo-text {
-            background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            background-size: 200% auto;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .customer-logo:hover .customer-logo-text {
-            background-position: 100% 0;
-        }
+        .customer-logo-text { color: var(--primary-color); transition: var(--transition); }
+        .customer-logo:hover .customer-logo-text { color: var(--secondary-color); }
 
         .customer-nav-menu {
             list-style: none;
@@ -244,11 +244,11 @@
         .customer-nav-menu a {
             display: block;
             padding: 18px 16px;
-            color: #1e293b;
+            color: var(--text-primary);
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition);
             position: relative;
             border-bottom: 2px solid transparent;
             white-space: nowrap;
@@ -256,8 +256,8 @@
 
         .customer-nav-menu a:hover,
         .customer-nav-menu a.active {
-            color: #6366f1;
-            border-bottom-color: #6366f1;
+            color: var(--Navbar-active-bg);
+            border-bottom-color: var(--Navbar-active-bg);
         }
 
         .customer-nav-menu a.active {
@@ -268,26 +268,19 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            color: #1e293b;
+            color: var(--text-primary);
         }
 
-        .customer-user-info .welcome-text {
-            font-weight: 600;
-            color: #8b5cf6;
-            background: rgba(139, 92, 246, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            border: 1px solid rgba(139, 92, 246, 0.2);
-        }
+        .customer-user-info .welcome-text { font-weight: 600; color: var(--secondary-color); background: var(--card-background); padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--secondary-color); }
 
         .customer-logout-btn {
-            background: linear-gradient(90deg, #ef4444, #dc2626);
-            color: white !important;
+            background: var(--primary-color);
+            color: var(--Navbar-active-text) !important;
             font-weight: 600 !important;
             border-radius: 6px;
             margin: 7px 0;
             padding: 8px 16px !important;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition);
             border: none;
             text-decoration: none;
             display: flex;
@@ -297,7 +290,7 @@
 
         .customer-logout-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            box-shadow: 0 4px 12px var(--border-color);
         }
 
         @media (max-width: 991px) {
@@ -545,8 +538,8 @@
 
         /* Category Pills */
         .category-pills { max-width: 1000px; margin: -2rem auto 2rem; padding: 0 2rem; display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
-        .category-pill { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); color: #6366f1; padding: 0.35rem 0.9rem; border-radius: 999px; text-decoration: none; font-weight: 500; transition: all 0.2s; }
-        .category-pill:hover { background: #6366f1; color: #fff; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(99,102,241,0.25); }
+        .category-pill { background: var(--Navbar-hover); border: 1px solid var(--border-color); color: var(--primary-color); padding: 0.35rem 0.9rem; border-radius: 999px; text-decoration: none; font-weight: 500; transition: var(--transition); }
+        .category-pill:hover { background: var(--primary-color); color: var(--Navbar-active-text); transform: translateY(-1px); box-shadow: 0 6px 18px var(--border-color); }
 
         /* Categories Section */
         .categories {
@@ -563,10 +556,10 @@
         }
 
         .category-card {
-            background: white;
+            background: var(--Navbar-bg);
             border-radius: 20px;
             padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px var(--border-color);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -579,12 +572,12 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
         }
 
         .category-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 20px 40px var(--border-color);
         }
 
         .category-icon {
@@ -597,11 +590,11 @@
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 1rem;
-            color: #333;
+            color: var(--text-primary);
         }
 
         .category-description {
-            color: #666;
+            color: var(--text-secondary);
             margin-bottom: 1.5rem;
             line-height: 1.6;
         }
@@ -614,11 +607,11 @@
         }
 
         .book-count {
-            background: rgba(99, 102, 241, 0.1);
+            background: var(--Navbar-hover);
             padding: 0.5rem 1rem;
             border-radius: 20px;
             font-weight: 500;
-            color: #6366f1;
+            color: var(--primary-color);
         }
 
         .category-tags {
@@ -629,8 +622,8 @@
         }
 
         .tag {
-            background: rgba(99, 102, 241, 0.1);
-            color: #6366f1;
+            background: var(--Navbar-hover);
+            color: var(--primary-color);
             padding: 0.3rem 0.8rem;
             border-radius: 15px;
             font-size: 0.85rem;
@@ -638,8 +631,8 @@
         }
 
         .explore-btn {
-            background: linear-gradient(90deg, #6366f1, #8b5cf6);
-            color: white;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: var(--Navbar-active-text);
             text-decoration: none;
             padding: 0.8rem 1.5rem;
             border-radius: 25px;
@@ -650,13 +643,13 @@
 
         .explore-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 5px 15px var(--border-color);
         }
 
         /* Footer */
         .footer {
-            background: linear-gradient(90deg, #6366f1, #8b5cf6);
-            color: white;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            color: var(--Navbar-active-text);
             text-align: center;
             padding: 2rem;
             margin-top: 4rem;
@@ -664,7 +657,7 @@
 
         .footer p {
             margin: 0;
-            opacity: 0.8;
+            opacity: 0.9;
         }
 
         /* Responsive Design */
