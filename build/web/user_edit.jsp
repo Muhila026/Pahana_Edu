@@ -27,8 +27,8 @@
             /* Sidebar Styles */
             .sidebar {
                 width: 280px;
-                background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-                color: white;
+                background: var(--sidebar-bg);
+                color: var(--sidebar-active-text);
                 padding: 0;
                 position: fixed;
                 height: 100vh;
@@ -38,21 +38,18 @@
 
             .sidebar-header {
                 padding: 2rem 1.5rem;
-                border-bottom: 1px solid rgba(255,255,255,0.1);
+                border-bottom: 1px solid var(--border-color);
                 text-align: center;
             }
 
             .logo {
                 font-size: 1.8rem;
                 font-weight: 700;
-                color: white;
+                color: var(--sidebar-active-text);
                 text-decoration: none;
             }
 
-            .logo:hover {
-                color: #ffd700;
-                text-decoration: none;
-            }
+            .logo:hover { color: var(--accent-color); text-decoration: none; }
 
             .nav-menu {
                 padding: 1rem 0;
@@ -67,24 +64,16 @@
                 display: flex;
                 align-items: center;
                 padding: 0.75rem 1rem;
-                color: rgba(255,255,255,0.8);
+                color: var(--sidebar-active-text);
                 text-decoration: none;
                 border-radius: 8px;
                 transition: all 0.3s ease;
                 font-weight: 500;
             }
 
-            .nav-link:hover {
-                background: rgba(255,255,255,0.1);
-                color: white;
-                text-decoration: none;
-            }
+            .nav-link:hover { background: var(--sidebar-hover); color: var(--accent-color); text-decoration: none; }
 
-            .nav-link.active {
-                background: rgba(255,255,255,0.2);
-                color: white;
-                border-left: 4px solid #ffd700;
-            }
+            .nav-link.active { background: var(--sidebar-active-bg); color: var(--sidebar-active-text); border-left: 4px solid var(--accent-color); }
 
             .nav-link i {
                 margin-right: 0.75rem;
@@ -92,11 +81,7 @@
                 width: 20px;
             }
 
-            .sidebar-footer {
-                padding: 1rem 1.5rem;
-                border-top: 1px solid rgba(255,255,255,0.1);
-                margin-top: auto;
-            }
+            .sidebar-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border-color); margin-top: auto; }
 
             /* Main Content Styles */
             .main-content {

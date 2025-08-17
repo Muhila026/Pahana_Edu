@@ -18,31 +18,31 @@
         <style>
         :root {
                 /* Brand Colors */
-                --primary-color: #b1081b;       /* Strong maroon/red - brand & emphasis */
-                --primary-hover: #8a0615;       /* Darker maroon for hover */
-                --secondary-color: #57b8bf;     /* Fresh teal accent */
+                --primary-color: #2C3E91;       /* Deep royal blue - main brand color */
+                --primary-hover: #1F2D6D;       /* Darker navy blue for hover */
+                --secondary-color: #4A90E2;     /* Bright sky blue for highlights */
 
-                /* Status Colors */
-                --success-color: #4CAF50;       /* Soft green for success */
-                --warning-color: #F4A261;       /* Gentle orange for warnings */
-                --danger-color: #E76F51;        /* Coral red for errors */
-                --info-color: #60A5FA;          /* Light modern blue */
+                /* Status Colors (blue-friendly) */
+                --success-color: #3BB273;       /* Teal green - balanced with blue */
+                --warning-color: #F4B400;       /* Golden yellow for alerts */
+                --danger-color: #E63946;        /* Strong coral red */
+                --info-color: #5DADEC;          /* Soft info blue */
 
                 /* Backgrounds */
-                --background-color: #ffffff;    /* Soft lavender background */
-                --card-background: #eefdff;     /* Light blue-gray card background */
+                --background-color: #F4F8FC;    /* Very light blue-gray background */
+                --card-background: #FFFFFF;     /* Clean white cards */
 
                 /* Text Colors */
-                --text-primary: #1e293b;        /* Dark navy for readability */
-                --text-secondary: #d0898d;      /* Muted pinkish tone for subtext */
+                --text-primary: #1E293B;        /* Dark navy-gray for readability */
+                --text-secondary: #475569;      /* Muted cool gray for secondary text */
 
                 /* Borders & Accents */
-                --border-color: #d0898d;        /* Soft pink border */
-                --sidebar-bg: #ffffff;          /* Clean white sidebar */
-                --sidebar-hover: #ecdbeb;       /* Light lavender hover */
-                --sidebar-active-bg: #57b8bf;   /* Teal active background */
-                --sidebar-active-text: #ffffff; /* White text on active sidebar item */
-                --accent-color: #57b8bf;        /* Teal highlights */
+                --border-color: #D0D9E6;        /* Soft bluish-gray border */
+                --sidebar-bg: #2C3E91;          /* Deep blue sidebar */
+                --sidebar-hover: #1F2D6D;       /* Darker hover state */
+                --sidebar-active-bg: #4A90E2;   /* Bright blue for active item */
+                --sidebar-active-text: #ffffff; /* White text on active item */
+                --accent-color: #3FA9F5;        /* Fresh accent blue */
             }
 
         * {
@@ -65,7 +65,7 @@
                 height: 100vh;
             width: 280px;
             background: var(--sidebar-bg);
-            color: var(--primary-color);
+            color: var(--sidebar-active-text);
                 overflow-y: auto;
                 z-index: 1000;
             transition: all 0.3s ease;
@@ -73,20 +73,20 @@
 
             .sidebar-header {
                 padding: 2rem 1.5rem;
-            border-bottom: 1px solid var(--sidebar-hover);
+            border-bottom: 1px solid var(--border-color);
                 text-align: center;
             }
 
                 .sidebar-title {
             font-size: 1.4rem;
                 font-weight: 700;
-            color: var(--primary-color);
+            color: var(--sidebar-active-text);
             margin-bottom: 0.5rem;
         }
 
         .sidebar-subtitle {
             font-size: 0.9rem;
-            color: var(--primary-color);
+            color: var(--sidebar-active-text);
             font-weight: 400;
         }
 
@@ -102,7 +102,7 @@
                 display: flex;
                 align-items: center;
             padding: 0.875rem 1.5rem;
-            color: var(--primary-color);
+            color: var(--sidebar-active-text);
                 text-decoration: none;
                 transition: all 0.3s ease;
             border-radius: 0;
@@ -111,10 +111,7 @@
 
 
 
-            .nav-link.active {
-            background: var(--accent-color);
-                color: white;
-            }
+            .nav-link.active { background: var(--sidebar-active-bg); color: var(--sidebar-active-text); }
 
             .nav-link i {
                 width: 20px;
@@ -122,11 +119,7 @@
             font-size: 1.1rem;
             }
 
-            .sidebar-footer {
-            padding: 1.5rem;
-            border-top: 1px solid var(--sidebar-hover);
-                margin-top: auto;
-            }
+            .sidebar-footer { padding: 1.5rem; border-top: 1px solid var(--border-color); margin-top: auto; }
 
             .logout-btn {
                 width: 100%;
@@ -158,7 +151,7 @@
         }
 
         .page-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            background: var(--secondary-color);
             color: white;
             padding: 2.5rem;
             border-radius: 20px;
@@ -293,7 +286,7 @@
         }
 
         .table thead th {
-            background: var(--primary-color);
+            background: var(--primary-hover);
             color: white;
             border: none;
             padding: 1rem;
@@ -422,6 +415,47 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
             color: white;
+        }
+        
+        /* Custom Delete Confirmation Popup */
+        .custom-popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        .custom-popup {
+            background: #ffffff;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        .custom-popup-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--card-background);
+            color: var(--text-primary);
+        }
+        .custom-popup-body {
+            padding: 1rem;
+            color: var(--text-primary);
+        }
+        .custom-popup-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            border-top: 1px solid var(--border-color);
+            background: #fff;
         }
         </style>
     </head>
@@ -709,7 +743,7 @@
                                         <a href="customer_edit.jsp?customer_id=<%= customer.getCustomerId() %>" class="btn btn-edit btn-sm">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <button class="btn btn-delete btn-sm" data-customer-id="<%= customer.getCustomerId() %>" onclick="deleteCustomer(this.dataset.customerId)" 
+                                        <button type="button" class="btn btn-delete btn-sm" data-customer-id="<%= customer.getCustomerId() %>" onclick="deleteCustomer(this.dataset.customerId)" 
                                                 title="Delete customer">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -795,7 +829,7 @@
             function confirmDelete(customerId) {
                 // Create AJAX request
                 const xhr = new XMLHttpRequest();
-                xhr.open('POST', 'CustomerServlet?action=delete&customer_id=' + customerId, true);
+                xhr.open('POST', 'CustomerServlet?action=delete', true);
                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                 xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                 
@@ -830,7 +864,8 @@
                     }
                 };
                 
-                xhr.send();
+                // send ID in body for reliability
+                xhr.send('customer_id=' + encodeURIComponent(customerId));
             }
 
             function showAlert(message, type) {
@@ -973,6 +1008,10 @@
                                     document.getElementById('sendVerificationBtn').disabled = true;
                                     document.getElementById('verificationPin').disabled = true;
                                     document.getElementById('verifyEmailBtn').disabled = true;
+                                    // After enabling, auto-submit the form to create and return to list
+                                    setTimeout(function(){
+                                        document.querySelector('#addCustomerModal form').submit();
+                                    }, 500);
                                 } else {
                                     showAlert(response.message, 'error');
                                     showVerificationStatus('Verification failed. Please try again.', 'error');
@@ -989,6 +1028,10 @@
                                 document.getElementById('sendVerificationBtn').disabled = true;
                                 document.getElementById('verificationPin').disabled = true;
                                 document.getElementById('verifyEmailBtn').disabled = true;
+                                // Auto-submit in fallback too
+                                setTimeout(function(){
+                                    document.querySelector('#addCustomerModal form').submit();
+                                }, 500);
                             }
                         } else {
                             showAlert('Failed to verify email. Please try again.', 'error');

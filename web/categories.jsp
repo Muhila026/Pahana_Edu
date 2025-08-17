@@ -25,31 +25,31 @@
         /* ===== CSS VARIABLES ===== */
         :root {
             /* Brand Colors */
-            --primary-color: #b1081b;
-            --primary-hover: #8a0615;
-            --secondary-color: #57b8bf;
+            --primary-color: #2C3E91;
+            --primary-hover: #1F2D6D;
+            --secondary-color: #4A90E2;
 
-            /* Status Colors */
-            --success-color: #4CAF50;
-            --warning-color: #F4A261;
-            --danger-color: #E76F51;
-            --info-color: #60A5FA;
+            /* Status Colors (blue-friendly) */
+            --success-color: #3BB273;
+            --warning-color: #F4B400;
+            --danger-color: #E63946;
+            --info-color: #5DADEC;
 
             /* Backgrounds */
-            --background-color: #ffffff;
-            --card-background: #eefdff;
+            --background-color: #F4F8FC;
+            --card-background: #FFFFFF;
 
             /* Text Colors */
-            --text-primary: #1e293b;
-            --text-secondary: #d0898d;
+            --text-primary: #1E293B;
+            --text-secondary: #475569;
 
             /* Borders & Accents */
-            --border-color: #d0898d;
-            --Navbar-bg: #ffffff;
-            --Navbar-hover: #ecdbeb;
-            --Navbar-active-bg: #57b8bf;
+            --border-color: #D0D9E6;
+            --Navbar-bg: var(--card-background);
+            --Navbar-hover: rgba(76, 117, 186, 0.12);
+            --Navbar-active-bg: var(--secondary-color);
             --Navbar-active-text: #ffffff;
-            --accent-color: #57b8bf;
+            --accent-color: #3FA9F5;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -354,45 +354,35 @@
 
         .admin-sidebar {
             width: 320px;
-            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
-            color: white;
+            background: var(--sidebar-bg);
+            color: var(--sidebar-active-text);
             padding: 1rem 0;
             position: fixed;
             height: 100vh;
             overflow-y: auto;
             z-index: 999;
             scrollbar-width: thin;
-            scrollbar-color: #3498db #2c3e50;
+            scrollbar-color: var(--secondary-color) var(--sidebar-hover);
         }
 
         .admin-sidebar::-webkit-scrollbar {
             width: 6px;
         }
 
-        .admin-sidebar::-webkit-scrollbar-track {
-            background: #2c3e50;
-        }
+        .admin-sidebar::-webkit-scrollbar-track { background: var(--sidebar-hover); }
 
-        .admin-sidebar::-webkit-scrollbar-thumb {
-            background: #3498db;
-            border-radius: 3px;
-        }
+        .admin-sidebar::-webkit-scrollbar-thumb { background: var(--secondary-color); border-radius: 3px; }
 
-        .admin-sidebar::-webkit-scrollbar-thumb:hover {
-            background: #2980b9;
-        }
+        .admin-sidebar::-webkit-scrollbar-thumb:hover { background: var(--primary-hover); }
 
         .admin-sidebar-header {
             padding: 0 1.5rem 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid var(--border-color);
             margin-bottom: 1.5rem;
             text-align: center;
         }
 
-        .admin-sidebar-header h2 {
-            color: #3498db;
-            margin-bottom: 0.5rem;
-        }
+        .admin-sidebar-header h2 { color: var(--secondary-color); margin-bottom: 0.5rem; }
 
         .admin-sidebar-menu {
             list-style: none;
@@ -407,7 +397,7 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            color: white;
+            color: var(--sidebar-active-text);
             text-decoration: none;
             padding: 0.8rem 1.2rem;
             border-radius: 8px;
@@ -418,16 +408,16 @@
         }
 
         .admin-sidebar-menu a:hover {
-            background: rgba(255,255,255,0.1);
-            color: #3498db;
+            background: var(--sidebar-hover);
+            color: var(--accent-color);
             transform: translateX(5px);
-            border-left-color: #3498db;
+            border-left-color: var(--accent-color);
         }
 
         .admin-sidebar-menu a.active {
-            background: rgba(52, 152, 219, 0.2);
-            color: #3498db;
-            border-left-color: #3498db;
+            background: var(--sidebar-active-bg);
+            color: var(--sidebar-active-text);
+            border-left-color: var(--accent-color);
         }
 
         .admin-sidebar-menu i {

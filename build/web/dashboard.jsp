@@ -19,31 +19,31 @@
         <style>
        :root {
                 /* Brand Colors */
-                --primary-color: #b1081b;       /* Strong maroon/red - brand & emphasis */
-                --primary-hover: #8a0615;       /* Darker maroon for hover */
-                --secondary-color: #57b8bf;     /* Fresh teal accent */
+                --primary-color: #2C3E91;       /* Deep royal blue - main brand color */
+                --primary-hover: #1F2D6D;       /* Darker navy blue for hover */
+                --secondary-color: #4A90E2;     /* Bright sky blue for highlights */
 
-                /* Status Colors */
-                --success-color: #4CAF50;       /* Soft green for success */
-                --warning-color: #F4A261;       /* Gentle orange for warnings */
-                --danger-color: #E76F51;        /* Coral red for errors */
-                --info-color: #60A5FA;          /* Light modern blue */
+                /* Status Colors (blue-friendly) */
+                --success-color: #3BB273;       /* Teal green - balanced with blue */
+                --warning-color: #F4B400;       /* Golden yellow for alerts */
+                --danger-color: #E63946;        /* Strong coral red */
+                --info-color: #5DADEC;          /* Soft info blue */
 
                 /* Backgrounds */
-                --background-color: #ffffff;    /* Soft lavender background */
-                --card-background: #eefdff;     /* Light blue-gray card background */
+                --background-color: #F4F8FC;    /* Very light blue-gray background */
+                --card-background: #FFFFFF;     /* Clean white cards */
 
                 /* Text Colors */
-                --text-primary: #1e293b;        /* Dark navy for readability */
-                --text-secondary: #d0898d;      /* Muted pinkish tone for subtext */
+                --text-primary: #1E293B;        /* Dark navy-gray for readability */
+                --text-secondary: #475569;      /* Muted cool gray for secondary text */
 
                 /* Borders & Accents */
-                --border-color: #d0898d;        /* Soft pink border */
-                --sidebar-bg: #ffffff;          /* Clean white sidebar */
-                --sidebar-hover: #ecdbeb;       /* Light lavender hover */
-                --sidebar-active-bg: #57b8bf;   /* Teal active background */
-                --sidebar-active-text: #ffffff; /* White text on active sidebar item */
-                --accent-color: #57b8bf;        /* Teal highlights */
+                --border-color: #D0D9E6;        /* Soft bluish-gray border */
+                --sidebar-bg: #2C3E91;          /* Deep blue sidebar */
+                --sidebar-hover: #1F2D6D;       /* Darker hover state */
+                --sidebar-active-bg: #4A90E2;   /* Bright blue for active item */
+                --sidebar-active-text: #ffffff; /* White text on active item */
+                --accent-color: #3FA9F5;        /* Fresh accent blue */
             }
 
 
@@ -67,7 +67,7 @@
             height: 100vh;
                 width: 280px;
             background: var(--sidebar-bg);
-                color: var(--primary-color);
+                color: var(--sidebar-active-text);
                 overflow-y: auto;
                 z-index: 1000;
             transition: all 0.3s ease;
@@ -75,20 +75,20 @@
 
             .sidebar-header {
                 padding: 2rem 1.5rem;
-            border-bottom: 1px solid var(--sidebar-hover);
+            border-bottom: 1px solid var(--border-color);
                 text-align: center;
             }
 
                 .sidebar-title {
             font-size: 1.4rem;
             font-weight: 700;
-            color: var(--primary-color);
+            color: var(--sidebar-active-text);
             margin-bottom: 0.5rem;
         }
 
         .sidebar-subtitle {
             font-size: 0.9rem;
-            color: var(--primary-color);
+            color: var(--sidebar-active-text);
             font-weight: 400;
         }
 
@@ -104,7 +104,7 @@
                 display: flex;
                 align-items: center;
             padding: 0.875rem 1.5rem;
-            color: var(--primary-color);
+            color: var(--sidebar-active-text);
                 text-decoration: none;
                 transition: all 0.3s ease;
             border-radius: 0;
@@ -114,8 +114,8 @@
 
 
             .nav-link.active {
-            background: var(--accent-color);
-                color: white;
+            background: var(--sidebar-active-bg);
+                color: var(--sidebar-active-text);
             }
 
             .nav-link i {
@@ -817,13 +817,14 @@
             }
 
             const root = getComputedStyle(document.documentElement);
-            let lineColor = (root.getPropertyValue('--primary-color') || '#b1081b').trim();
+            const infoColor = (root.getPropertyValue('--info-color') || '#60A5FA').trim();
+            let lineColor = infoColor;
             const gridColor = (root.getPropertyValue('--border-color') || '#EDE9FE').trim();
             const tickColor = (root.getPropertyValue('--text-primary') || '#1E1B4B').trim();
             if (!lineColor || lineColor.charAt(0) !== '#') {
-                lineColor = '#b1081b';
+                lineColor = '#60A5FA';
             }
-            const fillColor = hexToRgba(lineColor, 0.12);
+            const fillColor = hexToRgba(infoColor, 0.12);
 
             fetch('ChartServlet?action=weeklySales', { cache: 'no-store' })
                 .then(res => res.json())
@@ -842,7 +843,7 @@
                                 tension: 0.3,
                                 fill: true,
                                 pointRadius: 2,
-                                pointBackgroundColor: lineColor,
+                                pointBackgroundColor: infoColor,
                                 pointBorderColor: lineColor,
                                 borderWidth: 2
                             }]

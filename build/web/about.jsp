@@ -16,33 +16,42 @@
     <style>
         /* ===== CSS VARIABLES ===== */
         :root {
-            /* Brand Colors */
-            --primary-color: #b1081b;
-            --primary-hover: #8a0615;
-            --secondary-color: #57b8bf;
+    /* Brand Colors */
+    --primary-color: #2C3E91;       /* Deep royal blue - main brand color */
+    --primary-hover: #1F2D6D;       /* Darker navy blue for hover */
+    --secondary-color: #4A90E2;     /* Bright sky blue for highlights */
 
-            /* Status Colors */
-            --success-color: #4CAF50;
-            --warning-color: #F4A261;
-            --danger-color: #E76F51;
-            --info-color: #60A5FA;
+    /* Status Colors (blue-friendly) */
+    --success-color: #3BB273;       /* Teal green - balanced with blue */
+    --warning-color: #F4B400;       /* Golden yellow for alerts */
+    --danger-color: #E63946;        /* Strong coral red */
+    --info-color: #5DADEC;          /* Soft info blue */
 
-            /* Backgrounds */
-            --background-color: #ffffff;
-            --card-background: #eefdff;
+    /* Backgrounds */
+    --background-color: #F4F8FC;    /* Very light blue-gray background */
+    --card-background: #FFFFFF;     /* Clean white cards */
 
-            /* Text Colors */
-            --text-primary: #1e293b;
-            --text-secondary: #d0898d;
+    /* Text Colors */
+    --text-primary: #1E293B;        /* Dark navy-gray for readability */
+    --text-secondary: #475569;      /* Muted cool gray for secondary text */
 
-            /* Borders & Accents */
-            --border-color: #d0898d;
-            --Navbar-bg: #ffffff;
-            --Navbar-hover: #ecdbeb;
-            --Navbar-active-bg: #57b8bf;
-            --Navbar-active-text: #ffffff;
-            --accent-color: #57b8bf;
-        }
+    /* Borders & Accents */
+    --border-color: #D0D9E6;        /* Soft bluish-gray border */
+    --accent-color: #3FA9F5;        /* Fresh accent blue */
+
+    /* Sidebar (optional) */
+    --sidebar-bg: #2C3E91;          /* Deep blue sidebar */
+    --sidebar-hover: #1F2D6D;       /* Darker hover state */
+    --sidebar-active-bg: #4A90E2;   /* Bright blue for active item */
+    --sidebar-active-text: #ffffff; /* White text on active item */
+
+    /* Navbar (for compatibility with existing styles) */
+    --Navbar-bg: var(--card-background);
+    --Navbar-hover: rgba(76, 117, 186, 0.12);
+    --Navbar-active-bg: var(--secondary-color);
+    --Navbar-active-text: #ffffff;
+}
+
         
         * {
             margin: 0;
@@ -353,26 +362,26 @@
 
         .admin-sidebar {
             width: 320px;
-            background: linear-gradient(180deg, var(--primary-color) 0%, var(--primary-hover) 100%);
-            color: var(--Navbar-active-text);
+            background: var(--sidebar-bg);
+            color: var(--sidebar-active-text);
             padding: 1rem 0;
             position: fixed;
             height: 100vh;
             overflow-y: auto;
             z-index: 999;
             scrollbar-width: thin;
-            scrollbar-color: var(--secondary-color) var(--primary-hover);
+            scrollbar-color: var(--secondary-color) var(--sidebar-hover);
         }
 
         .admin-sidebar::-webkit-scrollbar {
             width: 6px;
         }
 
-        .admin-sidebar::-webkit-scrollbar-track { background: var(--primary-hover); }
+        .admin-sidebar::-webkit-scrollbar-track { background: var(--sidebar-hover); }
 
         .admin-sidebar::-webkit-scrollbar-thumb { background: var(--secondary-color); border-radius: 3px; }
 
-        .admin-sidebar::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
+        .admin-sidebar::-webkit-scrollbar-thumb:hover { background: var(--primary-hover); }
 
         .admin-sidebar-header {
             padding: 0 1.5rem 1.5rem;
@@ -396,7 +405,7 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            color: var(--Navbar-active-text);
+            color: var(--sidebar-active-text);
             text-decoration: none;
             padding: 0.8rem 1.2rem;
             border-radius: 8px;
@@ -407,16 +416,16 @@
         }
 
         .admin-sidebar-menu a:hover {
-            background: var(--Navbar-hover);
-            color: var(--secondary-color);
+            background: var(--sidebar-hover);
+            color: var(--accent-color);
             transform: translateX(5px);
-            border-left-color: var(--secondary-color);
+            border-left-color: var(--accent-color);
         }
 
         .admin-sidebar-menu a.active {
-            background: var(--Navbar-hover);
-            color: var(--secondary-color);
-            border-left-color: var(--secondary-color);
+            background: var(--sidebar-active-bg);
+            color: var(--sidebar-active-text);
+            border-left-color: var(--accent-color);
         }
 
         .admin-sidebar-menu i {

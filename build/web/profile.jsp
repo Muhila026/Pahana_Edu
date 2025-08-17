@@ -18,23 +18,23 @@
         <style>
         :root {
             /* Brand Colors */
-            --primary-color: #b1081b;
-            --primary-hover: #8a0615;
-            --secondary-color: #57b8bf;
-            --success-color: #4CAF50;
-            --warning-color: #F4A261;
-            --danger-color: #E76F51;
-            --info-color: #60A5FA;
-            --background-color: #ffffff;
-            --card-background: #eefdff;
-            --text-primary: #1e293b;
-            --text-secondary: #d0898d;
-            --border-color: #d0898d;
-            --sidebar-bg: #ffffff;
-            --sidebar-hover: #ecdbeb;
-            --sidebar-active-bg: #57b8bf;
+            --primary-color: #2C3E91;
+            --primary-hover: #1F2D6D;
+            --secondary-color: #4A90E2;
+            --success-color: #3BB273;
+            --warning-color: #F4B400;
+            --danger-color: #E63946;
+            --info-color: #5DADEC;
+            --background-color: #F4F8FC;
+            --card-background: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #475569;
+            --border-color: #D0D9E6;
+            --sidebar-bg: #2C3E91;
+            --sidebar-hover: #1F2D6D;
+            --sidebar-active-bg: #4A90E2;
             --sidebar-active-text: #ffffff;
-            --accent-color: #57b8bf;
+            --accent-color: #3FA9F5;
         }
 
         * {
@@ -57,7 +57,7 @@
             height: 100vh;
                 width: 280px;
             background: var(--sidebar-bg);
-                color: var(--primary-color);
+                color: var(--sidebar-active-text);
                 overflow-y: auto;
                 z-index: 1000;
             transition: all 0.3s ease;
@@ -65,20 +65,20 @@
 
             .sidebar-header {
                 padding: 2rem 1.5rem;
-            border-bottom: 1px solid var(--sidebar-hover);
+            border-bottom: 1px solid var(--border-color);
                 text-align: center;
             }
 
         .sidebar-title {
                 font-size: 1.4rem;
                 font-weight: 700;
-            color: var(--primary-color);
+            color: var(--sidebar-active-text);
             margin-bottom: 0.5rem;
         }
 
         .sidebar-subtitle {
             font-size: 0.9rem;
-            color: var(--primary-color);
+            color: var(--sidebar-active-text);
             font-weight: 400;
         }
 
@@ -94,7 +94,7 @@
                 display: flex;
                 align-items: center;
             padding: 0.875rem 1.5rem;
-            color: var(--primary-color);
+            color: var(--sidebar-active-text);
                 text-decoration: none;
                 transition: all 0.3s ease;
             border-radius: 0;
@@ -103,14 +103,13 @@
 
             .nav-link:hover {
             background: var(--sidebar-hover);
-                color: white;
+                color: var(--sidebar-active-text);
                 text-decoration: none;
             }
 
             .nav-link.active {
-            background: var(--accent-color);
-                color: white;
-            border-left: 4px solid var(--primary-color);
+            background: var(--sidebar-active-bg);
+                color: var(--sidebar-active-text);
             }
 
             .nav-link i {
@@ -121,7 +120,7 @@
 
             .sidebar-footer {
             padding: 1.5rem;
-            border-top: 1px solid var(--sidebar-hover);
+            border-top: 1px solid var(--border-color);
                 margin-top: auto;
             }
 
@@ -141,8 +140,8 @@
             }
 
             .logout-btn:hover {
-            background: #dc2626;
-                color: white;
+            background: var(--danger-color);
+                color: var(--sidebar-active-text);
                 text-decoration: none;
             transform: translateY(-2px);
             }
@@ -289,18 +288,18 @@
             }
 
             .alert-success {
-            background: linear-gradient(135deg, var(--success-color), #059669);
-            color: white;
+            background: var(--success-color);
+            color: var(--sidebar-active-text);
             }
 
             .alert-danger {
-            background: linear-gradient(135deg, var(--danger-color), #dc2626);
-            color: white;
+            background: var(--danger-color);
+            color: var(--sidebar-active-text);
         }
 
         .alert-info {
-            background: linear-gradient(135deg, var(--info-color), #2563eb);
-            color: white;
+            background: var(--info-color);
+            color: var(--sidebar-active-text);
         }
 
         .btn-close {
@@ -363,8 +362,8 @@
 
         /* Profile Info Styles */
         .profile-info {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--info-color) 100%);
-            color: white;
+            background: var(--primary-color);
+            color: var(--sidebar-active-text);
             border-radius: 16px;
             padding: 2rem;
             margin-bottom: 2rem;

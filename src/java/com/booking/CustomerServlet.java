@@ -904,10 +904,10 @@ public class CustomerServlet extends HttpServlet {
 
             if (success) {
                 System.out.println("Customer created successfully: " + accountNumber);
-                response.sendRedirect("customer.jsp?message=Customer created successfully.");
+                response.sendRedirect("CustomerServlet?action=list&message=Customer created successfully.");
             } else {
                 System.err.println("Customer creation failed: " + accountNumber);
-                response.sendRedirect("customer.jsp?error=Failed to create customer.");
+                response.sendRedirect("CustomerServlet?action=list&error=Failed to create customer.");
             }
 
         } catch (Exception e) {
@@ -940,10 +940,10 @@ public class CustomerServlet extends HttpServlet {
 
             if (success) {
                 System.out.println("Customer updated successfully: " + accountNumber);
-                response.sendRedirect("customer.jsp?message=Customer updated successfully.");
+                response.sendRedirect("CustomerServlet?action=list&message=Customer updated successfully.");
             } else {
                 System.err.println("Customer update failed: " + accountNumber);
-                response.sendRedirect("customer.jsp?error=Failed to update customer.");
+                response.sendRedirect("CustomerServlet?action=list&error=Failed to update customer.");
             }
 
         } catch (Exception e) {
@@ -994,7 +994,7 @@ public class CustomerServlet extends HttpServlet {
                     response.getWriter().write("{\"success\": true, \"message\": \"Customer deleted successfully.\"}");
                 } else {
                     // Redirect for regular requests
-                    response.sendRedirect("customer.jsp?message=Customer deleted successfully.");
+                    response.sendRedirect("CustomerServlet?action=list&message=Customer deleted successfully.");
                 }
             } else {
                 System.err.println("Customer deletion failed: ID " + customerId);
@@ -1005,7 +1005,7 @@ public class CustomerServlet extends HttpServlet {
                     response.getWriter().write("{\"success\": false, \"message\": \"Failed to delete customer. Please try again.\"}");
                 } else {
                     // Redirect for regular requests
-                    response.sendRedirect("customer.jsp?error=Failed to delete customer. Please try again.");
+                    response.sendRedirect("CustomerServlet?action=list&error=Failed to delete customer. Please try again.");
                 }
             }
 
@@ -1022,7 +1022,7 @@ public class CustomerServlet extends HttpServlet {
                 response.getWriter().write("{\"success\": false, \"message\": \"Error deleting customer: " + e.getMessage() + "\"}");
             } else {
                 // Redirect for regular requests
-                response.sendRedirect("customer.jsp?error=Error deleting customer: " + e.getMessage());
+                response.sendRedirect("CustomerServlet?action=list&error=Error deleting customer: " + e.getMessage());
             }
         }
     }

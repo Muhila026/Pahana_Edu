@@ -12,21 +12,31 @@
         /* ===== CSS VARIABLES ===== */
         :root {
             /* Brand Colors */
-            --primary-color: #b1081b;
-            --primary-hover: #8a0615;
-            --secondary-color: #57b8bf;
+            --primary-color: #2C3E91;       /* Deep royal blue - main brand color */
+            --primary-hover: #1F2D6D;       /* Darker navy blue for hover */
+            --secondary-color: #4A90E2;     /* Bright sky blue for highlights */
 
-            /* Text & Surfaces */
-            --text-primary: #1e293b;
-            --text-secondary: #d0898d;
-            --Navbar-bg: #ffffff;
-            --Navbar-hover: #ecdbeb;
-            --Navbar-active-bg: #57b8bf;
-            --Navbar-active-text: #ffffff;
-            --border-color: #d0898d;
-            --card-background: #eefdff;
-            --background-color: #ffffff;
+            /* Status Colors (blue-friendly) */
+            --success-color: #3BB273;       /* Teal green - balanced with blue */
+            --warning-color: #F4B400;       /* Golden yellow for alerts */
+            --danger-color: #E63946;        /* Strong coral red */
+            --info-color: #5DADEC;          /* Soft info blue */
 
+            /* Backgrounds */
+            --background-color: #F4F8FC;    /* Very light blue-gray background */
+            --card-background: #FFFFFF;     /* Clean white cards */
+
+            /* Text Colors */
+            --text-primary: #1E293B;        /* Dark navy-gray for readability */
+            --text-secondary: #475569;      /* Muted cool gray for secondary text */
+
+            /* Borders & Accents */
+            --border-color: #D0D9E6;        /* Soft bluish-gray border */
+            --sidebar-bg: #2C3E91;          /* Deep blue sidebar */
+            --sidebar-hover: #1F2D6D;       /* Darker hover state */
+            --sidebar-active-bg: #4A90E2;   /* Bright blue for active item */
+            --sidebar-active-text: #ffffff; /* White text on active item */
+            --accent-color: #3FA9F5;        /* Fresh accent blue */
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
@@ -46,12 +56,12 @@
 
         /* ===== PUBLIC NAVIGATION (Top Navbar Only) ===== */
         .public-navbar {
-            background: var(--Navbar-bg);
-            box-shadow: 0 4px 6px -1px var(--border-color), 0 2px 4px -1px var(--border-color);
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
@@ -76,8 +86,14 @@
             border-right: 1px solid var(--border-color);
         }
         
-        .logo-text { color: var(--primary-color); transition: var(--transition); }
-        .logo:hover .logo-text { color: var(--secondary-color); }
+        .logo-text {
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+        
+        .logo:hover .logo-text {
+            background-position: 100% 0;
+        }
         
         .nav-menu {
             list-style: none;
@@ -105,8 +121,8 @@
         
         .nav-menu a:hover,
         .nav-menu a.active {
-            color: var(--Navbar-active-bg);
-            border-bottom-color: var(--Navbar-active-bg);
+            color: var(--secondary-color);
+            border-bottom-color: var(--secondary-color);
         }
         
         .nav-menu a.active {
@@ -115,7 +131,7 @@
         
         .login-btn {
             background: var(--primary-color);
-            color: var(--Navbar-active-text) !important;
+            color: var(--sidebar-active-text) !important;
             font-weight: 600 !important;
             border-radius: 6px;
             margin: 7px 0;
@@ -169,12 +185,12 @@
         }
 
         .customer-navbar {
-            background: var(--Navbar-bg);
-            box-shadow: 0 4px 6px -1px var(--border-color), 0 2px 4px -1px var(--border-color);
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -190,17 +206,23 @@
         .customer-logo {
             font-size: 1.8rem;
             font-weight: 700;
-            color: var(--primary-color);
+            color: #6366f1;
             text-decoration: none;
             letter-spacing: -0.5px;
             padding: 18px 20px 18px 0;
             display: flex;
             align-items: center;
-            border-right: 1px solid var(--border-color);
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
         }
 
-        .customer-logo-text { color: var(--primary-color); transition: var(--transition); }
-        .customer-logo:hover .customer-logo-text { color: var(--secondary-color); }
+        .customer-logo-text {
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .customer-logo:hover .customer-logo-text {
+            background-position: 100% 0;
+        }
 
         .customer-nav-menu {
             list-style: none;
@@ -218,11 +240,11 @@
         .customer-nav-menu a {
             display: block;
             padding: 18px 16px;
-            color: var(--text-primary);
+            color: #1e293b;
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
-            transition: var(--transition);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             border-bottom: 2px solid transparent;
             white-space: nowrap;
@@ -230,8 +252,8 @@
 
         .customer-nav-menu a:hover,
         .customer-nav-menu a.active {
-            color: var(--Navbar-active-bg);
-            border-bottom-color: var(--Navbar-active-bg);
+            color: var(--secondary-color);
+            border-bottom-color: var(--secondary-color);
         }
 
         .customer-nav-menu a.active {
@@ -242,26 +264,26 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            color: var(--text-primary);
+            color: #1e293b;
         }
 
         .customer-user-info .welcome-text {
             font-weight: 600;
             color: var(--secondary-color);
-            background: var(--card-background);
+            background: rgba(74, 144, 226, 0.10);
             padding: 0.5rem 1rem;
             border-radius: 8px;
-            border: 1px solid var(--secondary-color);
+            border: 1px solid rgba(74, 144, 226, 0.20);
         }
 
         .customer-logout-btn {
-            background: var(--primary-color);
+            background: var(--danger-color);
             color: var(--Navbar-active-text) !important;
             font-weight: 600 !important;
             border-radius: 6px;
             margin: 7px 0;
             padding: 8px 16px !important;
-            transition: var(--transition);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
             text-decoration: none;
             display: flex;
@@ -271,7 +293,7 @@
 
         .customer-logout-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px var(--border-color);
+            box-shadow: 0 4px 12px rgba(230, 57, 70, 0.25);
         }
 
         .customer-main-content {
@@ -443,26 +465,15 @@
 
         /* Page Header for Public */
         .public-page-header {
-            position: relative;
             background: url('IMG/books.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            color: var(--Navbar-active-text);
+            color: white;
             text-align: center;
             padding: 100px 2rem 70px;
             margin-bottom: 3rem;
         }
-
-        .public-page-header::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(0deg, var(--text-primary), var(--text-primary));
-            opacity: 0.55;
-        }
-
-        .public-page-header > * { position: relative; z-index: 1; }
 
         .public-page-header h1 {
             font-size: 3.5rem;
@@ -472,22 +483,22 @@
 
         .public-page-header p {
             font-size: 1.2rem;
-            opacity: 0.95;
+            opacity: 0.9;
             max-width: 600px;
             margin: 0 auto;
         }
 
         /* Category Pills */
         .category-pills { max-width: 1000px; margin: -2rem auto 2rem; padding: 0 2rem; display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
-        .category-pill { background: var(--Navbar-hover); border: 1px solid var(--border-color); color: var(--primary-color); padding: 0.35rem 0.9rem; border-radius: 999px; text-decoration: none; font-weight: 500; transition: var(--transition); }
-        .category-pill:hover { background: var(--primary-color); color: var(--Navbar-active-text); transform: translateY(-1px); box-shadow: 0 6px 18px var(--border-color); }
+        .category-pill { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); color: #6366f1; padding: 0.35rem 0.9rem; border-radius: 999px; text-decoration: none; font-weight: 500; transition: all 0.2s; }
+        .category-pill:hover { background: #6366f1; color: #fff; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(99,102,241,0.25); }
 
         /* Search Form */
         .search-section {
-            background: var(--Navbar-bg);
+            background: white;
             padding: 2rem;
             border-radius: 15px;
-            box-shadow: 0 10px 30px var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             margin: -2rem auto 3rem;
             max-width: 800px;
             position: relative;
@@ -509,13 +520,13 @@
         .form-group label {
             margin-bottom: 0.5rem;
             font-weight: 500;
-            color: var(--primary-color);
+            color: #6366f1;
         }
 
         .form-group input,
         .form-group select {
             padding: 0.8rem;
-            border: 2px solid var(--border-color);
+            border: 2px solid #e9ecef;
             border-radius: 8px;
             font-size: 1rem;
             transition: border-color 0.3s;
@@ -528,7 +539,7 @@
         }
 
         .search-btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: var(--primary-color);
             color: var(--Navbar-active-text);
             padding: 0.8rem 1.5rem;
             border: none;
@@ -558,10 +569,10 @@
         }
 
         .book-card {
-            background: var(--Navbar-bg);
+            background: white;
             border-radius: 20px;
             padding: 2rem;
-            box-shadow: 0 10px 30px var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -574,12 +585,12 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            background: var(--primary-color);
         }
 
         .book-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px var(--border-color);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
         .book-icon {
@@ -593,19 +604,19 @@
             font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            color: var(--text-primary);
+            color: #333;
             line-height: 1.3;
         }
 
         .book-author {
-            color: var(--text-secondary);
+            color: #666;
             margin-bottom: 1rem;
             font-style: italic;
         }
 
         .book-category {
-            background: var(--Navbar-hover);
-            color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
             padding: 0.3rem 0.8rem;
             border-radius: 15px;
             font-size: 0.85rem;
@@ -624,20 +635,20 @@
         .book-price {
             font-size: 1.2rem;
             font-weight: bold;
-            color: var(--primary-color);
+            color: #6366f1;
         }
 
         .book-stock {
-            background: var(--Navbar-hover);
+            background: rgba(99, 102, 241, 0.1);
             padding: 0.3rem 0.8rem;
             border-radius: 15px;
             font-size: 0.85rem;
             font-weight: 500;
-            color: var(--primary-color);
+            color: #6366f1;
         }
 
         .view-btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: var(--primary-color);
             color: var(--Navbar-active-text);
             text-decoration: none;
             padding: 0.8rem 1.5rem;
@@ -651,7 +662,7 @@
 
         .view-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px var(--border-color);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
         }
 
         /* Messages */
@@ -676,7 +687,7 @@
 
         /* Footer */
         .footer {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            background: var(--primary-color);
             color: var(--Navbar-active-text);
             text-align: center;
             padding: 2rem;
@@ -685,7 +696,7 @@
 
         .footer p {
             margin: 0;
-            opacity: 0.9;
+            opacity: 0.8;
         }
 
         /* Responsive Design */

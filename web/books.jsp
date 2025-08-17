@@ -11,12 +11,32 @@
     <style>
         /* ===== CSS VARIABLES ===== */
         :root {
-            --primary-color: #6366f1; /* Modern indigo */
-            --secondary-color: #8b5cf6; /* Modern violet */
-            --accent-color: #a855f7; /* Modern purple */
-            --text-color: #1e293b; /* Dark blue-gray */
-            --light-color: #f8fafc; /* Light gray */
-            --hover-color: #4f46e5;
+            /* Brand Colors */
+            --primary-color: #2C3E91;       /* Deep royal blue - main brand color */
+            --primary-hover: #1F2D6D;       /* Darker navy blue for hover */
+            --secondary-color: #4A90E2;     /* Bright sky blue for highlights */
+
+            /* Status Colors (blue-friendly) */
+            --success-color: #3BB273;       /* Teal green - balanced with blue */
+            --warning-color: #F4B400;       /* Golden yellow for alerts */
+            --danger-color: #E63946;        /* Strong coral red */
+            --info-color: #5DADEC;          /* Soft info blue */
+
+            /* Backgrounds */
+            --background-color: #F4F8FC;    /* Very light blue-gray background */
+            --card-background: #FFFFFF;     /* Clean white cards */
+
+            /* Text Colors */
+            --text-primary: #1E293B;        /* Dark navy-gray for readability */
+            --text-secondary: #475569;      /* Muted cool gray for secondary text */
+
+            /* Borders & Accents */
+            --border-color: #D0D9E6;        /* Soft bluish-gray border */
+            --sidebar-bg: #2C3E91;          /* Deep blue sidebar */
+            --sidebar-hover: #1F2D6D;       /* Darker hover state */
+            --sidebar-active-bg: #4A90E2;   /* Bright blue for active item */
+            --sidebar-active-text: #ffffff; /* White text on active item */
+            --accent-color: #3FA9F5;        /* Fresh accent blue */
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
@@ -29,8 +49,8 @@
         body {
             font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--text-primary);
+            background: var(--background-color);
             min-height: 100vh;
         }
 
@@ -57,22 +77,18 @@
         .logo {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #6366f1;
+            color: var(--primary-color);
             text-decoration: none;
             letter-spacing: -0.5px;
             padding: 18px 20px 18px 0;
             display: flex;
             align-items: center;
-            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            border-right: 1px solid var(--border-color);
         }
         
         .logo-text {
-            background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            background-size: 200% auto;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--primary-color);
+            transition: var(--transition);
         }
         
         .logo:hover .logo-text {
@@ -94,19 +110,19 @@
         .nav-menu a {
             display: block;
             padding: 18px 16px;
-            color: #1e293b;
+            color: var(--text-primary);
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition);
             position: relative;
             border-bottom: 2px solid transparent;
         }
         
         .nav-menu a:hover,
         .nav-menu a.active {
-            color: #6366f1;
-            border-bottom-color: #6366f1;
+            color: var(--secondary-color);
+            border-bottom-color: var(--secondary-color);
         }
         
         .nav-menu a.active {
@@ -114,19 +130,19 @@
         }
         
         .login-btn {
-            background: linear-gradient(90deg, #6366f1, #8b5cf6);
-            color: white !important;
+            background: var(--primary-color);
+            color: var(--sidebar-active-text) !important;
             font-weight: 600 !important;
             border-radius: 6px;
             margin: 7px 0;
             padding: 8px 16px !important;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition);
             border: none;
         }
         
         .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 12px var(--border-color);
         }
         
         @media (max-width: 991px) {
@@ -200,12 +216,8 @@
         }
 
         .customer-logo-text {
-            background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            background-size: 200% auto;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--primary-color);
+            transition: var(--transition);
         }
 
         .customer-logo:hover .customer-logo-text {
@@ -240,8 +252,8 @@
 
         .customer-nav-menu a:hover,
         .customer-nav-menu a.active {
-            color: #6366f1;
-            border-bottom-color: #6366f1;
+            color: var(--secondary-color);
+            border-bottom-color: var(--secondary-color);
         }
 
         .customer-nav-menu a.active {
@@ -257,16 +269,16 @@
 
         .customer-user-info .welcome-text {
             font-weight: 600;
-            color: #8b5cf6;
-            background: rgba(139, 92, 246, 0.1);
+            color: var(--secondary-color);
+            background: rgba(74, 144, 226, 0.10);
             padding: 0.5rem 1rem;
             border-radius: 8px;
-            border: 1px solid rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(74, 144, 226, 0.20);
         }
 
         .customer-logout-btn {
-            background: linear-gradient(90deg, #ef4444, #dc2626);
-            color: white !important;
+            background: var(--danger-color);
+            color: var(--Navbar-active-text) !important;
             font-weight: 600 !important;
             border-radius: 6px;
             margin: 7px 0;
@@ -281,7 +293,7 @@
 
         .customer-logout-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            box-shadow: 0 4px 12px rgba(230, 57, 70, 0.25);
         }
 
         .customer-main-content {
@@ -453,7 +465,7 @@
 
         /* Page Header for Public */
         .public-page-header {
-            background: linear-gradient(0deg, rgba(15,23,42,0.55), rgba(15,23,42,0.55)), url('IMG/books.jpg');
+            background: url('IMG/books.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -523,12 +535,12 @@
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #8b5cf6;
+            border-color: var(--secondary-color);
         }
 
         .search-btn {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: white;
+            background: var(--primary-color);
+            color: var(--Navbar-active-text);
             padding: 0.8rem 1.5rem;
             border: none;
             border-radius: 8px;
@@ -539,7 +551,7 @@
 
         .search-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 5px 15px var(--border-color);
         }
 
         /* Books Section */
@@ -573,7 +585,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            background: var(--primary-color);
         }
 
         .book-card:hover {
@@ -585,7 +597,7 @@
             font-size: 3rem;
             margin-bottom: 1rem;
             display: block;
-            color: #8b5cf6;
+            color: var(--secondary-color);
         }
 
         .book-title {
@@ -636,8 +648,8 @@
         }
 
         .view-btn {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: white;
+            background: var(--primary-color);
+            color: var(--Navbar-active-text);
             text-decoration: none;
             padding: 0.8rem 1.5rem;
             border-radius: 25px;
@@ -675,8 +687,8 @@
 
         /* Footer */
         .footer {
-            background: linear-gradient(90deg, #6366f1, #8b5cf6);
-            color: white;
+            background: var(--primary-color);
+            color: var(--Navbar-active-text);
             text-align: center;
             padding: 2rem;
             margin-top: 4rem;

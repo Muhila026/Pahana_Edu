@@ -553,15 +553,15 @@ public class UserServlet extends HttpServlet {
 
             if (success) {
                 System.out.println("User created successfully: " + username);
-                response.sendRedirect("user.jsp?message=User created successfully.");
+                response.sendRedirect("UserServlet?action=list&message=User created successfully.");
             } else {
                 System.err.println("User creation failed: " + username);
-                response.sendRedirect("user.jsp?error=Failed to create user. Username or email might already exist.");
+                response.sendRedirect("UserServlet?action=list&error=Failed to create user. Username or email might already exist.");
             }
 
         } catch (Exception e) {
             System.err.println("User creation error: " + e.getMessage());
-            response.sendRedirect("user.jsp?error=Error creating user: " + e.getMessage());
+            response.sendRedirect("UserServlet?action=list&error=Error creating user: " + e.getMessage());
         }
     }
 
@@ -618,15 +618,15 @@ public class UserServlet extends HttpServlet {
 
             if (success) {
                 System.out.println("User updated successfully: " + username);
-                response.sendRedirect("user.jsp?message=User updated successfully.");
+                response.sendRedirect("UserServlet?action=list&message=User updated successfully.");
             } else {
                 System.err.println("User update failed: " + username);
-                response.sendRedirect("user.jsp?error=Failed to update user.");
+                response.sendRedirect("UserServlet?action=list&error=Failed to update user.");
             }
 
         } catch (Exception e) {
             System.err.println("User update error: " + e.getMessage());
-            response.sendRedirect("user.jsp?error=Error updating user: " + e.getMessage());
+            response.sendRedirect("UserServlet?action=list&error=Error updating user: " + e.getMessage());
         }
     }
 
@@ -698,7 +698,7 @@ public class UserServlet extends HttpServlet {
                     response.getWriter().write("{\"success\": true, \"message\": \"User deleted successfully.\"}");
                 } else {
                     // Redirect for regular requests
-                    response.sendRedirect("user.jsp?message=User deleted successfully.");
+                    response.sendRedirect("UserServlet?action=list&message=User deleted successfully.");
                 }
             } else {
                 System.err.println("User deletion failed: ID " + userId);
@@ -709,7 +709,7 @@ public class UserServlet extends HttpServlet {
                     response.getWriter().write("{\"success\": false, \"message\": \"Failed to delete user.\"}");
                 } else {
                     // Redirect for regular requests
-                    response.sendRedirect("user.jsp?error=Failed to delete user.");
+                    response.sendRedirect("UserServlet?action=list&error=Failed to delete user.");
                 }
             }
 
@@ -726,7 +726,7 @@ public class UserServlet extends HttpServlet {
                 response.getWriter().write("{\"success\": false, \"message\": \"Error deleting user: " + e.getMessage() + "\"}");
             } else {
                 // Redirect for regular requests
-                response.sendRedirect("user.jsp?error=Error deleting user: " + e.getMessage());
+                response.sendRedirect("UserServlet?action=list&error=Error deleting user: " + e.getMessage());
             }
         }
     }

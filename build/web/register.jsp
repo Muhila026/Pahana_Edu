@@ -21,16 +21,32 @@
     
     <style>
         :root {
-            --primary-color: #6366f1;
-            --primary-hover: #4f46e5;
-            --secondary-color: #64748b;
-            --success-color: #10b981;
-            --error-color: #ef4444;
-            --background-color: #f8fafc;
-            --card-background: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border-color: #e2e8f0;
+            /* Brand Colors */
+            --primary-color: #2C3E91;       /* Deep royal blue - main brand color */
+            --primary-hover: #1F2D6D;       /* Darker navy blue for hover */
+            --secondary-color: #4A90E2;     /* Bright sky blue for highlights */
+
+            /* Status Colors (blue-friendly) */
+            --success-color: #3BB273;       /* Teal green - balanced with blue */
+            --warning-color: #F4B400;       /* Golden yellow for alerts */
+            --danger-color: #E63946;        /* Strong coral red */
+            --info-color: #5DADEC;          /* Soft info blue */
+
+            /* Backgrounds */
+            --background-color: #F4F8FC;    /* Very light blue-gray background */
+            --card-background: #FFFFFF;     /* Clean white cards */
+
+            /* Text Colors */
+            --text-primary: #1E293B;        /* Dark navy-gray for readability */
+            --text-secondary: #475569;      /* Muted cool gray for secondary text */
+
+            /* Borders & Accents */
+            --border-color: #D0D9E6;        /* Soft bluish-gray border */
+            --sidebar-bg: #2C3E91;          /* Deep blue sidebar */
+            --sidebar-hover: #1F2D6D;       /* Darker hover state */
+            --sidebar-active-bg: #4A90E2;   /* Bright blue for active item */
+            --sidebar-active-text: #ffffff; /* White text on active item */
+            --accent-color: #3FA9F5;        /* Fresh accent blue */
         }
 
         * {
@@ -198,12 +214,12 @@
 
         .alert-danger {
             background: linear-gradient(135deg, #fef2f2, #fee2e2);
-            color: var(--error-color);
-            border-left: 4px solid var(--error-color);
+            color: var(--danger-color);
+            border-left: 4px solid var(--danger-color);
         }
 
         .required {
-            color: var(--error-color);
+            color: var(--danger-color);
             font-weight: 600;
         }
 
