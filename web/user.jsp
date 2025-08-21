@@ -483,12 +483,15 @@
                 </a>
                         </div>
             
-            <div class="nav-item">
-                <a href="UserRoleServlet?action=list" class="nav-link">
-                    <i class="fas fa-user-shield"></i>
-                    UserRole
-                </a>
-                    </div>
+            <!-- User Roles -->
+        <% if ("ADMIN".equals(userRole)) { %>
+        <div class="nav-item">
+            <a href="UserRoleServlet?action=list" class="nav-link">
+                <i class="bi bi-shield-check"></i>
+                User Roles
+            </a>
+        </div>
+        <% } %>
             
             <div class="nav-item">
                 <a href="profile.jsp" class="nav-link">
@@ -681,18 +684,6 @@
                                         %>
                                     </select>
                                 <small class="text-muted">Note: CUSTOMER accounts are created through customer registration.</small>
-                                <!-- Debug info -->
-                                <div class="mt-2">
-                                    <small class="text-info">
-                                        Debug: <% 
-                                        if (userRoles != null) {
-                                            out.print("User roles loaded: " + userRoles.size());
-                                        } else {
-                                            out.print("No user roles loaded");
-                                        }
-                                        %>
-                                    </small>
-                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">

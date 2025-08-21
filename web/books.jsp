@@ -87,7 +87,7 @@
         }
         
         .logo-text {
-            color: var(--primary-color);
+            color: white;
             transition: var(--transition);
         }
         
@@ -216,7 +216,7 @@
         }
 
         .customer-logo-text {
-            color: var(--primary-color);
+            color: white;
             transition: var(--transition);
         }
 
@@ -608,11 +608,7 @@
             line-height: 1.3;
         }
 
-        .book-author {
-            color: #666;
-            margin-bottom: 1rem;
-            font-style: italic;
-        }
+
 
         .book-category {
             background: rgba(99, 102, 241, 0.1);
@@ -839,14 +835,7 @@
             <h1>School, University & Literature</h1>
             <p>From Grade 1 to A/L, professional studies, and Sinhala/English literature — curated for Sri Lankan learners.</p>
         </section>
-        <div class="category-pills">
-            <a class="category-pill" href="BookServlet?action=list&redirect=books.jsp">All</a>
-            <a class="category-pill" href="BookServlet?action=search&categoryFilter=School&redirect=books.jsp">School</a>
-            <a class="category-pill" href="BookServlet?action=search&categoryFilter=University&redirect=books.jsp">University</a>
-            <a class="category-pill" href="BookServlet?action=search&categoryFilter=Professional&redirect=books.jsp">Professional</a>
-            <a class="category-pill" href="BookServlet?action=search&categoryFilter=Literature&redirect=books.jsp">Literature</a>
-            <a class="category-pill" href="BookServlet?action=search&categoryFilter=Kids&redirect=books.jsp">Kids</a>
-        </div>
+
 
     <% } else if ("customer".equals(navType)) { %>
         <!-- CUSTOMER NAVIGATION (Top Navbar Only) -->
@@ -1055,7 +1044,6 @@
                 <div class="book-card">
                     <span class="book-icon">📖</span>
                     <h3 class="book-title"><%= book.getTitle() %></h3>
-                    <p class="book-author">by <%= book.getAuthor() != null ? book.getAuthor() : "Unknown Author" %></p>
                     <span class="book-category"><%= book.getCategoryName() != null ? book.getCategoryName() : "Uncategorized" %></span>
                     <div class="book-details">
                         <span class="book-price">Rs.<%= book.getPrice() != null ? book.getPrice().toString() : "0.00" %></span>

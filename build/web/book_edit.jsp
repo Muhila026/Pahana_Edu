@@ -1,3 +1,4 @@
+<%-- 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="com.booking.BookServlet.Book"%>
 <%@page import="com.booking.BookCategoryServlet.BookCategory"%>
@@ -536,12 +537,14 @@
                 </a>
             </div>
             
-            <div class="nav-item">
-                <a href="UserRoleServlet?action=list" class="nav-link">
-                    <i class="fas fa-user-shield"></i>
-                    UserRole
-                </a>
-            </div>
+                            <% if ("ADMIN".equals(userRole)) { %>
+                <div class="nav-item">
+                    <a href="UserRoleServlet?action=list" class="nav-link">
+                        <i class="fas fa-user-shield"></i>
+                        UserRole
+                    </a>
+                </div>
+                <% } %>
             
             <div class="nav-item">
                 <a href="profile.jsp" class="nav-link">

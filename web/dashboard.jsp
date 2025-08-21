@@ -495,12 +495,14 @@
                     </a>
                 </div>
                 
+                <% if ("ADMIN".equals(role)) { %>
                 <div class="nav-item">
                     <a href="UserRoleServlet?action=list" class="nav-link">
                         <i class="fas fa-user-shield"></i>
                         UserRole
                     </a>
                 </div>
+                <% } %>
                 
                 <div class="nav-item">
                     <a href="profile.jsp" class="nav-link">
@@ -695,58 +697,75 @@
 
         <!-- Management Cards Grid -->
         <div class="management-grid">
-            <!-- Book Management Card -->
-            <div class="management-card">
-                <div class="card-icon book">
-                    <i class="fas fa-book"></i>
-                        </div>
-                <h3 class="card-title">Book Management</h3>
-                <p class="card-description">Add, edit, and manage books in your inventory. Keep track of stock levels and book details.</p>
-                <a href="BookServlet?action=list" class="card-action">
-                    Manage Books
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-                        </div>
-
-            <!-- Category Management Card -->
-            <div class="management-card">
-                <div class="card-icon category">
-                    <i class="fas fa-tags"></i>
+            <% if ("ADMIN".equals(session.getAttribute("role")) || "MANAGER".equals(session.getAttribute("role"))) { %>
+                <!-- Book Management Card -->
+                <div class="management-card">
+                    <div class="card-icon book">
+                        <i class="fas fa-book"></i>
                     </div>
-                <h3 class="card-title">Category Management</h3>
-                <p class="card-description">Organize books with categories and tags. Create a structured catalog for easy navigation.</p>
-                <a href="BookCategoryServlet?action=list" class="card-action">
-                    Manage Categories
-                    <i class="fas fa-arrow-right"></i>
-                </a>
+                    <h3 class="card-title">Book Management</h3>
+                    <p class="card-description">Add, edit, and manage books in your inventory. Keep track of stock levels and book details.</p>
+                    <a href="BookServlet?action=list" class="card-action">
+                        Manage Books
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
 
-            <!-- User Management Card -->
-            <div class="management-card">
-                <div class="card-icon user">
-                    <i class="fas fa-users"></i>
-                        </div>
-                <h3 class="card-title">User Management</h3>
-                <p class="card-description">Manage customer accounts and staff members. Control access and permissions.</p>
-                <a href="UserServlet?action=list" class="card-action">
-                    Manage Users
-                    <i class="fas fa-arrow-right"></i>
-                </a>
+                <!-- Category Management Card -->
+                <div class="management-card">
+                    <div class="card-icon category">
+                        <i class="fas fa-tags"></i>
                     </div>
+                    <h3 class="card-title">Category Management</h3>
+                    <p class="card-description">Organize books with categories and tags. Create a structured catalog for easy navigation.</p>
+                    <a href="BookCategoryServlet?action=list" class="card-action">
+                        Manage Categories
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
 
-            <!-- Reports & Analytics Card -->
-            <div class="management-card">
-                <div class="card-icon reports">
-                    <i class="fas fa-chart-bar"></i>
+                <% if ("ADMIN".equals(session.getAttribute("role"))) { %>
+                <!-- User Management Card -->
+                <div class="management-card">
+                    <div class="card-icon user">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="card-title">User Management</h3>
+                    <p class="card-description">Manage customer accounts and staff members. Control access and permissions.</p>
+                    <a href="UserServlet?action=list" class="card-action">
+                        Manage Users
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
-                <h3 class="card-title">Reports & Analytics</h3>
-                <p class="card-description">View sales reports and customer analytics. Track performance and make data-driven decisions.</p>
-                <a href="ChartServlet" class="card-action">
-                    View Reports
-                    <i class="fas fa-arrow-right"></i>
-                </a>
+                <% } %>
+            <% } else if ("STAFF".equals(session.getAttribute("role"))) { %>
+                <!-- POS Card for Staff -->
+                <div class="management-card">
+                    <div class="card-icon book">
+                        <i class="fas fa-cash-register"></i>
+                    </div>
+                    <h3 class="card-title">Point of Sale</h3>
+                    <p class="card-description">Process sales transactions and manage customer purchases efficiently.</p>
+                    <a href="pos.jsp" class="card-action">
+                        Open POS
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
-            </div>
+
+                <!-- View Messages Card for Staff -->
+                <div class="management-card">
+                    <div class="card-icon category">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3 class="card-title">View Messages</h3>
+                    <p class="card-description">Check customer inquiries and respond to support requests.</p>
+                    <a href="contact.jsp" class="card-action">
+                        View Messages
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            <% } %>
+        </div>
         </div>
 
         <!-- Bootstrap JS -->
