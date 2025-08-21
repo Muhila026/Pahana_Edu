@@ -485,12 +485,14 @@
                     </a>
                 </div>
                 
+                <% if ("ADMIN".equals(userRole)) { %>
                 <div class="nav-item">
                     <a href="UserRoleServlet?action=list" class="nav-link">
                         <i class="fas fa-user-shield"></i>
                         UserRole
                     </a>
                 </div>
+                <% } %>
                 
                 <div class="nav-item">
                     <a href="profile.jsp" class="nav-link">

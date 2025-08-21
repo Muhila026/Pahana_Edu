@@ -85,7 +85,7 @@
             border-right: 1px solid var(--border-color);
         }
         
-        .logo-text { color: var(--primary-color); transition: var(--transition); }
+        .logo-text { color: white; transition: var(--transition); }
         .logo:hover .logo-text { color: var(--secondary-color); }
         
         .nav-menu {
@@ -225,7 +225,7 @@
             border-right: 1px solid var(--border-color);
         }
 
-        .customer-logo-text { color: var(--primary-color); transition: var(--transition); }
+        .customer-logo-text { color: white; transition: var(--transition); }
         .customer-logo:hover .customer-logo-text { color: var(--secondary-color); }
 
         .customer-nav-menu {
@@ -792,14 +792,7 @@
             <h1>Browse Categories</h1>
             <p>School to University, Professional studies and Sinhala/English literature — curated for Sri Lankan learners.</p>
         </section>
-        <div class="category-pills">
-            <a class="category-pill" href="BookCategoryServlet?action=list&redirect=categories.jsp">All</a>
-            <a class="category-pill" href="BookServlet?action=search&categoryFilter=School&redirect=books.jsp">School</a>
-            <a class="category-pill" href="BookServlet?action=search&categoryFilter=University&redirect=books.jsp">University</a>
-            <a class="category-pill" href="BookServlet?action=search&categoryFilter=Professional&redirect=books.jsp">Professional</a>
-            <a class="category-pill" href="BookServlet?action=search&categoryFilter=Literature&redirect=books.jsp">Literature</a>
-            <a class="category-pill" href="BookServlet?action=search&categoryFilter=Kids&redirect=books.jsp">Kids</a>
-        </div>
+
 
     <% } else if ("customer".equals(navType)) { %>
         <!-- CUSTOMER NAVIGATION (Top Navbar Only) -->

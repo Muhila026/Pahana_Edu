@@ -1,3 +1,9 @@
+<%-- 
+    Document   : book_category
+    Created on : Aug 4, 2025, 10:00:00 AM
+    Author     : DELL
+--%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="com.booking.BookCategoryServlet.BookCategory"%>
 <%@page import="java.util.*"%>
@@ -492,12 +498,14 @@
                 </a>
             </div>
             
-            <div class="nav-item">
-                <a href="UserRoleServlet?action=list" class="nav-link">
-                    <i class="fas fa-user-shield"></i>
-                    UserRole
-                </a>
-            </div>
+                            <% if ("ADMIN".equals(userRole)) { %>
+                <div class="nav-item">
+                    <a href="UserRoleServlet?action=list" class="nav-link">
+                        <i class="fas fa-user-shield"></i>
+                        UserRole
+                    </a>
+                </div>
+                <% } %>
             
             <div class="nav-item">
                 <a href="profile.jsp" class="nav-link">

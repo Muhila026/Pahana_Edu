@@ -57,7 +57,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #D0D9E6 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -71,20 +71,28 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             overflow: hidden;
             width: 100%;
-            max-width: 450px;
+            max-width: 900px;
             position: relative;
+            display: flex;
+            min-height: 600px;
         }
 
-        .login-header {
+        .login-left {
             background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
             color: white;
             padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
             position: relative;
             overflow: hidden;
+            flex: 1;
+            min-width: 300px;
         }
 
-        .login-header::before {
+        .login-left::before {
             content: '';
             position: absolute;
             top: -50%;
@@ -100,23 +108,87 @@
             50% { transform: translateY(-20px) rotate(180deg); }
         }
 
-        .login-header h1 {
+        .logo-section {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 30px;
+        }
+
+        .logo-image {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            filter: brightness(0) invert(1);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-image:hover {
+            transform: scale(1.1);
+        }
+
+        .brand-name {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .brand-tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        .features-list li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .features-list i {
+            margin-right: 12px;
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .login-right {
+            flex: 1;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: var(--card-background);
+            min-width: 400px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
         }
 
         .login-header p {
             font-size: 1rem;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-        }
-
-        .login-body {
-            padding: 40px 30px;
+            color: var(--text-secondary);
+            margin: 0;
         }
 
         .form-floating {
@@ -178,6 +250,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            margin-top: 10px;
         }
 
         .btn-login::before {
@@ -270,26 +343,54 @@
         }
 
         /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                max-width: 450px;
+                min-height: auto;
+            }
+            
+            .login-left {
+                min-width: auto;
+                padding: 30px 20px;
+            }
+            
+            .login-right {
+                min-width: auto;
+                padding: 30px 20px;
+            }
+            
+            .brand-name {
+                font-size: 2rem;
+            }
+            
+            .logo-image {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
         @media (max-width: 576px) {
             .login-container {
                 margin: 10px;
                 border-radius: 15px;
             }
             
-            .login-header {
-                padding: 30px 20px;
+            .login-left {
+                padding: 25px 15px;
             }
             
-            .login-header h1 {
-                font-size: 2rem;
+            .login-right {
+                padding: 25px 15px;
             }
             
-            .login-body {
-                padding: 30px 20px;
+            .brand-name {
+                font-size: 1.75rem;
             }
             
-            .social-login {
-                flex-direction: column;
+            .logo-image {
+                width: 70px;
+                height: 70px;
             }
         }
 
@@ -334,14 +435,22 @@
 </head>
 <body>
     <div class="login-container">
-        <!-- Header Section -->
-        <div class="login-header">
-            <h1>Pahana BookShop</h1>
-            <p>Welcome back! Please sign in to your account</p>
+        <!-- Left Side (Logo and Brand Name) -->
+        <div class="login-left">
+            <div class="logo-section">
+                <img src="IMG/logo1.png" alt="Pahana BookShop Logo" class="logo-image">
+            </div>
+            <h1 class="brand-name">Pahana BookShop</h1>
+            <p class="brand-tagline">Your gateway to a world of books</p>
         </div>
 
-        <!-- Body Section -->
-        <div class="login-body">
+        <!-- Right Side (Login Form) -->
+        <div class="login-right">
+            <div class="login-header">
+                <h2>Welcome Back</h2>
+                <p>Please sign in to your account to continue</p>
+            </div>
+
             <!-- Error Messages -->
             <% if (request.getAttribute("error") != null) { %>
                 <div class="alert alert-danger" role="alert">

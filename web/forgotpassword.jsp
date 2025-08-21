@@ -50,7 +50,7 @@
 
             body {
                 font-family: 'Inter', sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #667eea 0%, #D0D9E6 100%);
                 min-height: 100vh;
                 display: flex;
                 align-items: center;
@@ -64,20 +64,28 @@
                 box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
                 overflow: hidden;
                 width: 100%;
-                max-width: 520px;
+                max-width: 1000px;
                 position: relative;
+                display: flex;
+                min-height: 650px;
             }
 
-            .card-header {
+            .forgot-left {
                 background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
                 color: white;
                 padding: 40px 30px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
                 text-align: center;
                 position: relative;
                 overflow: hidden;
+                flex: 1;
+                min-width: 350px;
             }
 
-            .card-header::before {
+            .forgot-left::before {
                 content: '';
                 position: absolute;
                 top: -50%;
@@ -88,14 +96,99 @@
                 animation: float 6s ease-in-out infinite;
             }
 
-            @keyframes float { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-20px) rotate(180deg); } }
+            @keyframes float { 
+                0%, 100% { transform: translateY(0) rotate(0); } 
+                50% { transform: translateY(-20px) rotate(180deg); } 
+            }
 
-            .card-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; position: relative; z-index: 1; }
-            .card-header p { font-size: 1rem; opacity: 0.95; position: relative; z-index: 1; }
+            .logo-section {
+                position: relative;
+                z-index: 2;
+                margin-bottom: 30px;
+            }
 
-            .card-body { padding: 40px 30px; }
+            .logo-image {
+                width: 120px;
+                height: 120px;
+                margin-bottom: 20px;
+                filter: brightness(0) invert(1);
+                transition: transform 0.3s ease;
+            }
 
-            .form-floating { margin-bottom: 20px; position: relative; }
+            .logo-image:hover {
+                transform: scale(1.1);
+            }
+
+            .brand-name {
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin-bottom: 10px;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            }
+
+            .brand-tagline {
+                font-size: 1.1rem;
+                opacity: 0.95;
+                margin-bottom: 20px;
+                font-weight: 300;
+            }
+
+            .features-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                text-align: left;
+            }
+
+            .features-list li {
+                margin-bottom: 15px;
+                display: flex;
+                align-items: center;
+                font-size: 0.95rem;
+                opacity: 0.9;
+            }
+
+            .features-list i {
+                margin-right: 12px;
+                color: var(--secondary-color);
+                font-size: 1.1rem;
+                width: 20px;
+                text-align: center;
+            }
+
+            .forgot-right {
+                flex: 1.5;
+                padding: 40px 30px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                background: var(--card-background);
+                min-width: 500px;
+            }
+
+            .card-header {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+
+            .card-header h1 {
+                font-size: 2rem;
+                font-weight: 700;
+                color: var(--text-primary);
+                margin-bottom: 10px;
+            }
+
+            .card-header p {
+                font-size: 1rem;
+                color: var(--text-secondary);
+                margin: 0;
+            }
+
+            .form-floating { 
+                margin-bottom: 20px; 
+                position: relative; 
+            }
+            
             .form-floating .form-control {
                 border: 2px solid var(--border-color);
                 border-radius: 12px;
@@ -104,10 +197,22 @@
                 transition: all 0.3s ease;
                 background: #f8fafc;
             }
-            .form-floating .form-control:focus { border-color: var(--primary-color); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); background: white; }
-            .form-floating label { color: var(--text-secondary); font-weight: 500; }
+            
+            .form-floating .form-control:focus { 
+                border-color: var(--primary-color); 
+                box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); 
+                background: white; 
+            }
+            
+            .form-floating label { 
+                color: var(--text-secondary); 
+                font-weight: 500; 
+            }
 
-            .password-field { position: relative; }
+            .password-field { 
+                position: relative; 
+            }
+            
             .password-toggle {
                 position: absolute;
                 right: 15px;
@@ -121,136 +226,275 @@
                 transition: color 0.3s ease;
                 z-index: 10;
             }
-            .password-toggle:hover { color: var(--primary-color); }
+            
+            .password-toggle:hover { 
+                color: var(--primary-color); 
+            }
 
             .btn-primary-gradient {
                 background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
-                border: none; border-radius: 12px; padding: 14px 16px; font-size: 16px; font-weight: 600; color: white; width: 100%; transition: all 0.3s ease; position: relative; overflow: hidden;
+                border: none; 
+                border-radius: 12px; 
+                padding: 14px 16px; 
+                font-size: 16px; 
+                font-weight: 600; 
+                color: white; 
+                width: 100%; 
+                transition: all 0.3s ease; 
+                position: relative; 
+                overflow: hidden;
             }
-            .btn-primary-gradient::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s; }
-            .btn-primary-gradient:hover::before { left: 100%; }
-            .btn-primary-gradient:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3); }
+            
+            .btn-primary-gradient::before { 
+                content: ''; 
+                position: absolute; 
+                top: 0; 
+                left: -100%; 
+                width: 100%; 
+                height: 100%; 
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); 
+                transition: left 0.5s; 
+            }
+            
+            .btn-primary-gradient:hover::before { 
+                left: 100%; 
+            }
+            
+            .btn-primary-gradient:hover { 
+                transform: translateY(-2px); 
+                box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3); 
+            }
 
-            .btn-outline { border-radius: 12px; padding: 12px 14px; font-weight: 600; }
+            .btn-outline { 
+                border-radius: 12px; 
+                padding: 12px 14px; 
+                font-weight: 600; 
+            }
 
-            .alert { border-radius: 12px; border: none; padding: 16px 20px; margin-bottom: 20px; font-weight: 500; }
-            .alert-danger { background: linear-gradient(135deg, #fef2f2, #fee2e2); color: var(--danger-color); border-left: 4px solid var(--danger-color); }
-            .alert-success { background: linear-gradient(135deg, #f0fdf4, #dcfce7); color: var(--success-color); border-left: 4px solid var(--success-color); }
+            .alert { 
+                border-radius: 12px; 
+                border: none; 
+                padding: 16px 20px; 
+                margin-bottom: 20px; 
+                font-weight: 500; 
+            }
+            
+            .alert-danger { 
+                background: linear-gradient(135deg, #fef2f2, #fee2e2); 
+                color: var(--danger-color); 
+                border-left: 4px solid var(--danger-color); 
+            }
+            
+            .alert-success { 
+                background: linear-gradient(135deg, #f0fdf4, #dcfce7); 
+                color: var(--success-color); 
+                border-left: 4px solid var(--success-color); 
+            }
 
-            .muted { color: var(--text-secondary); font-size: 14px; }
-            .link { color: var(--primary-color); text-decoration: none; font-weight: 600; }
-            .link:hover { color: var(--primary-hover); text-decoration: underline; }
+            .muted { 
+                color: var(--text-secondary); 
+                font-size: 14px; 
+            }
+            
+            .link { 
+                color: var(--primary-color); 
+                text-decoration: none; 
+                font-weight: 600; 
+            }
+            
+            .link:hover { 
+                color: var(--primary-hover); 
+                text-decoration: underline; 
+            }
 
-            .step { display: none; }
-            .step.active { display: block; }
+            .step { 
+                display: none; 
+            }
+            
+            .step.active { 
+                display: block; 
+            }
 
-            .timer { font-variant-numeric: tabular-nums; }
+            .timer { 
+                font-variant-numeric: tabular-nums; 
+            }
+
+            /* Responsive Design */
+            @media (max-width: 768px) {
+                .container-card {
+                    flex-direction: column;
+                    max-width: 550px;
+                    min-height: auto;
+                }
+                
+                .forgot-left {
+                    min-width: auto;
+                    padding: 30px 20px;
+                }
+                
+                .forgot-right {
+                    min-width: auto;
+                    padding: 30px 20px;
+                }
+                
+                .brand-name {
+                    font-size: 2rem;
+                }
+                
+                .logo-image {
+                    width: 80px;
+                    height: 80px;
+                }
+            }
 
             @media (max-width: 576px) {
-                .container-card { margin: 10px; border-radius: 15px; }
-                .card-header { padding: 30px 20px; }
-                .card-header h1 { font-size: 1.75rem; }
-                .card-body { padding: 30px 20px; }
+                .container-card { 
+                    margin: 10px; 
+                    border-radius: 15px; 
+                }
+                
+                .forgot-left { 
+                    padding: 25px 15px; 
+                }
+                
+                .forgot-right { 
+                    padding: 25px 15px; 
+                }
+                
+                .brand-name { 
+                    font-size: 1.75rem; 
+                }
+                
+                .logo-image { 
+                    width: 70px; 
+                    height: 70px; 
+                }
             }
 
-            .btn-loading { position: relative; color: transparent !important; }
+            .btn-loading { 
+                position: relative; 
+                color: transparent !important; 
+            }
+            
             .btn-loading::after {
                 content: '';
                 position: absolute;
-                width: 20px; height: 20px; top: 50%; left: 50%; margin-left: -10px; margin-top: -10px;
-                border: 2px solid transparent; border-top: 2px solid white; border-radius: 50%;
+                width: 20px; 
+                height: 20px; 
+                top: 50%; 
+                left: 50%; 
+                margin-left: -10px; 
+                margin-top: -10px;
+                border: 2px solid transparent; 
+                border-top: 2px solid white; 
+                border-radius: 50%;
                 animation: spin 1s linear infinite;
             }
-            @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+            
+            @keyframes spin { 
+                0% { transform: rotate(0deg); } 
+                100% { transform: rotate(360deg); } 
+            }
         </style>
     </head>
     <body>
         <div class="container-card">
-            <div class="card-header">
-                <h1>Forgot Password</h1>
-                <p>We will send a verification code to your email</p>
+            <div class="forgot-left">
+                <div class="logo-section">
+                    <img src="IMG/logo1.png" alt="Pahana BookShop Logo" class="logo-image">
+                    <h1 class="brand-name">Pahana BookShop</h1>
+                    <p class="brand-tagline">Your gateway to a world of books</p>
+                </div>
+
             </div>
 
-            <div class="card-body">
-                <% if (request.getAttribute("error") != null) { %>
-                <div class="alert alert-danger" role="alert">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    <%= request.getAttribute("error") %>
-                </div>
-                <% } %>
-
-                <% if (request.getAttribute("success") != null) { %>
-                <div class="alert alert-success" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>
-                    <%= request.getAttribute("success") %>
-                </div>
-                <% } %>
-
-                <% if (request.getParameter("message") != null) { %>
-                <div class="alert alert-success" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>
-                    <%= request.getParameter("message") %>
-                </div>
-                <% } %>
-
-                <div id="stepRequest" class="step active">
-                    <form id="requestForm" action="ForgotPasswordServlet" method="post">
-                        <input type="hidden" name="action" value="requestCode">
-                        <div class="form-floating">
-                            <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
-                            <label for="email"><i class="fas fa-envelope me-2"></i>Email address</label>
-                        </div>
-
-                        <button type="submit" id="sendCodeBtn" class="btn btn-primary-gradient">
-                            <i class="fas fa-paper-plane me-2"></i>Send Verification Code
-                        </button>
-
-                        <div class="mt-3 text-center">
-                            <a href="login.jsp" class="link"><i class="fas fa-arrow-left me-1"></i>Back to Sign In</a>
-                        </div>
-                    </form>
+            <div class="forgot-right">
+                <div class="card-header">
+                    <h1>Forgot Password</h1>
+                    <p>We will send a verification code to your email</p>
                 </div>
 
-                <div id="stepVerify" class="step">
-                    <form id="resetForm" action="ForgotPasswordServlet" method="post">
-                        <input type="hidden" name="action" value="resetPassword">
-                        <div class="form-floating mb-2">
-                            <input type="email" class="form-control" id="emailReadonly" name="email" placeholder="name@example.com" readonly>
-                            <label for="emailReadonly"><i class="fas fa-envelope me-2"></i>Email address</label>
-                        </div>
+                <div class="card-body">
+                    <% if (request.getAttribute("error") != null) { %>
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <%= request.getAttribute("error") %>
+                    </div>
+                    <% } %>
 
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="muted">Enter the 6-digit code sent to your email</span>
-                            <button type="button" id="resendBtn" class="btn btn-sm btn-outline-secondary btn-outline" disabled>
-                                Resend code <span id="resendTimer" class="timer">60</span>s
+                    <% if (request.getAttribute("success") != null) { %>
+                    <div class="alert alert-success" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <%= request.getAttribute("success") %>
+                    </div>
+                    <% } %>
+
+                    <% if (request.getParameter("message") != null) { %>
+                    <div class="alert alert-success" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <%= request.getParameter("message") %>
+                    </div>
+                    <% } %>
+
+                    <div id="stepRequest" class="step active">
+                        <form id="requestForm" action="ForgotPasswordServlet" method="post">
+                            <input type="hidden" name="action" value="requestCode">
+                            <div class="form-floating">
+                                <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                                <label for="email"><i class="fas fa-envelope me-2"></i>Email address</label>
+                            </div>
+
+                            <button type="submit" id="sendCodeBtn" class="btn btn-primary-gradient">
+                                <i class="fas fa-paper-plane me-2"></i>Send Verification Code
                             </button>
-                        </div>
 
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="code" name="code" placeholder="123456" maxlength="6" pattern="[0-9]{6}" required>
-                            <label for="code"><i class="fas fa-key me-2"></i>Verification code</label>
-                        </div>
+                            <div class="mt-3 text-center">
+                                <a href="login.jsp" class="link"><i class="fas fa-arrow-left me-1"></i>Back to Sign In</a>
+                            </div>
+                        </form>
+                    </div>
 
-                        <div class="form-floating password-field">
-                            <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="New Password" minlength="6" required>
-                            <label for="newPassword"><i class="fas fa-lock me-2"></i>New password</label>
-                            <button type="button" class="password-toggle" data-target="newPassword"><i class="fas fa-eye"></i></button>
-                        </div>
+                    <div id="stepVerify" class="step">
+                        <form id="resetForm" action="ForgotPasswordServlet" method="post">
+                            <input type="hidden" name="action" value="resetPassword">
+                            <div class="form-floating mb-2">
+                                <input type="email" class="form-control" id="emailReadonly" name="email" placeholder="name@example.com" readonly>
+                                <label for="emailReadonly"><i class="fas fa-envelope me-2"></i>Email address</label>
+                            </div>
 
-                        <div class="form-floating password-field">
-                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" minlength="6" required>
-                            <label for="confirmPassword"><i class="fas fa-lock me-2"></i>Confirm new password</label>
-                            <button type="button" class="password-toggle" data-target="confirmPassword"><i class="fas fa-eye"></i></button>
-                        </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="muted">Enter the 6-digit code sent to your email</span>
+                                <button type="button" id="resendBtn" class="btn btn-sm btn-outline-secondary btn-outline" disabled>
+                                    Resend code <span id="resendTimer" class="timer">60</span>s
+                                </button>
+                            </div>
 
-                        <button type="submit" id="resetBtn" class="btn btn-primary-gradient">
-                            <i class="fas fa-rotate me-2"></i>Reset Password
-                        </button>
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="code" name="code" placeholder="123456" maxlength="6" pattern="[0-9]{6}" required>
+                                <label for="code"><i class="fas fa-key me-2"></i>Verification code</label>
+                            </div>
 
-                        <div class="mt-3 text-center">
-                            <a href="#" id="changeEmail" class="link"><i class="fas fa-arrow-left me-1"></i>Change email</a>
-                        </div>
-                    </form>
+                            <div class="form-floating password-field">
+                                <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="New Password" minlength="6" required>
+                                <label for="newPassword"><i class="fas fa-lock me-2"></i>New password</label>
+                                <button type="button" class="password-toggle" data-target="newPassword"><i class="fas fa-eye"></i></button>
+                            </div>
+
+                            <div class="form-floating password-field">
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" minlength="6" required>
+                                <label for="confirmPassword"><i class="fas fa-lock me-2"></i>Confirm new password</label>
+                                <button type="button" class="password-toggle" data-target="confirmPassword"><i class="fas fa-eye"></i></button>
+                            </div>
+
+                            <button type="submit" id="resetBtn" class="btn btn-primary-gradient">
+                                <i class="fas fa-rotate me-2"></i>Reset Password
+                            </button>
+
+                            <div class="mt-3 text-center">
+                                <a href="#" id="changeEmail" class="link"><i class="fas fa-arrow-left me-1"></i>Change email</a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

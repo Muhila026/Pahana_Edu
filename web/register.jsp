@@ -57,7 +57,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #D0D9E6 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -71,20 +71,28 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             overflow: hidden;
             width: 100%;
-            max-width: 550px;
+            max-width: 1000px;
             position: relative;
+            display: flex;
+            min-height: 650px;
         }
 
-        .register-header {
+        .register-left {
             background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
             color: white;
             padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
             position: relative;
             overflow: hidden;
+            flex: 1;
+            min-width: 350px;
         }
 
-        .register-header::before {
+        .register-left::before {
             content: '';
             position: absolute;
             top: -50%;
@@ -100,31 +108,72 @@
             50% { transform: translateY(-20px) rotate(180deg); }
         }
 
-        .register-header h1 {
+        .logo-section {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 30px;
+        }
+
+        .logo-image {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            filter: brightness(0) invert(1);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-image:hover {
+            transform: scale(1.1);
+        }
+
+        .brand-name {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        .register-header p {
-            font-size: 1rem;
+        .brand-tagline {
+            font-size: 1.1rem;
             opacity: 0.9;
-            position: relative;
-            z-index: 1;
-        }
-
-        .register-body {
-            padding: 40px 30px;
-        }
-
-        .form-floating {
             margin-bottom: 20px;
-            position: relative;
+            font-weight: 300;
         }
 
-        .form-floating .form-control {
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        .features-list li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .features-list i {
+            margin-right: 12px;
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .register-right {
+            flex: 1.5;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: var(--card-background);
+            min-width: 500px;
+        }
+
+        .form-control {
             border: 2px solid var(--border-color);
             border-radius: 12px;
             padding: 16px 20px;
@@ -133,89 +182,10 @@
             background: #f8fafc;
         }
 
-        .form-floating .form-control:focus {
+        .form-control:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
             background: white;
-        }
-
-        .form-floating label {
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        .password-field {
-            position: relative;
-        }
-
-        .password-toggle {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            padding: 5px;
-            transition: color 0.3s ease;
-            z-index: 10;
-        }
-
-        .password-toggle:hover {
-            color: var(--primary-color);
-        }
-
-        .btn-register {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
-            border: none;
-            border-radius: 12px;
-            padding: 16px;
-            font-size: 16px;
-            font-weight: 600;
-            color: white;
-            width: 100%;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-register::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn-register:hover::before {
-            left: 100%;
-        }
-
-        .btn-register:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
-        }
-
-        .btn-register:active {
-            transform: translateY(0);
-        }
-
-        .alert {
-            border-radius: 12px;
-            border: none;
-            padding: 16px 20px;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-
-        .alert-danger {
-            background: linear-gradient(135deg, #fef2f2, #fee2e2);
-            color: var(--danger-color);
-            border-left: 4px solid var(--danger-color);
         }
 
         .required {
@@ -240,27 +210,6 @@
             text-decoration: underline;
         }
 
-        /* Responsive Design */
-        @media (max-width: 576px) {
-            .register-container {
-                margin: 10px;
-                border-radius: 15px;
-            }
-            
-            .register-header {
-                padding: 30px 20px;
-            }
-            
-            .register-header h1 {
-                font-size: 2rem;
-            }
-            
-            .register-body {
-                padding: 30px 20px;
-            }
-        }
-
-        /* Loading Animation */
         .btn-loading {
             position: relative;
             color: transparent;
@@ -286,19 +235,24 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Input Focus Effects */
-        .form-floating .form-control:focus + label {
-            color: var(--primary-color);
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
         }
 
-        /* Floating Label Animation */
-        .form-floating .form-control:not(:placeholder-shown) + label,
-        .form-floating .form-control:focus + label {
-            transform: scale(0.85) translateY(-1rem) translateX(0.15rem);
-            color: var(--primary-color);
+        .register-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
         }
-        
-        /* New Form Styling for Add Customer Design */
+
+        .register-header p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
         .form-group {
             margin-bottom: 1rem;
         }
@@ -369,18 +323,79 @@
         .gap-2 > *:first-child {
             margin-left: 0;
         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .register-container {
+                flex-direction: column;
+                max-width: 550px;
+                min-height: auto;
+            }
+            
+            .register-left {
+                min-width: auto;
+                padding: 30px 20px;
+            }
+            
+            .register-right {
+                min-width: auto;
+                padding: 30px 20px;
+            }
+            
+            .brand-name {
+                font-size: 2rem;
+            }
+            
+            .logo-image {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .register-container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .register-left {
+                padding: 25px 15px;
+            }
+            
+            .register-right {
+                padding: 25px 15px;
+            }
+            
+            .brand-name {
+                font-size: 1.75rem;
+            }
+            
+            .logo-image {
+                width: 70px;
+                height: 70px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="register-container">
-        <!-- Header Section -->
-        <div class="register-header">
-            <h1><i class="fas fa-user-plus me-2"></i>Add New Customer</h1>
-            <p>Create a new customer account with full access to our services</p>
+        <!-- Left Side (Logo and Brand) -->
+        <div class="register-left">
+            <div class="logo-section">
+                <img src="IMG/logo1.png" alt="Pahana BookShop Logo" class="logo-image">
+                <h1 class="brand-name">Pahana BookShop</h1>
+                <p class="brand-tagline">Your gateway to a world of books</p>
+            </div>
+           
         </div>
 
-        <!-- Body Section -->
-        <div class="register-body">
+        <!-- Right Side (Registration Form) -->
+        <div class="register-right">
+            <div class="register-header">
+                <h2><i class="fas fa-user-plus me-2"></i>Create New Account</h2>
+                <p>Join Pahana BookShop and start your book journey today!</p>
+            </div>
+
             <!-- Error Messages -->
             <%
             String error = request.getParameter("error");
